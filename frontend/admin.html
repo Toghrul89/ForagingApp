@@ -14,7 +14,7 @@
     
     <div id="user-input-container">
         <h2>Add New Tree Location</h2>
-        <form id="tree-form">
+        <form id="tree-form" enctype="multipart/form-data">
             <label for="treeName">Tree Name:</label>
             <input type="text" id="treeName" name="treeName" placeholder="e.g., Apple Tree" required><br>
             
@@ -23,6 +23,9 @@
             
             <label for="longitude">Longitude:</label>
             <input type="text" id="longitude" name="longitude" placeholder="e.g., -122.366229" required><br>
+
+            <label for="treeImage">Take or Upload Tree Image:</label>
+            <input type="file" id="treeImage" name="treeImage" accept="image/*" capture="environment" required><br>
             
             <button type="submit">Submit Tree</button>
         </form>
