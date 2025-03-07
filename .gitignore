@@ -1,0 +1,6 @@
+# .gitignore file content
+.DS_Store
+*.log
+node_modules/
+target/
+*.class
