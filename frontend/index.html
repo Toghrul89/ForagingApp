@@ -1,14 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Foraging App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foraging App - Find Fruit Trees</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Welcome to the Foraging App</h1>
-    <p>Map and fruit tree location will be displayed here.</p>
-    <script src="app.js"></script>
+
+    <h1>Foraging App</h1>
+    
+    <div id="map-container">
+        <h2>Fruit Trees Near You</h2>
+        <div id="map"></div> <!-- Placeholder for Map Integration -->
+    </div>
+
+    <div id="tree-list-container">
+        <h2>Available Trees</h2>
+        <ul id="tree-list"></ul>
+    </div>
+
+    <div id="navigation">
+        <a href="admin.html">Go to Admin Panel</a>
+    </div>
+
+    <script src="index.js"></script>
 </body>
 </html>
-
-<a href="admin.html">Go to Admin Panel</a>
