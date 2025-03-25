@@ -1,37 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Panel - Foraging App</title>
-    <link rel="stylesheet" href="styles.css">
+  <title>Admin Panel – Foraging App</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Admin Panel</h1>
-    
-    <div id="admin-container">
-        <h2>Pending Tree Submissions</h2>
-        <div id="pending-trees"></div>
-    </div>
-    
-    <div id="user-input-container">
-        <h2>Add New Tree Location</h2>
-        <form id="tree-form" enctype="multipart/form-data">
-            <label for="treeName">Tree Name:</label>
-            <input type="text" id="treeName" name="treeName" placeholder="e.g., Apple Tree" required><br>
-            
-            <label for="latitude">Latitude:</label>
-            <input type="text" id="latitude" name="latitude" placeholder="e.g., 47.629797" required><br>
-            
-            <label for="longitude">Longitude:</label>
-            <input type="text" id="longitude" name="longitude" placeholder="e.g., -122.366229" required><br>
+  <h1>Admin Panel</h1>
 
-            <label for="treeImage">Take or Upload Tree Image:</label>
-            <input type="file" id="treeImage" name="treeImage" accept="image/*" capture="environment">
+  <div id="admin-container">
+    <h2>Pending Tree Submissions</h2>
+    <div id="pending-trees"></div>
+  </div>
 
-            
-            <button type="submit">Submit Tree</button>
-        </form>
-    </div>
+  <div id="user-input-container">
+    <h2>Add New Tree Location</h2>
+    <form id="tree-form" enctype="multipart/form-data">
+      <label for="treeName">Tree Name:</label>
+      <input type="text" id="treeName" name="treeName" placeholder="e.g., Apple Tree" required><br>
 
-    <script src="admin.js"></script>
+      <label for="latitude">Latitude:</label>
+      <input type="text" id="latitude" name="latitude" placeholder="e.g., 47.629797" required><br>
+
+      <label for="longitude">Longitude:</label>
+      <input type="text" id="longitude" name="longitude" placeholder="e.g., -122.366229" required><br>
+
+      <label for="treeImage">Take or Upload Tree Image:</label>
+      <input type="file" id="treeImage" name="image" accept="image/*" capture="environment"><br>
+
+      <button type="submit">Submit Tree</button>
+    </form>
+  </div>
+
+  <script src="admin.js"></script>
 </body>
 </html>
