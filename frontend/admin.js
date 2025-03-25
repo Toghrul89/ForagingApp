@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const treeForm = document.getElementById("tree-form");
   const pendingTreesDiv = document.getElementById("pending-trees");
 
-  // Fetch trees and display
+  // Fetch trees from backend and show them
   async function fetchTrees() {
     try {
       const response = await fetch("http://localhost:8080/api/trees/list");
@@ -30,32 +30,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Submit new tree
+  // Submit form to backend
   treeForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(treeForm);
-    const fileInput = document.getElementById("treeImage");
+    const name = document.getElementById("treeName").value;
+    const latitude = document.getElementById("latitude").value;
+    const longitude = document.getElementById("longitude").value;
+    const imageInput = document.getElementById("treeImage");
 
-    // Optionally handle image upload later
-    const hasImage = fileInput.files.length > 0;
+    if (!imageInput.files.length) {
+      alert("Please select an image file.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("latitude", latitude);
+    formData.append("longitude", longitude);
+    formData.append("image", imageInput.files[0]);
 
     try {
       const response = await fetch("http://localhost:8080/api/trees/add", {
         method: "POST",
-        body: formData
+        body: formData,
       });
 
       if (response.ok) {
-        alert("Tree submitted successfully!");
+        alert("Tree added successfully!");
         treeForm.reset();
-        fetchTrees();
+        fetchTrees(); // refresh list
       } else {
-        alert("Error: Failed to submit the tree.");
-        console.error("Response status:", response.status);
+        alert("Failed to add tree. Server error.");
       }
-    } catch (err) {
-      console.error("Request error:", err);
+    } catch (error) {
+      console.error("Error submitting tree:", error);
       alert("An error occurred while adding the tree.");
     }
   });
