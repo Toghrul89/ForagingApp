@@ -6,23 +6,20 @@ import jakarta.persistence.*;
 public class Tree {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     private String name;
-    private double latitude;
-    private double longitude;
+    private String location;
+    private String imageUrl;
 
-    // Optional: store image file name or path
-    private String imagePath;
+    // Getters and Setters
 
-    // --- Getters and Setters ---
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -34,27 +31,19 @@ public class Tree {
         this.name = name;
     }
 
-    public double getLatitude() {
-        return latitude;
+    public String getLocation() {
+        return location;
     }
 
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
