@@ -1,65 +1,64 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const treeForm = document.getElementById("treeForm");
-    const pendingTreesList = document.getElementById("pendingTreesList");
-  
-    // Fetch and display pending trees (you can update this if you add approval logic later)
-    async function fetchPendingTrees() {
-      try {
-        const response = await fetch("http://localhost:8080/api/trees/list");
-        const trees = await response.json();
-  
-        pendingTreesList.innerHTML = "";
-  
-        trees.forEach((tree) => {
-          const li = document.createElement("li");
-          li.textContent = `${tree.name} — (${tree.latitude}, ${tree.longitude})`;
-          pendingTreesList.appendChild(li);
-        });
-      } catch (error) {
-        console.error("Error fetching trees:", error);
+  const treeForm = document.getElementById("tree-form");
+  const pendingTreesDiv = document.getElementById("pending-trees");
+
+  // Fetch trees and display
+  async function fetchTrees() {
+    try {
+      const response = await fetch("http://localhost:8080/api/trees/list");
+      const trees = await response.json();
+
+      pendingTreesDiv.innerHTML = "";
+
+      if (trees.length === 0) {
+        pendingTreesDiv.innerHTML = "<p>No trees submitted yet.</p>";
+        return;
       }
+
+      const list = document.createElement("ul");
+
+      trees.forEach((tree) => {
+        const item = document.createElement("li");
+        item.textContent = `${tree.name} — (${tree.latitude}, ${tree.longitude})`;
+        list.appendChild(item);
+      });
+
+      pendingTreesDiv.appendChild(list);
+    } catch (error) {
+      console.error("Error fetching trees:", error);
+      pendingTreesDiv.innerHTML = "<p>Error loading trees.</p>";
     }
-  
-    // Handle tree form submission (JSON-only for now)
-    treeForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-  
-      const treeName = document.getElementById("treeName").value;
-      const latitude = parseFloat(document.getElementById("latitude").value);
-      const longitude = parseFloat(document.getElementById("longitude").value);
-  
-      if (treeName && latitude && longitude) {
-        const treeData = {
-          name: treeName,
-          latitude: latitude,
-          longitude: longitude
-        };
-  
-        try {
-          const response = await fetch("http://localhost:8080/api/trees/add", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(treeData)
-          });
-  
-          if (response.ok) {
-            alert("Tree added successfully!");
-            treeForm.reset();
-            fetchPendingTrees(); // Refresh list
-          } else {
-            alert("Failed to add tree.");
-          }
-        } catch (error) {
-          console.error("Error submitting tree:", error);
-          alert("An error occurred while adding the tree.");
-        }
+  }
+
+  // Submit new tree
+  treeForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(treeForm);
+    const fileInput = document.getElementById("treeImage");
+
+    // Optionally handle image upload later
+    const hasImage = fileInput.files.length > 0;
+
+    try {
+      const response = await fetch("http://localhost:8080/api/trees/add", {
+        method: "POST",
+        body: formData
+      });
+
+      if (response.ok) {
+        alert("Tree submitted successfully!");
+        treeForm.reset();
+        fetchTrees();
       } else {
-        alert("Please fill out all fields.");
+        alert("Error: Failed to submit the tree.");
+        console.error("Response status:", response.status);
       }
-    });
-  
-    fetchPendingTrees(); // Initial load
+    } catch (err) {
+      console.error("Request error:", err);
+      alert("An error occurred while adding the tree.");
+    }
   });
-  
+
+  fetchTrees();
+});
