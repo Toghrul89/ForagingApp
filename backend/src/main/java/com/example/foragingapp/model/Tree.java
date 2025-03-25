@@ -1,34 +1,60 @@
 package com.example.foragingapp.model;
 
 import jakarta.persistence.*;
-import java.util.UUID;
 
 @Entity
-@Table(name = "trees")
 public class Tree {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    private Long id;
 
     private String name;
-    private String location;
-    private String imageUrl; // Store image path
+    private double latitude;
+    private double longitude;
 
-    public Tree() {}
+    // Optional: store image file name or path
+    private String imagePath;
 
-    public Tree(String name, String location, String imageUrl) {
-        this.name = name;
-        this.location = location;
-        this.imageUrl = imageUrl;
+    // --- Getters and Setters ---
+
+    public Long getId() {
+        return id;
     }
 
-    // Getters and setters
-    public UUID getId() { return id; }
-    public String getName() { return name; }
-    public String getLocation() { return location; }
-    public String getImageUrl() { return imageUrl; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public void setName(String name) { this.name = name; }
-    public void setLocation(String location) { this.location = location; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 }
