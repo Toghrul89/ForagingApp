@@ -1,4 +1,4 @@
-package backend.src.main.java.com.example.foragingapp;
+package com.example.foragingapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
