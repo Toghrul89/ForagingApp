@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@CrossOrigin(origins = "http://localhost:5500")
 @RestController
 @RequestMapping("/api/trees")
-public class TreeController {
+public class TreeController { 
 
     @Autowired
     private TreeRepository treeRepository;
