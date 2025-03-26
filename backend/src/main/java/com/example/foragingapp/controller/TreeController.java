@@ -43,7 +43,7 @@ public class TreeController {
             }
             File destination = new File(uploadPath, filename);
             treeImage.transferTo(destination);
-            tree.setImageUrl("/" + uploadDir + "/" + filename); // e.g., "/uploads/abc.jpg"
+            tree.setImageUrl("/uploads/" + filename); // e.g., "/uploads/abc.jpg"
         } else {
             tree.setImageUrl(""); // Optional: empty or placeholder
         }
