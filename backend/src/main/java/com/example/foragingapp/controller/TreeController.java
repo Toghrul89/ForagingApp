@@ -36,7 +36,7 @@ public class TreeController {
 
         if (treeImage != null && !treeImage.isEmpty()) {
             String filename = UUID.randomUUID().toString() + "_" + treeImage.getOriginalFilename();
-            String uploadDir = "uploads";
+            String uploadDir = System.getProperty("user.dir") + "/uploads";
             File uploadPath = new File(uploadDir);
             if (!uploadPath.exists()) {
                 uploadPath.mkdirs();
