@@ -1,63 +1,37 @@
 package com.example.foragingapplication
 
-import android.app.DatePickerDialog
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import java.text.SimpleDateFormat
-import java.util.*
 
 class LogEntryActivity : AppCompatActivity() {
-
-    private lateinit var plantNameEditText: EditText
-    private lateinit var notesEditText: EditText
-    private lateinit var dateTextView: TextView
-    private lateinit var saveButton: Button
-
-    private var selectedDate: Calendar = Calendar.getInstance()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_entry)
 
-        plantNameEditText = findViewById(R.id.editTextPlantName)
-        notesEditText = findViewById(R.id.editTextNotes)
-        dateTextView = findViewById(R.id.textViewDate)
-        saveButton = findViewById(R.id.buttonSave)
+        // Connect UI elements
+        val itemNameEditText = findViewById<EditText>(R.id.editTextItemName)
+        val locationEditText = findViewById<EditText>(R.id.editTextLocation)
+        val notesEditText = findViewById<EditText>(R.id.editTextNotes)
+        val dateEditText = findViewById<EditText>(R.id.editTextDate)
+        val saveButton = findViewById<Button>(R.id.buttonSaveLog)
 
-        updateDateInView()
-
-        dateTextView.setOnClickListener {
-            DatePickerDialog(this,
-                { _, year, month, day ->
-                    selectedDate.set(Calendar.YEAR, year)
-                    selectedDate.set(Calendar.MONTH, month)
-                    selectedDate.set(Calendar.DAY_OF_MONTH, day)
-                    updateDateInView()
-                },
-                selectedDate.get(Calendar.YEAR),
-                selectedDate.get(Calendar.MONTH),
-                selectedDate.get(Calendar.DAY_OF_MONTH)
-            ).show()
-        }
-
+        // Handle button click
         saveButton.setOnClickListener {
-            val plantName = plantNameEditText.text.toString().trim()
+            val itemName = itemNameEditText.text.toString().trim()
+            val location = locationEditText.text.toString().trim()
             val notes = notesEditText.text.toString().trim()
-            val date = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(selectedDate.time)
+            val date = dateEditText.text.toString().trim()
 
-            if (plantName.isEmpty()) {
-                Toast.makeText(this, "Please enter a plant name", Toast.LENGTH_SHORT).show()
+            if (itemName.isNotEmpty() && location.isNotEmpty() && date.isNotEmpty()) {
+                val message = "Saved: $itemName at $location on $date"
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                // Here you can later add: save to database or file
             } else {
-                // TODO: Save to database later
-                Toast.makeText(this, "Saved: $plantName on $date", Toast.LENGTH_SHORT).show()
-                finish()
+                Toast.makeText(this, "Please fill in item name, location and date", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    private fun updateDateInView() {
-        val format = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-        dateTextView.text = format.format(selectedDate.time)
     }
 }
