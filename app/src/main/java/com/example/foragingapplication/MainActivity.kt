@@ -18,5 +18,11 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, LogEntryActivity::class.java)
             startActivity(intent)
         }
+
+        val viewLogsButton = findViewById<Button>(R.id.buttonViewLogs)
+        viewLogsButton.setOnClickListener {
+            val intent = Intent(this, ViewLogsActivity::class.java)
+            startActivity(intent)
+        }
     }
 }
