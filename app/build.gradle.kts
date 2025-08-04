@@ -18,7 +18,8 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
+        dataBinding = true
+        viewBinding = true 
     }
 
     compileOptions {
@@ -36,4 +37,10 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("org.maplibre.gl:android-sdk:10.4.0")
+
+    testImplementation("junit:junit:4.13.2")
 }
+
+
+
