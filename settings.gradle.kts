@@ -5,12 +5,13 @@ pluginManagement {
         mavenCentral()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-        maven(url = "https://maplibre.org/maven") 
+        maven(url = "https://maven.maplibre.org/") // Required for MapLibre
     }
 }
 
