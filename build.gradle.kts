@@ -1,20 +1,12 @@
-// Root-level build.gradle.kts
-
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:8.3.0")
-        classpath(kotlin("gradle-plugin", version = "1.9.0"))
-    }
+// Top-level Gradle file
+plugins {
+    kotlin("jvm") version "1.9.10" apply false
+    id("com.android.application") version "8.1.0" apply false
 }
 
 allprojects {
     repositories {
         google()
         mavenCentral()
-        maven(url = "https://maven.maplibre.org/")
     }
 }

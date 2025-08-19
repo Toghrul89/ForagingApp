@@ -1,7 +1,9 @@
-package com.example.foragingapplication
+package com.example.foragingapp
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.EditText
@@ -11,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.mapbox.geojson.Point
-import com.mapbox.maps.CameraOptions
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
 import com.mapbox.maps.plugin.annotation.AnnotationConfig
@@ -20,11 +21,11 @@ import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.gestures.addOnMapClickListener
-import com.mapbox.maps.plugin.lifecycle.*
+import com.mapbox.maps.plugin.lifecycle.onStart
+import com.mapbox.maps.plugin.lifecycle.onStop
 import com.mapbox.maps.plugin.locationcomponent.location
 
 class MapActivity : AppCompatActivity() {
-
     private lateinit var mapView: MapView
     private lateinit var pointAnnotationManager: PointAnnotationManager
 
@@ -35,19 +36,23 @@ class MapActivity : AppCompatActivity() {
         mapView = findViewById(R.id.mapView)
 
         mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) {
-            setupMarkerManager()
-            requestLocationPermission()
-        }
-    }
+            val annotationApi = mapView.annotations
+            pointAnnotationManager = annotationApi.createPointAnnotationManager(mapView, AnnotationConfig())
 
-    private fun setupMarkerManager() {
-        val annotationApi = mapView.annotations
-        pointAnnotationManager = annotationApi.createPointAnnotationManager(mapView, AnnotationConfig())
+            mapView.gestures.addOnMapClickListener { point ->
+                showAddTreeDialog(point)
+                true
+            }
 
-        mapView.gestures.addOnMapClickListener { point ->
-            showAddTreeDialog(point)
-            true
+            pointAnnotationManager.addClickListener { annotation: PointAnnotation ->
+                val title = annotation.textField ?: "Fruit tree"
+                val url = "https://en.wikipedia.org/wiki/Special:Search?search=" + Uri.encode(title)
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                true
+            }
         }
+
+        requestLocationPermission()
     }
 
     private fun showAddTreeDialog(point: Point) {
@@ -60,52 +65,37 @@ class MapActivity : AppCompatActivity() {
             .setView(dialogView)
             .setPositiveButton("Add") { _, _ ->
                 val name = nameInput.text.toString().ifEmpty { "Unnamed Tree" }
-                addTreeMarker(point, name)
+                addMarker(point, name)
                 Toast.makeText(this, "$name added!", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
 
-    private fun addTreeMarker(point: Point, title: String) {
-        val marker = PointAnnotationOptions()
+    private fun addMarker(point: Point, title: String) {
+        val opts = PointAnnotationOptions()
             .withPoint(point)
             .withTextField(title)
             .withTextSize(12.0)
-        pointAnnotationManager.create(marker)
+        pointAnnotationManager.create(opts)
     }
 
-    // Location permission logic
     private fun requestLocationPermission() {
-        val permission = Manifest.permission.ACCESS_FINE_LOCATION
-        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(permission), 1001)
-        } else {
-            enableUserLocation()
-        }
+        val perm = Manifest.permission.ACCESS_FINE_LOCATION
+        if (ContextCompat.checkSelfPermission(this, perm) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(perm), 1001)
+        } else enableUserLocation()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 1001 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            enableUserLocation()
-        } else {
-            Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
-        }
+    override fun onRequestPermissionsResult(req: Int, perms: Array<out String>, res: IntArray) {
+        super.onRequestPermissionsResult(req, perms, res)
+        if (req == 1001 && res.isNotEmpty() && res[0] == PackageManager.PERMISSION_GRANTED) enableUserLocation()
     }
 
     private fun enableUserLocation() {
-        val locationComponentPlugin = mapView.location
-        locationComponentPlugin.updateSettings {
-            enabled = true
-            pulsingEnabled = true
-        }
+        mapView.location.updateSettings { enabled = true; pulsingEnabled = true }
     }
 
-    // Lifecycle
     override fun onStart() { super.onStart(); mapView.onStart() }
-    override fun onResume() { super.onResume(); mapView.onResume() }
-    override fun onPause() { super.onPause(); mapView.onPause() }
     override fun onStop() { super.onStop(); mapView.onStop() }
-    override fun onDestroy() { super.onDestroy(); mapView.onDestroy() }
 }

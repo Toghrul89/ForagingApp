@@ -1,4 +1,4 @@
-package com.example.foragingapplication
+package com.example.foragingapp
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,19 +10,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Connect the button
-        val buttonAddLog = findViewById<Button>(R.id.buttonAddLog)
-
-        // Set click listener
-        buttonAddLog.setOnClickListener {
-            val intent = Intent(this, LogEntryActivity::class.java)
-            startActivity(intent)
+        findViewById<Button>(R.id.buttonAddLog).setOnClickListener {
+            startActivity(Intent(this, LogEntryActivity::class.java))
         }
 
-        val viewLogsButton = findViewById<Button>(R.id.buttonViewLogs)
-        viewLogsButton.setOnClickListener {
-            val intent = Intent(this, ViewLogsActivity::class.java)
-            startActivity(intent)
+        findViewById<Button>(R.id.buttonViewLogs).setOnClickListener {
+            startActivity(Intent(this, LogListActivity::class.java))
+        }
+
+        findViewById<Button>(R.id.buttonMap).setOnClickListener {
+            startActivity(Intent(this, MapActivity::class.java))
         }
     }
 }
