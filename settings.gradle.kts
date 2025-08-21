@@ -1,18 +1,20 @@
 pluginManagement {
     repositories {
         google()
-        gradlePluginPortal()
         mavenCentral()
-        maven(url = "https://maven.maplibre.org") // MapLibre repo
+        maven { url = uri("https://maplibre.org/maven") }
+        gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google()
         mavenCentral()
-        maven(url = "https://maven.maplibre.org") // MapLibre repo
+        maven { url = uri("https://maplibre.org/maven") }
     }
 }
+
 rootProject.name = "ForagingApp"
 include(":app")
