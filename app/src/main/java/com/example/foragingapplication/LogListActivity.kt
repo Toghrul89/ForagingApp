@@ -1,22 +1,28 @@
 package com.example.foragingapp
 
 import android.os.Bundle
+import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.foragingapp.data.LogDatabaseHelper
-import com.example.foragingapp.ui.LogsAdapter
 
 class LogListActivity : AppCompatActivity() {
+
+    private lateinit var dbHelper: LogDatabaseHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_list)
 
-        val db = LogDatabaseHelper(this)
-        val logs = db.getAllLogs()
+        dbHelper = LogDatabaseHelper(this)
 
-        val rv = findViewById<RecyclerView>(R.id.recyclerLogs)
-        rv.layoutManager = LinearLayoutManager(this)
-        rv.adapter = LogsAdapter(logs)
+        val listView = findViewById<ListView>(R.id.logListView)
+        val logs = dbHelper.getAllLogs()
+
+        val adapter = LogsAdapter(this, logs)
+        listView.adapter = adapter
+    }
+
+    override fun onDestroy() {
+        dbHelper.close()
+        super.onDestroy()
     }
 }
