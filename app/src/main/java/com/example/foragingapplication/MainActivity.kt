@@ -2,24 +2,42 @@ package com.example.foragingapp
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        findViewById<Button>(R.id.buttonAddLog).setOnClickListener {
-            startActivity(Intent(this, LogEntryActivity::class.java))
+        // Initialize buttons from layout
+        val logEntryButton = findViewById<Button>(R.id.btnLogEntry)
+        val viewLogsButton = findViewById<Button>(R.id.btnViewLogs)
+        val openMapButton = findViewById<Button>(R.id.btnOpenMap)
+        val viewLogsButton: Button = findViewById(R.id.btnViewLogs)
+        viewLogsButton.setOnClickListener {
+            val intent = Intent(this, ViewLogsActivity::class.java)
+            startActivity(intent)
         }
 
-        findViewById<Button>(R.id.buttonViewLogs).setOnClickListener {
-            startActivity(Intent(this, LogListActivity::class.java))
+
+        // Navigate to LogEntryActivity
+        logEntryButton.setOnClickListener {
+            val intent = Intent(this, LogEntryActivity::class.java)
+            startActivity(intent)
         }
 
-        findViewById<Button>(R.id.buttonMap).setOnClickListener {
-            startActivity(Intent(this, MapActivity::class.java))
+        // Navigate to ViewLogsActivity
+        viewLogsButton.setOnClickListener {
+            val intent = Intent(this, ViewLogsActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Navigate to MapActivity
+        openMapButton.setOnClickListener {
+            val intent = Intent(this, MapActivity::class.java)
+            startActivity(intent)
         }
     }
 }
