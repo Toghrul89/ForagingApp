@@ -1,20 +1,5 @@
-// Root build.gradle.kts
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url = uri("https://maplibre.org/maven") }
-    }
-    dependencies {
-        classpath("com.android.tools.build:gradle:8.2.0")
-        classpath(kotlin("gradle-plugin", version = "1.9.0"))
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url = uri("https://maplibre.org/maven") }
-    }
+plugins {
+    kotlin("android") version "1.9.0" apply false
+    id("com.android.application") version "8.1.1" apply false
+    id("com.android.library") version "8.1.1" apply false
 }
