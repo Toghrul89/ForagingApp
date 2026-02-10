@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.example.foragingapp.model.LogEntry
 
 class LogDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+    
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL(
             """
@@ -73,6 +74,60 @@ class LogDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, n
             }
         }
         return list
+    }
+
+    fun getLogById(id: Long): LogEntry? {
+        val cursor: Cursor = readableDatabase.query(
+            TABLE_LOGS, 
+            null, 
+            "$COL_ID = ?", 
+            arrayOf(id.toString()), 
+            null, 
+            null, 
+            null
+        )
+        
+        cursor.use { c ->
+            if (c.moveToFirst()) {
+                val idIx = c.getColumnIndexOrThrow(COL_ID)
+                val nameIx = c.getColumnIndexOrThrow(COL_NAME)
+                val locIx = c.getColumnIndexOrThrow(COL_LOCATION)
+                val dateIx = c.getColumnIndexOrThrow(COL_DATE)
+                val notesIx = c.getColumnIndexOrThrow(COL_NOTES)
+                val imgIx = c.getColumnIndexOrThrow(COL_IMAGE_URI)
+                val latIx = c.getColumnIndexOrThrow(COL_LAT)
+                val lngIx = c.getColumnIndexOrThrow(COL_LNG)
+                
+                return LogEntry(
+                    id = c.getLong(idIx),
+                    name = c.getString(nameIx),
+                    location = c.getString(locIx),
+                    date = c.getString(dateIx),
+                    notes = c.getString(notesIx) ?: "",
+                    imageUri = c.getString(imgIx) ?: "",
+                    lat = if (!c.isNull(latIx)) c.getDouble(latIx) else null,
+                    lng = if (!c.isNull(lngIx)) c.getDouble(lngIx) else null,
+                )
+            }
+        }
+        return null
+    }
+
+    fun deleteLog(id: Long): Int {
+        return writableDatabase.delete(TABLE_LOGS, "$COL_ID = ?", arrayOf(id.toString()))
+    }
+
+    fun updateLog(entry: LogEntry): Int {
+        val values = ContentValues().apply {
+            put(COL_NAME, entry.name)
+            put(COL_LOCATION, entry.location)
+            put(COL_DATE, entry.date)
+            put(COL_NOTES, entry.notes)
+            put(COL_IMAGE_URI, entry.imageUri)
+            put(COL_LAT, entry.lat)
+            put(COL_LNG, entry.lng)
+        }
+        return writableDatabase.update(TABLE_LOGS, values, "$COL_ID = ?", arrayOf(entry.id.toString()))
     }
 
     companion object {

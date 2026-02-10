@@ -1,4 +1,3 @@
 <resources>
-    <string name="app_name">ForagingApplication</string>
-    <string name="add_foraging_log">Add Foraging Log</string>
+    <string name="app_name">ForagingApp</string>
 </resources>

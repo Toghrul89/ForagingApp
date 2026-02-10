@@ -24,13 +24,21 @@ class ViewLogsActivity : AppCompatActivity() {
         logsRecyclerView.layoutManager = LinearLayoutManager(this)
 
         databaseHelper = LogDatabaseHelper(this)
-        val logList = databaseHelper.getAllLogs()
-
-        adapter = LogsAdapter(logList)
-        logsRecyclerView.adapter = adapter
+        loadLogs()
 
         backButton.setOnClickListener {
-            finish() // Just finish this activity to go back
+            finish()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadLogs()
+    }
+
+    private fun loadLogs() {
+        val logList = databaseHelper.getAllLogs()
+        adapter = LogsAdapter(logList)
+        logsRecyclerView.adapter = adapter
     }
 }

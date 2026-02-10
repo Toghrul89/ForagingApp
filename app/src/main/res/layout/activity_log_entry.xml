@@ -1,47 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
-    tools:context=".LogEntryActivity">
+    android:padding="16dp"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/etName"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Tree or Plant Name"
-            android:inputType="textPersonName"
+            android:text="Add Tree Log"
+            android:textSize="24sp"
+            android:textStyle="bold"
             android:layout_marginBottom="16dp" />
 
-        <EditText
-            android:id="@+id/etLocation"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Location"
-            android:inputType="text"
-            android:layout_marginBottom="16dp" />
+            android:hint="Tree Name *"
+            android:layout_marginBottom="8dp">
 
-        <EditText
-            android:id="@+id/etNotes"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextTreeName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Notes"
-            android:inputType="textMultiLine"
-            android:minLines="3"
-            android:gravity="top"
-            android:layout_marginBottom="24dp" />
+            android:hint="Location *"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/btnSave"
+            android:id="@+id/buttonGetLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Save Entry" />
+            android:text="📍 Get Current GPS Location"
+            android:layout_marginBottom="8dp"
+            style="@style/Widget.Material3.Button.OutlinedButton" />
+
+        <TextView
+            android:id="@+id/tvCoordinates"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Coordinates will appear here"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Notes (optional)"
+            android:layout_marginBottom="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextNotes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:gravity="top" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Photo (optional)"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <Button
+                android:id="@+id/buttonTakePhoto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="📷 Camera"
+                android:layout_marginEnd="8dp"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
+
+            <Button
+                android:id="@+id/buttonSelectImage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="🖼️ Gallery"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageViewPreview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="Photo preview" />
+
+        <Button
+            android:id="@+id/buttonSaveLog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="💾 Save Log"
+            android:textSize="16sp"
+            android:padding="16dp" />
 
     </LinearLayout>
 </ScrollView>
