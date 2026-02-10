@@ -1,11 +1,11 @@
 package com.example.foragingapp
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.foragingapp.data.LogDatabaseHelper
 
 class ViewLogsActivity : AppCompatActivity() {
 
@@ -30,8 +30,7 @@ class ViewLogsActivity : AppCompatActivity() {
         logsRecyclerView.adapter = adapter
 
         backButton.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+            finish() // Just finish this activity to go back
         }
     }
 }

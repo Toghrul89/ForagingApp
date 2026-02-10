@@ -14,7 +14,6 @@
         android:theme="@style/Theme.ForagingApp">
         
         <activity android:name=".ViewLogsActivity" />
-        <activity android:name=".LogListActivity" />
         <activity android:name=".LogEntryActivity" />
         <activity android:name=".MapActivity" />
         <activity

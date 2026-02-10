@@ -15,12 +15,6 @@ class MainActivity : AppCompatActivity() {
         val logEntryButton = findViewById<Button>(R.id.btnLogEntry)
         val viewLogsButton = findViewById<Button>(R.id.btnViewLogs)
         val openMapButton = findViewById<Button>(R.id.btnOpenMap)
-        val viewLogsButton: Button = findViewById(R.id.btnViewLogs)
-        viewLogsButton.setOnClickListener {
-            val intent = Intent(this, ViewLogsActivity::class.java)
-            startActivity(intent)
-        }
-
 
         // Navigate to LogEntryActivity
         logEntryButton.setOnClickListener {
@@ -40,4 +34,4 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-}
+} 

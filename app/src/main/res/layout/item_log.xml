@@ -3,21 +3,41 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp"
+    android:padding="12dp"
     android:background="@android:color/white"
     android:elevation="2dp"
     android:layout_marginBottom="8dp">
+
+    <TextView
+        android:id="@+id/tvLogName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tree Name"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvLogLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp" />
 
     <TextView
         android:id="@+id/tvLogDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Date"
-        android:textStyle="bold" />
+        android:textSize="12sp"
+        android:textColor="#666666"
+        android:layout_marginTop="4dp" />
 
     <TextView
-        android:id="@+id/tvLogNote"
+        android:id="@+id/tvLogNotes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Note content here." />
+        android:text="Notes"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp" />
 </LinearLayout>
