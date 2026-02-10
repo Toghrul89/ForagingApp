@@ -49,7 +49,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
     // MapLibre SDK
-    implementation("org.maplibre.gl:android-sdk:9.6.2")
+    implementation("org.maplibre.gl:android-sdk:11.5.0")
 
     // Gson for JSON handling
     implementation("com.google.code.gson:gson:2.10.1")

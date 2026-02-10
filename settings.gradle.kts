@@ -3,11 +3,6 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
-        maven {
-            url = uri("http://maplibre.github.io/maplibre-gl-native/maven")
-            // ✅ THIS is the correct way to allow insecure protocol in Kotlin DSL
-            isAllowInsecureProtocol = true
-        }
     }
 
     plugins {
@@ -21,11 +16,6 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url = uri("http://maplibre.github.io/maplibre-gl-native/maven")
-            // ✅ again here
-            isAllowInsecureProtocol = true
-        }
     }
 }
 
