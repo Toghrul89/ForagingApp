@@ -28,12 +28,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "1.8"
     }
 
     buildFeatures {
@@ -48,8 +48,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
-    // MapLibre SDK
-    implementation("org.maplibre.gl:android-sdk:11.5.0")
+    // MapLibre SDK - Using compatible version
+    implementation("org.maplibre.gl:android-sdk:9.6.0")
 
     // Gson for JSON handling
     implementation("com.google.code.gson:gson:2.10.1")

@@ -12,200 +12,139 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.foragingapp.data.LogDatabaseHelper
 import com.example.foragingapp.model.LogEntry
-import com.mapbox.geojson.Point
-import com.mapbox.maps.MapView
-import com.mapbox.maps.Style
-import com.mapbox.maps.plugin.annotation.AnnotationConfig
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotation
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
-import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
-import com.mapbox.maps.plugin.annotation.annotations
-import com.mapbox.maps.plugin.gestures.addOnMapClickListener
-import com.mapbox.maps.plugin.locationcomponent.location
+import com.mapbox.mapboxsdk.Mapbox
+import com.mapbox.mapboxsdk.camera.CameraPosition
+import com.mapbox.mapboxsdk.geometry.LatLng
+import com.mapbox.mapboxsdk.maps.MapView
+import com.mapbox.mapboxsdk.maps.Style
 import java.text.SimpleDateFormat
 import java.util.*
 
 class MapActivity : AppCompatActivity() {
     private lateinit var mapView: MapView
-    private lateinit var pointAnnotationManager: PointAnnotationManager
     private lateinit var dbHelper: LogDatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // Initialize Mapbox
+        Mapbox.getInstance(this, null)
+        
         setContentView(R.layout.activity_map)
 
         dbHelper = LogDatabaseHelper(this)
         mapView = findViewById(R.id.mapView)
+        mapView.onCreate(savedInstanceState)
 
-        mapView.getMapboxMap().loadStyleUri(Style.MAPBOX_STREETS) {
-            val annotationApi = mapView.annotations
-            pointAnnotationManager = annotationApi.createPointAnnotationManager(mapView, AnnotationConfig())
-
-            loadExistingMarkers()
-
-            mapView.gestures.addOnMapClickListener { point ->
-                showAddTreeDialog(point)
-                true
-            }
-
-            pointAnnotationManager.addClickListener { annotation: PointAnnotation ->
-                showMarkerDetails(annotation)
-                true
+        mapView.getMapAsync { map ->
+            map.setStyle(Style.MAPBOX_STREETS) {
+                
+                // Set initial camera position
+                val position = CameraPosition.Builder()
+                    .target(LatLng(40.7128, -74.0060)) // New York
+                    .zoom(10.0)
+                    .build()
+                map.cameraPosition = position
+                
+                Toast.makeText(this, "Map loaded! Tap anywhere to add a tree.", Toast.LENGTH_LONG).show()
+                
+                // Add click listener
+                map.addOnMapClickListener { point ->
+                    showAddTreeDialog(point)
+                    true
+                }
             }
         }
 
         requestLocationPermission()
     }
 
-    private fun loadExistingMarkers() {
-        val logs = dbHelper.getAllLogs()
-        
-        for (log in logs) {
-            if (log.lat != null && log.lng != null) {
-                val point = Point.fromLngLat(log.lng, log.lat)
-                addMarkerToMap(point, log.name, log.id)
-            }
-        }
-        
-        if (logs.isNotEmpty()) {
-            val count = logs.count { it.lat != null && it.lng != null }
-            Toast.makeText(this, "Loaded $count markers from database", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun showAddTreeDialog(point: Point) {
+    private fun showAddTreeDialog(point: LatLng) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_tree, null)
         val nameInput = dialogView.findViewById<EditText>(R.id.treeNameInput)
         val noteInput = dialogView.findViewById<EditText>(R.id.treeNoteInput)
 
         AlertDialog.Builder(this)
-            .setTitle("Add Tree at this Location")
+            .setTitle("Add Tree at Location")
             .setView(dialogView)
             .setPositiveButton("Add") { _, _ ->
                 val name = nameInput.text.toString().ifEmpty { "Unnamed Tree" }
                 val notes = noteInput.text.toString()
-                
                 saveTreeToDatabase(name, notes, point)
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
 
-    private fun saveTreeToDatabase(name: String, notes: String, point: Point) {
+    private fun saveTreeToDatabase(name: String, notes: String, point: LatLng) {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDate = dateFormat.format(Date())
         
         val logEntry = LogEntry(
             name = name,
-            location = "Lat: ${String.format("%.6f", point.latitude())}, Lng: ${String.format("%.6f", point.longitude())}",
+            location = "Lat: ${String.format("%.6f", point.latitude)}, Lng: ${String.format("%.6f", point.longitude)}",
             date = currentDate,
             notes = notes,
-            lat = point.latitude(),
-            lng = point.longitude()
+            lat = point.latitude,
+            lng = point.longitude
         )
         
         val id = dbHelper.insertLog(logEntry)
         
         if (id > 0) {
-            addMarkerToMap(point, name, id)
             Toast.makeText(this, "$name saved to database!", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, "Failed to save tree", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun addMarkerToMap(point: Point, title: String, logId: Long) {
-        val opts = PointAnnotationOptions()
-            .withPoint(point)
-            .withTextField(title)
-            .withTextSize(12.0)
-        
-        val annotation = pointAnnotationManager.create(opts)
-        annotation.setData(com.google.gson.JsonPrimitive(logId))
-    }
-
-    private fun showMarkerDetails(annotation: PointAnnotation) {
-        val logId = annotation.getData()?.asLong
-        
-        if (logId != null) {
-            val log = dbHelper.getLogById(logId)
-            
-            if (log != null) {
-                val message = """
-                    Tree: ${log.name}
-                    Location: ${log.location}
-                    Date: ${log.date}
-                    Notes: ${if (log.notes.isNotEmpty()) log.notes else "No notes"}
-                """.trimIndent()
-                
-                AlertDialog.Builder(this)
-                    .setTitle("Tree Details")
-                    .setMessage(message)
-                    .setPositiveButton("OK", null)
-                    .setNegativeButton("Delete") { _, _ ->
-                        deleteMarker(annotation, logId)
-                    }
-                    .show()
-            }
-        } else {
-            val title = annotation.textField ?: "Unknown Tree"
-            Toast.makeText(this, title, Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun deleteMarker(annotation: PointAnnotation, logId: Long) {
-        AlertDialog.Builder(this)
-            .setTitle("Delete Tree?")
-            .setMessage("Are you sure you want to delete this tree log?")
-            .setPositiveButton("Delete") { _, _ ->
-                val deleted = dbHelper.deleteLog(logId)
-                
-                if (deleted > 0) {
-                    pointAnnotationManager.delete(annotation)
-                    Toast.makeText(this, "Tree deleted", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Failed to delete", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
-    }
-
     private fun requestLocationPermission() {
         val perm = Manifest.permission.ACCESS_FINE_LOCATION
         if (ContextCompat.checkSelfPermission(this, perm) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(perm), 1001)
-        } else {
-            enableUserLocation()
         }
     }
 
     override fun onRequestPermissionsResult(req: Int, perms: Array<out String>, res: IntArray) {
         super.onRequestPermissionsResult(req, perms, res)
         if (req == 1001 && res.isNotEmpty() && res[0] == PackageManager.PERMISSION_GRANTED) {
-            enableUserLocation()
+            Toast.makeText(this, "Location permission granted", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun enableUserLocation() {
-        mapView.location.updateSettings { 
-            enabled = true
-            pulsingEnabled = true
-        }
-    }
-
-    override fun onStart() { 
+    override fun onStart() {
         super.onStart()
         mapView.onStart()
     }
-    
-    override fun onStop() { 
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
+
+    override fun onStop() {
         super.onStop()
         mapView.onStop()
     }
-    
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapView.onSaveInstanceState(outState)
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
+    }
+
     override fun onDestroy() {
-        dbHelper.close()
         super.onDestroy()
+        mapView.onDestroy()
+        dbHelper.close()
     }
 }

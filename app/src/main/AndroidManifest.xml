@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.foragingapp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
@@ -18,9 +17,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ForagingApp">
         
-        <activity android:name=".ViewLogsActivity" />
-        <activity android:name=".LogEntryActivity" />
-        <activity android:name=".MapActivity" />
+        <activity android:name=".ViewLogsActivity"
+            android:exported="false" />
+        <activity android:name=".LogEntryActivity"
+            android:exported="false" />
+        <activity android:name=".MapActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
