@@ -199,13 +199,13 @@ class LogEntryActivity : AppCompatActivity() {
             lng = currentLng
         )
 
-        val result = if (editingLogId != null) {
-            dbHelper.updateLog(logEntry)
+        val success = if (editingLogId != null) {
+            dbHelper.updateLog(logEntry) > 0  // Returns Boolean
         } else {
-            dbHelper.insertLog(logEntry)
+            dbHelper.insertLog(logEntry) > 0  // Returns Boolean
         }
 
-        if (result > 0) {
+        if (success) {
             Toast.makeText(this, "Log saved successfully", Toast.LENGTH_SHORT).show()
             finish()
         } else {

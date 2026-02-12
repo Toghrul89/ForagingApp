@@ -16,6 +16,7 @@ import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
+import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.Style
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,12 +24,13 @@ import java.util.*
 class MapActivity : AppCompatActivity() {
     private lateinit var mapView: MapView
     private lateinit var dbHelper: LogDatabaseHelper
+    private var mapboxMap: MapboxMap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Initialize Mapbox
-        Mapbox.getInstance(this, null)
+        // Initialize Mapbox (MapLibre fork)
+        Mapbox.getInstance(this)
         
         setContentView(R.layout.activity_map)
 
@@ -37,16 +39,23 @@ class MapActivity : AppCompatActivity() {
         mapView.onCreate(savedInstanceState)
 
         mapView.getMapAsync { map ->
-            map.setStyle(Style.MAPBOX_STREETS) {
+            mapboxMap = map
+            
+            // Use a free MapLibre style URL instead of Style.MAPBOX_STREETS
+            map.setStyle("https://demotiles.maplibre.org/style.json") { style ->
                 
                 // Set initial camera position
                 val position = CameraPosition.Builder()
-                    .target(LatLng(40.7128, -74.0060)) // New York
+                    .target(LatLng(37.7749, -122.4194)) // San Francisco
                     .zoom(10.0)
                     .build()
                 map.cameraPosition = position
                 
-                Toast.makeText(this, "Map loaded! Tap anywhere to add a tree.", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this, 
+                    "Map loaded! Tap anywhere to add a tree.", 
+                    Toast.LENGTH_LONG
+                ).show()
                 
                 // Add click listener
                 map.addOnMapClickListener { point ->
@@ -105,9 +114,14 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(req: Int, perms: Array<out String>, res: IntArray) {
-        super.onRequestPermissionsResult(req, perms, res)
-        if (req == 1001 && res.isNotEmpty() && res[0] == PackageManager.PERMISSION_GRANTED) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int, 
+        permissions: Array<out String>, 
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1001 && grantResults.isNotEmpty() && 
+            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(this, "Location permission granted", Toast.LENGTH_SHORT).show()
         }
     }
