@@ -1,16 +1,18 @@
 package com.example.foragingapp
 
 import android.os.Bundle
-import android.widget.Button
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foragingapp.data.LogDatabaseHelper
+import com.google.android.material.appbar.MaterialToolbar
 
 class ViewLogsActivity : AppCompatActivity() {
 
     private lateinit var logsRecyclerView: RecyclerView
-    private lateinit var backButton: Button
+    private lateinit var tvEmpty: TextView
     private lateinit var adapter: LogsAdapter
     private lateinit var databaseHelper: LogDatabaseHelper
 
@@ -18,17 +20,17 @@ class ViewLogsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_view_logs)
 
-        logsRecyclerView = findViewById(R.id.rvLogs)
-        backButton = findViewById(R.id.btnBack)
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener { finish() }
 
+        logsRecyclerView = findViewById(R.id.rvLogs)
+        tvEmpty = findViewById(R.id.tvEmpty)
         logsRecyclerView.layoutManager = LinearLayoutManager(this)
 
         databaseHelper = LogDatabaseHelper(this)
         loadLogs()
-
-        backButton.setOnClickListener {
-            finish()
-        }
     }
 
     override fun onResume() {
@@ -38,7 +40,14 @@ class ViewLogsActivity : AppCompatActivity() {
 
     private fun loadLogs() {
         val logList = databaseHelper.getAllLogs()
-        adapter = LogsAdapter(logList)
-        logsRecyclerView.adapter = adapter
+        if (logList.isEmpty()) {
+            logsRecyclerView.visibility = View.GONE
+            tvEmpty.visibility = View.VISIBLE
+        } else {
+            logsRecyclerView.visibility = View.VISIBLE
+            tvEmpty.visibility = View.GONE
+            adapter = LogsAdapter(logList)
+            logsRecyclerView.adapter = adapter
+        }
     }
 }

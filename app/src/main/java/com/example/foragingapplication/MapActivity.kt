@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.foragingapp.data.LogDatabaseHelper
 import com.example.foragingapp.model.LogEntry
+import com.google.android.material.appbar.MaterialToolbar
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.geometry.LatLng
@@ -45,13 +46,18 @@ class MapActivity : AppCompatActivity() {
         MapLibre.getInstance(this)
         setContentView(R.layout.activity_map)
 
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener { finish() }
+
         dbHelper = LogDatabaseHelper(this)
         mapView = findViewById(R.id.mapView)
         mapView.onCreate(savedInstanceState)
 
         mapView.getMapAsync { mapLibreMap ->
             map = mapLibreMap
-            mapLibreMap.setStyle("https://demotiles.maplibre.org/style.json") { style ->
+            mapLibreMap.setStyle("https://tiles.openfreemap.org/styles/liberty") { style ->
                 setupMarkerLayer(style)
                 loadMarkersFromDatabase()
                 centerMap()
@@ -66,7 +72,6 @@ class MapActivity : AppCompatActivity() {
         requestLocationPermission()
     }
 
-    // Sets up a GeoJSON source + SymbolLayer for markers
     private fun setupMarkerLayer(style: Style) {
         style.addSource(GeoJsonSource(SOURCE_ID, FeatureCollection.fromFeatures(emptyList())))
         style.addLayer(
@@ -74,14 +79,16 @@ class MapActivity : AppCompatActivity() {
                 PropertyFactory.textField("{name}"),
                 PropertyFactory.textSize(13f),
                 PropertyFactory.textOffset(arrayOf(0f, 1.5f)),
-                PropertyFactory.iconImage("marker"),
+                PropertyFactory.textColor("#1B5E20"),
+                PropertyFactory.textHaloColor("#FFFFFF"),
+                PropertyFactory.textHaloWidth(1.5f),
+                PropertyFactory.iconImage("marker-15"),
                 PropertyFactory.iconAllowOverlap(true),
                 PropertyFactory.textAllowOverlap(true)
             )
         )
     }
 
-    // Refreshes the GeoJSON source with all current markers
     private fun refreshMarkers() {
         val source = map?.style?.getSourceAs<GeoJsonSource>(SOURCE_ID)
         source?.setGeoJson(FeatureCollection.fromFeatures(markerFeatures))
@@ -104,9 +111,9 @@ class MapActivity : AppCompatActivity() {
         val target = if (logsWithCoords.isNotEmpty()) {
             LatLng(logsWithCoords.first().lat!!, logsWithCoords.first().lng!!)
         } else {
-            LatLng(47.6062, -122.3321) // Seattle fallback
+            LatLng(47.6062, -122.3321)
         }
-        map?.cameraPosition = CameraPosition.Builder().target(target).zoom(10.0).build()
+        map?.cameraPosition = CameraPosition.Builder().target(target).zoom(12.0).build()
     }
 
     private fun showAddSpotDialog(point: LatLng) {
@@ -115,7 +122,7 @@ class MapActivity : AppCompatActivity() {
         val noteInput = dialogView.findViewById<EditText>(R.id.treeNoteInput)
 
         AlertDialog.Builder(this)
-            .setTitle("Add Spot Here")
+            .setTitle("🌿 Add Spot Here")
             .setView(dialogView)
             .setPositiveButton("Add") { _, _ ->
                 val name = nameInput.text.toString().ifEmpty { "Unnamed Spot" }
@@ -127,10 +134,10 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun saveSpot(name: String, notes: String, point: LatLng) {
-        val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+        val date = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
         val entry = LogEntry(
             name = name,
-            location = "Lat: ${String.format("%.6f", point.latitude)}, Lng: ${String.format("%.6f", point.longitude)}",
+            location = "Lat: ${String.format("%.5f", point.latitude)}, Lng: ${String.format("%.5f", point.longitude)}",
             date = date,
             notes = notes,
             lat = point.latitude,
@@ -138,12 +145,11 @@ class MapActivity : AppCompatActivity() {
         )
         val id = dbHelper.insertLog(entry)
         if (id > 0) {
-            // Add pin immediately without reloading everything
             val feature = Feature.fromGeometry(Point.fromLngLat(point.longitude, point.latitude))
             feature.addStringProperty("name", name)
             markerFeatures.add(feature)
             refreshMarkers()
-            Toast.makeText(this, "$name saved!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "✅ $name saved!", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, "Failed to save", Toast.LENGTH_SHORT).show()
         }

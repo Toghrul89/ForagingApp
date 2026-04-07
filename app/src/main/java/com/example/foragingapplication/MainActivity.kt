@@ -11,23 +11,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val logEntryButton = findViewById<Button>(R.id.btnLogEntry)
-        val viewLogsButton = findViewById<Button>(R.id.btnViewLogs)
-        val openMapButton = findViewById<Button>(R.id.btnOpenMap)
-
-        logEntryButton.setOnClickListener {
-            val intent = Intent(this, LogEntryActivity::class.java)
-            startActivity(intent)
+        findViewById<Button>(R.id.btnLogEntry).setOnClickListener {
+            startActivity(Intent(this, LogEntryActivity::class.java))
         }
 
-        viewLogsButton.setOnClickListener {
-            val intent = Intent(this, ViewLogsActivity::class.java)
-            startActivity(intent)
+        findViewById<Button>(R.id.btnViewLogs).setOnClickListener {
+            startActivity(Intent(this, ViewLogsActivity::class.java))
         }
 
-        openMapButton.setOnClickListener {
-            val intent = Intent(this, MapActivity::class.java)
-            startActivity(intent)
+        findViewById<Button>(R.id.btnOpenMap).setOnClickListener {
+            startActivity(Intent(this, MapActivity::class.java))
         }
     }
 }
