@@ -39,6 +39,10 @@ class MapActivity : AppCompatActivity() {
         private const val SOURCE_ID = "foraging-spots"
         private const val LAYER_ID = "foraging-spots-layer"
         private const val LOCATION_PERMISSION_CODE = 1001
+        // Default location: Seattle, WA
+        private const val DEFAULT_LAT = 47.6062
+        private const val DEFAULT_LNG = -122.3321
+        private const val DEFAULT_ZOOM = 12.0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +61,17 @@ class MapActivity : AppCompatActivity() {
 
         mapView.getMapAsync { mapLibreMap ->
             map = mapLibreMap
+
+            // FIX 2: Enable all gestures — pinch to zoom, scroll to pan, rotate, tilt
+            mapLibreMap.uiSettings.apply {
+                isZoomGesturesEnabled = true
+                isScrollGesturesEnabled = true
+                isRotateGesturesEnabled = true
+                isTiltGesturesEnabled = true
+                isZoomControlsEnabled = true      // shows +/- buttons on screen
+                isDoubleTapGesturesEnabled = true
+            }
+
             mapLibreMap.setStyle("https://tiles.openfreemap.org/styles/liberty") { style ->
                 setupMarkerLayer(style)
                 loadMarkersFromDatabase()
@@ -107,13 +122,17 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun centerMap() {
+        // FIX 1: Default is Seattle. If user has saved spots, zoom to the first one instead.
         val logsWithCoords = dbHelper.getAllLogs().filter { it.lat != null && it.lng != null }
         val target = if (logsWithCoords.isNotEmpty()) {
             LatLng(logsWithCoords.first().lat!!, logsWithCoords.first().lng!!)
         } else {
-            LatLng(47.6062, -122.3321)
+            LatLng(DEFAULT_LAT, DEFAULT_LNG) // Seattle, WA
         }
-        map?.cameraPosition = CameraPosition.Builder().target(target).zoom(12.0).build()
+        map?.cameraPosition = CameraPosition.Builder()
+            .target(target)
+            .zoom(DEFAULT_ZOOM)
+            .build()
     }
 
     private fun showAddSpotDialog(point: LatLng) {
@@ -122,7 +141,7 @@ class MapActivity : AppCompatActivity() {
         val noteInput = dialogView.findViewById<EditText>(R.id.treeNoteInput)
 
         AlertDialog.Builder(this)
-            .setTitle("🌿 Add Spot Here")
+            .setTitle("Add Spot Here")
             .setView(dialogView)
             .setPositiveButton("Add") { _, _ ->
                 val name = nameInput.text.toString().ifEmpty { "Unnamed Spot" }
@@ -149,7 +168,7 @@ class MapActivity : AppCompatActivity() {
             feature.addStringProperty("name", name)
             markerFeatures.add(feature)
             refreshMarkers()
-            Toast.makeText(this, "✅ $name saved!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "$name saved!", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, "Failed to save", Toast.LENGTH_SHORT).show()
         }

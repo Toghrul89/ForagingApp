@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Hero Header -->
+            <!-- ── Hero Header ── -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
 
             </LinearLayout>
 
-            <!-- Divider line -->
+            <!-- Divider -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -63,7 +63,7 @@
                 android:layout_marginStart="28dp"
                 android:layout_marginEnd="28dp"/>
 
-            <!-- Action Cards -->
+            <!-- ── Action Cards ── -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,9 +71,9 @@
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:paddingTop="24dp"
-                android:paddingBottom="16dp">
+                android:paddingBottom="8dp">
 
-                <!-- Log Entry Card -->
+                <!-- Log Entry Card (dark) -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -121,13 +121,13 @@
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- View Logs + Map Row -->
+                <!-- Logs + Map row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
 
-                    <!-- View Logs -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
                         android:layout_height="130dp"
@@ -165,7 +165,6 @@
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
-                    <!-- Map -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
                         android:layout_height="130dp"
@@ -204,17 +203,100 @@
                     </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
+
             </LinearLayout>
 
-            <!-- Bottom tip -->
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- ── About Section ── -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Tap the map to pin any spot instantly."
-                android:textSize="12sp"
-                android:textColor="@color/textHint"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="32dp"/>
+                android:orientation="vertical"
+                android:paddingStart="28dp"
+                android:paddingEnd="28dp"
+                android:paddingTop="28dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ABOUT"
+                    android:textSize="10sp"
+                    android:letterSpacing="0.2"
+                    android:textColor="@color/textHint"
+                    android:layout_marginBottom="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Built for foragers."
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textPrimary"
+                    android:layout_marginBottom="10dp"/>
+
+                <!-- ✏️ Edit this text with your own About info -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="This app was built to make it easy to track, log, and revisit foraging spots in the wild. Created as a personal portfolio project by a software development student who loves the outdoors."
+                    android:textSize="14sp"
+                    android:lineSpacingMultiplier="1.6"
+                    android:textColor="@color/textSecondary"/>
+
+            </LinearLayout>
+
+            <!-- ── Footer ── -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="28dp"
+                android:paddingEnd="28dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="40dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FORAGE APP"
+                    android:textSize="11sp"
+                    android:letterSpacing="0.2"
+                    android:textColor="@color/textPrimary"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Made with care for the wild."
+                    android:textSize="12sp"
+                    android:textColor="@color/textHint"
+                    android:layout_marginTop="4dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="v1.0  ·  Seattle, WA"
+                    android:textSize="11sp"
+                    android:textColor="@color/textHint"
+                    android:layout_marginTop="4dp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

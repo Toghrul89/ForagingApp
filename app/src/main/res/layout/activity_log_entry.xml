@@ -69,7 +69,6 @@
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords"
                     android:textColor="@color/textPrimary"/>
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -90,7 +89,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/textPrimary"/>
-
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -114,10 +112,8 @@
                     android:minLines="3"
                     android:gravity="top"
                     android:textColor="@color/textPrimary"/>
-
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- GPS Coordinates display -->
             <TextView
                 android:id="@+id/tvCoordinates"
                 android:layout_width="match_parent"
@@ -172,7 +168,6 @@
                 android:textColor="@color/textHint"
                 android:layout_marginBottom="12dp"/>
 
-            <!-- Image preview -->
             <ImageView
                 android:id="@+id/imageViewPreview"
                 android:layout_width="match_parent"
@@ -223,7 +218,24 @@
                 android:textSize="15sp"
                 android:backgroundTint="@color/primary"
                 android:textColor="@color/textOnDark"
-                app:cornerRadius="16dp"/>
+                app:cornerRadius="16dp"
+                android:layout_marginBottom="32dp"/>
+
+            <!-- Footer -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider"
+                android:layout_marginBottom="20dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FORAGE APP  ·  v1.0"
+                android:textSize="11sp"
+                android:letterSpacing="0.1"
+                android:textColor="@color/textHint"
+                android:gravity="center"/>
 
         </LinearLayout>
     </ScrollView>
