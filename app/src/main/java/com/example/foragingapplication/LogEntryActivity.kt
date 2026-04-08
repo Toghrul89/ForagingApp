@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -70,7 +71,6 @@ class LogEntryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_entry)
 
-        // Toolbar with back button
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -93,7 +93,7 @@ class LogEntryActivity : AppCompatActivity() {
         if (editingLogId != null) {
             loadExistingLog(editingLogId!!)
             toolbar.title = "Edit Spot"
-            buttonSave.text = "💾 Update Spot"
+            buttonSave.text = "Update Spot"
         }
 
         buttonGetLocation.setOnClickListener { getCurrentLocation() }
@@ -111,7 +111,7 @@ class LogEntryActivity : AppCompatActivity() {
         currentLng = log.lng
 
         if (log.lat != null && log.lng != null) {
-            tvCoordinates.text = "📍 Lat: ${String.format("%.6f", log.lat)}, Lng: ${String.format("%.6f", log.lng)}"
+            tvCoordinates.text = "GPS: ${String.format("%.5f", log.lat)}, ${String.format("%.5f", log.lng)}"
             tvCoordinates.visibility = View.VISIBLE
         }
 
@@ -126,7 +126,9 @@ class LogEntryActivity : AppCompatActivity() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_REQUEST_CODE
             )
             return
         }
@@ -135,7 +137,7 @@ class LogEntryActivity : AppCompatActivity() {
             if (location != null) {
                 currentLat = location.latitude
                 currentLng = location.longitude
-                tvCoordinates.text = "📍 Lat: ${String.format("%.6f", location.latitude)}, Lng: ${String.format("%.6f", location.longitude)}"
+                tvCoordinates.text = "GPS: ${String.format("%.5f", location.latitude)}, ${String.format("%.5f", location.longitude)}"
                 tvCoordinates.visibility = View.VISIBLE
                 if (editTextLocation.text.isEmpty()) {
                     editTextLocation.setText("${String.format("%.5f", location.latitude)}, ${String.format("%.5f", location.longitude)}")
@@ -149,7 +151,11 @@ class LogEntryActivity : AppCompatActivity() {
 
     private fun takePhoto() {
         val photoFile = File(getExternalFilesDir(null), "IMG_${System.currentTimeMillis()}.jpg")
-        currentPhotoUri = FileProvider.getUriForFile(this, "${applicationContext.packageName}.fileprovider", photoFile)
+        currentPhotoUri = FileProvider.getUriForFile(
+            this,
+            "${applicationContext.packageName}.fileprovider",
+            photoFile
+        )
         takePictureLauncher.launch(currentPhotoUri)
     }
 
@@ -169,6 +175,23 @@ class LogEntryActivity : AppCompatActivity() {
             return
         }
 
+        // Warn if no GPS coordinates — spot won't show on map
+        if (currentLat == null || currentLng == null) {
+            AlertDialog.Builder(this)
+                .setTitle("No GPS coordinates")
+                .setMessage("You haven't captured GPS coordinates. This spot will be saved but won't appear on the map.\n\nTap \"Use my current location\" to add GPS, or save without it.")
+                .setPositiveButton("Save anyway") { _, _ ->
+                    doSave(treeName, location, notes)
+                }
+                .setNegativeButton("Go back and add GPS", null)
+                .show()
+            return
+        }
+
+        doSave(treeName, location, notes)
+    }
+
+    private fun doSave(treeName: String, location: String, notes: String) {
         val date = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
         val logEntry = LogEntry(
             id = editingLogId ?: 0,
@@ -188,17 +211,22 @@ class LogEntryActivity : AppCompatActivity() {
         }
 
         if (success) {
-            Toast.makeText(this, "✅ Spot saved!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Spot saved!", Toast.LENGTH_SHORT).show()
             finish()
         } else {
             Toast.makeText(this, "Failed to save. Try again.", Toast.LENGTH_SHORT).show()
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE &&
-            grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            grantResults.isNotEmpty() &&
+            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             getCurrentLocation()
         } else {
             Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
