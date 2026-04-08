@@ -10,85 +10,91 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Title -->
         <TextView
             android:text="Foraging Tracker 🌿"
             android:textSize="26sp"
             android:textStyle="bold"
-            android:textColor="@color/textPrimary"/>
+            android:textColor="@color/textPrimary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <TextView
-            android:text="Track your discoveries beautifully"
+            android:text="Track your discoveries"
             android:textColor="@color/textSecondary"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-        <!-- Card Button -->
         <LinearLayout
             android:background="@drawable/card_bg"
             android:padding="20dp"
             android:layout_marginBottom="16dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:text="Add New Log"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <Button
+                android:id="@+id/btnLogEntry"
                 android:text="Start Logging"
-                android:backgroundTint="@color/primary"/>
+                android:backgroundTint="@color/primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"/>
         </LinearLayout>
 
         <LinearLayout
             android:background="@drawable/card_bg"
             android:padding="20dp"
             android:layout_marginBottom="16dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:text="View Logs"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <Button
+                android:id="@+id/btnViewLogs"
                 android:text="Open Logs"
-                android:backgroundTint="@color/accent"/>
+                android:backgroundTint="@color/accent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"/>
         </LinearLayout>
 
         <LinearLayout
             android:background="@drawable/card_bg"
             android:padding="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <TextView
                 android:text="Map View"
                 android:textSize="18sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
             <Button
+                android:id="@+id/btnOpenMap"
                 android:text="Open Map"
-                android:backgroundTint="@color/primary"/>
+                android:backgroundTint="@color/primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"/>
         </LinearLayout>
 
     </LinearLayout>
-
-    <LinearLayout
-    android:background="@drawable/card_bg"
-    android:padding="20dp"
-    android:layout_marginTop="20dp"
-    android:orientation="vertical">
-
-    <TextView
-        android:text="About Us"
-        android:textStyle="bold"
-        android:textSize="20sp"/>
-
-    <TextView
-        android:text="We build simple tools for nature lovers to track and explore their discoveries. Our mission is to make foraging smarter, easier, and more enjoyable."
-        android:textColor="@color/textSecondary"
-        android:layout_marginTop="8dp"/>
-
-    </LinearLayout>
-
-
 </ScrollView>
