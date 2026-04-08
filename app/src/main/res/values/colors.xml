@@ -1,13 +1,29 @@
 <resources>
-    <color name="primary">#4F46E5</color>
-    <color name="primaryDark">#3730A3</color>
-    <color name="accent">#6366F1</color>
+    <!-- Brand -->
+    <color name="primary">#1A1A1A</color>
+    <color name="primaryDark">#000000</color>
+    <color name="accent">#4CAF50</color>
+    <color name="accentDark">#2E7D32</color>
 
-    <color name="background">#F8FAFC</color>
+    <!-- Backgrounds -->
+    <color name="background">#F5F2EE</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="surfaceVariant">#EDEAE5</color>
     <color name="cardBackground">#FFFFFF</color>
 
-    <color name="textPrimary">#111827</color>
-    <color name="textSecondary">#6B7280</color>
+    <!-- Text -->
+    <color name="textPrimary">#1A1A1A</color>
+    <color name="textSecondary">#6B6560</color>
+    <color name="textHint">#A09B96</color>
+    <color name="textOnDark">#FFFFFF</color>
+    <color name="textOnAccent">#FFFFFF</color>
 
-    <color name="border">#E5E7EB</color>
+    <!-- UI -->
+    <color name="border">#DDD9D4</color>
+    <color name="divider">#E8E4DF</color>
+    <color name="ripple">#1A1A1A1A</color>
+
+    <!-- Status -->
+    <color name="success">#4CAF50</color>
+    <color name="error">#E53935</color>
 </resources>

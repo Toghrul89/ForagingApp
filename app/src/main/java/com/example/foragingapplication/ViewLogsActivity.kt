@@ -1,5 +1,6 @@
 package com.example.foragingapp
 
+import android.widget.LinearLayout
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -12,7 +13,7 @@ import com.google.android.material.appbar.MaterialToolbar
 class ViewLogsActivity : AppCompatActivity() {
 
     private lateinit var logsRecyclerView: RecyclerView
-    private lateinit var tvEmpty: TextView
+    private lateinit var tvEmpty: LinearLayout
     private lateinit var adapter: LogsAdapter
     private lateinit var databaseHelper: LogDatabaseHelper
 

@@ -1,25 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="24dp"
+    android:background="@color/surface">
 
-    <EditText
-        android:id="@+id/treeNameInput"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tree Name"
-        android:inputType="textCapWords"
-        android:layout_marginBottom="8dp" />
+        android:hint="Spot name"
+        android:layout_marginBottom="14dp"
+        app:boxCornerRadiusTopStart="14dp"
+        app:boxCornerRadiusTopEnd="14dp"
+        app:boxCornerRadiusBottomStart="14dp"
+        app:boxCornerRadiusBottomEnd="14dp"
+        app:boxStrokeColor="@color/border"
+        app:boxBackgroundColor="@color/surface">
 
-    <EditText
-        android:id="@+id/treeNoteInput"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/treeNameInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapWords"
+            android:textColor="@color/textPrimary"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Notes (optional)"
-        android:inputType="textMultiLine"
-        android:minLines="3"
-        android:gravity="top" />
+        app:boxCornerRadiusTopStart="14dp"
+        app:boxCornerRadiusTopEnd="14dp"
+        app:boxCornerRadiusBottomStart="14dp"
+        app:boxCornerRadiusBottomEnd="14dp"
+        app:boxStrokeColor="@color/border"
+        app:boxBackgroundColor="@color/surface">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/treeNoteInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:minLines="2"
+            android:gravity="top"
+            android:textColor="@color/textPrimary"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>
