@@ -7,14 +7,14 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/textOnDark</item>
         <item name="colorSurface">@color/surface</item>
+        <item name="colorSecondaryContainer">@color/blobSage</item>
         <item name="android:fontFamily">sans-serif</item>
     </style>
 
     <style name="Widget.ForagingApp.Button.Primary" parent="Widget.Material3.Button">
         <item name="android:backgroundTint">@color/primary</item>
         <item name="android:textColor">@color/textOnDark</item>
-        <item name="android:letterSpacing">0.05</item>
-        <item name="cornerRadius">14dp</item>
+        <item name="cornerRadius">28dp</item>
     </style>
 
     <style name="Widget.ForagingApp.Button.Outlined" parent="Widget.Material3.Button.OutlinedButton">
@@ -24,10 +24,10 @@
     </style>
 
     <style name="Widget.ForagingApp.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
-        <item name="boxCornerRadiusTopStart">14dp</item>
-        <item name="boxCornerRadiusTopEnd">14dp</item>
-        <item name="boxCornerRadiusBottomStart">14dp</item>
-        <item name="boxCornerRadiusBottomEnd">14dp</item>
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
         <item name="boxStrokeColor">@color/border</item>
         <item name="hintTextColor">@color/textSecondary</item>
     </style>
