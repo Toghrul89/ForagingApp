@@ -1,35 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:background="@color/background"
     android:orientation="vertical"
-    android:background="#F1F8E9">
-
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar"
-        android:title="My Foraging Spots" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvLogs"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="8dp"
-        android:clipToPadding="false" />
+    android:padding="16dp">
 
     <TextView
-        android:id="@+id/tvEmpty"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="🌿 No spots logged yet.\nTap the back button and add your first one!"
-        android:textSize="16sp"
-        android:textColor="#888888"
-        android:visibility="gone" />
+        android:text="Your Logs"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
 
+    <ListView
+        android:id="@+id/logListView"
+        android:divider="@null"
+        android:dividerHeight="10dp"/>
 </LinearLayout>
