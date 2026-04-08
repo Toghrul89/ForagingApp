@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import com.example.foragingapp.model.LogEntry
 import com.google.android.material.appbar.MaterialToolbar
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraPosition
+import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.MapView
@@ -39,10 +41,11 @@ class MapActivity : AppCompatActivity() {
         private const val SOURCE_ID = "foraging-spots"
         private const val LAYER_ID = "foraging-spots-layer"
         private const val LOCATION_PERMISSION_CODE = 1001
-        // Default location: Seattle, WA
-        private const val DEFAULT_LAT = 47.6062
-        private const val DEFAULT_LNG = -122.3321
-        private const val DEFAULT_ZOOM = 12.0
+        // Fix 2: Default is always Seattle
+        private const val SEATTLE_LAT = 47.6062
+        private const val SEATTLE_LNG = -122.3321
+        private const val DEFAULT_ZOOM = 11.0
+        private const val SPOT_ZOOM = 15.0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,24 +62,76 @@ class MapActivity : AppCompatActivity() {
         mapView = findViewById(R.id.mapView)
         mapView.onCreate(savedInstanceState)
 
+        // Fix 1: Zoom buttons
+        findViewById<TextView>(R.id.btnZoomIn).setOnClickListener {
+            map?.let { m ->
+                m.animateCamera(
+                    CameraUpdateFactory.newCameraPosition(
+                        CameraPosition.Builder()
+                            .target(m.cameraPosition.target)
+                            .zoom(m.cameraPosition.zoom + 1.0)
+                            .build()
+                    ), 300
+                )
+            }
+        }
+
+        findViewById<TextView>(R.id.btnZoomOut).setOnClickListener {
+            map?.let { m ->
+                m.animateCamera(
+                    CameraUpdateFactory.newCameraPosition(
+                        CameraPosition.Builder()
+                            .target(m.cameraPosition.target)
+                            .zoom(m.cameraPosition.zoom - 1.0)
+                            .build()
+                    ), 300
+                )
+            }
+        }
+
         mapView.getMapAsync { mapLibreMap ->
             map = mapLibreMap
 
-            // FIX 2: Enable all gestures — pinch to zoom, scroll to pan, rotate, tilt
+            // Fix 1: All touch gestures enabled
             mapLibreMap.uiSettings.apply {
                 isZoomGesturesEnabled = true
                 isScrollGesturesEnabled = true
                 isRotateGesturesEnabled = true
                 isTiltGesturesEnabled = true
-                // isZoomControlsEnabled not available in MapLibre — zoom via pinch gesture
                 isDoubleTapGesturesEnabled = true
+                isQuickZoomGesturesEnabled = true
             }
 
             mapLibreMap.setStyle("https://tiles.openfreemap.org/styles/liberty") { style ->
+
+                // Fix 3: Show all saved spots as markers
                 setupMarkerLayer(style)
                 loadMarkersFromDatabase()
-                centerMap()
-                Toast.makeText(this, "Tap anywhere to add a spot!", Toast.LENGTH_LONG).show()
+
+                // Fix 2 & 4: Start at Seattle always; if opened from a log card, fly to that spot
+                val focusLat = intent.getDoubleExtra("FOCUS_LAT", Double.MIN_VALUE)
+                val focusLng = intent.getDoubleExtra("FOCUS_LNG", Double.MIN_VALUE)
+                val focusName = intent.getStringExtra("FOCUS_NAME")
+
+                if (focusLat != Double.MIN_VALUE && focusLng != Double.MIN_VALUE) {
+                    // Opened from "View on Map" — fly straight to that spot
+                    mapLibreMap.cameraPosition = CameraPosition.Builder()
+                        .target(LatLng(focusLat, focusLng))
+                        .zoom(SPOT_ZOOM)
+                        .build()
+                    if (focusName != null) {
+                        toolbar.title = focusName
+                        Toast.makeText(this, "Showing: $focusName", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    // Normal open — show Seattle
+                    mapLibreMap.cameraPosition = CameraPosition.Builder()
+                        .target(LatLng(SEATTLE_LAT, SEATTLE_LNG))
+                        .zoom(DEFAULT_ZOOM)
+                        .build()
+                    Toast.makeText(this, "Tap anywhere to pin a new spot", Toast.LENGTH_LONG).show()
+                }
+
                 mapLibreMap.addOnMapClickListener { point ->
                     showAddSpotDialog(point)
                     true
@@ -92,11 +147,11 @@ class MapActivity : AppCompatActivity() {
         style.addLayer(
             SymbolLayer(LAYER_ID, SOURCE_ID).withProperties(
                 PropertyFactory.textField("{name}"),
-                PropertyFactory.textSize(13f),
-                PropertyFactory.textOffset(arrayOf(0f, 1.5f)),
+                PropertyFactory.textSize(12f),
+                PropertyFactory.textOffset(arrayOf(0f, 1.8f)),
                 PropertyFactory.textColor("#1B5E20"),
                 PropertyFactory.textHaloColor("#FFFFFF"),
-                PropertyFactory.textHaloWidth(1.5f),
+                PropertyFactory.textHaloWidth(2f),
                 PropertyFactory.iconImage("marker-15"),
                 PropertyFactory.iconAllowOverlap(true),
                 PropertyFactory.textAllowOverlap(true)
@@ -110,6 +165,7 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun loadMarkersFromDatabase() {
+        markerFeatures.clear()
         val logs = dbHelper.getAllLogs()
         for (log in logs) {
             if (log.lat != null && log.lng != null) {
@@ -119,20 +175,6 @@ class MapActivity : AppCompatActivity() {
             }
         }
         refreshMarkers()
-    }
-
-    private fun centerMap() {
-        // FIX 1: Default is Seattle. If user has saved spots, zoom to the first one instead.
-        val logsWithCoords = dbHelper.getAllLogs().filter { it.lat != null && it.lng != null }
-        val target = if (logsWithCoords.isNotEmpty()) {
-            LatLng(logsWithCoords.first().lat!!, logsWithCoords.first().lng!!)
-        } else {
-            LatLng(DEFAULT_LAT, DEFAULT_LNG) // Seattle, WA
-        }
-        map?.cameraPosition = CameraPosition.Builder()
-            .target(target)
-            .zoom(DEFAULT_ZOOM)
-            .build()
     }
 
     private fun showAddSpotDialog(point: LatLng) {
@@ -156,7 +198,7 @@ class MapActivity : AppCompatActivity() {
         val date = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
         val entry = LogEntry(
             name = name,
-            location = "Lat: ${String.format("%.5f", point.latitude)}, Lng: ${String.format("%.5f", point.longitude)}",
+            location = "Lat: ${String.format(Locale.US, "%.5f", point.latitude)}, Lng: ${String.format(Locale.US, "%.5f", point.longitude)}",
             date = date,
             notes = notes,
             lat = point.latitude,

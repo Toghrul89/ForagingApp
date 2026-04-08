@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,7 @@ class LogsAdapter(private val logs: List<LogEntry>) : RecyclerView.Adapter<LogsA
         val tvDate: TextView = view.findViewById(R.id.tvLogDate)
         val tvNotes: TextView = view.findViewById(R.id.tvLogNotes)
         val ivThumbnail: ImageView = view.findViewById(R.id.ivLogThumbnail)
+        val btnViewOnMap: Button = view.findViewById(R.id.btnViewOnMap)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LogViewHolder {
@@ -31,19 +33,36 @@ class LogsAdapter(private val logs: List<LogEntry>) : RecyclerView.Adapter<LogsA
         holder.tvLocation.text = log.location
         holder.tvDate.text = log.date
         holder.tvNotes.text = if (log.notes.isNotEmpty()) log.notes else "No notes"
-        
+
         if (log.imageUri.isNotEmpty()) {
             holder.ivThumbnail.setImageURI(Uri.parse(log.imageUri))
             holder.ivThumbnail.visibility = ImageView.VISIBLE
         } else {
             holder.ivThumbnail.visibility = ImageView.GONE
         }
-        
+
+        // Tap the card → open for editing
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, LogEntryActivity::class.java)
             intent.putExtra("LOG_ID", log.id)
             context.startActivity(intent)
+        }
+
+        // Fix 4: "View on Map" button — opens map and flies to this spot's coordinates
+        if (log.lat != null && log.lng != null) {
+            holder.btnViewOnMap.visibility = View.VISIBLE
+            holder.btnViewOnMap.setOnClickListener {
+                val context = holder.itemView.context
+                val intent = Intent(context, MapActivity::class.java)
+                intent.putExtra("FOCUS_LAT", log.lat)
+                intent.putExtra("FOCUS_LNG", log.lng)
+                intent.putExtra("FOCUS_NAME", log.name)
+                context.startActivity(intent)
+            }
+        } else {
+            // Hide the button if this log has no coordinates
+            holder.btnViewOnMap.visibility = View.GONE
         }
     }
 

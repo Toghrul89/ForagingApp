@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Image (shown only if available) -->
+        <!-- Photo (only visible when image exists) -->
         <ImageView
             android:id="@+id/ivLogThumbnail"
             android:layout_width="match_parent"
@@ -29,12 +29,12 @@
             android:orientation="vertical"
             android:padding="18dp">
 
-            <!-- Name + date row -->
+            <!-- Name + date -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="6dp">
+                android:layout_marginBottom="4dp">
 
                 <TextView
                     android:id="@+id/tvLogName"
@@ -54,14 +54,14 @@
 
             </LinearLayout>
 
-            <!-- Location chip -->
+            <!-- Location -->
             <TextView
                 android:id="@+id/tvLogLocation"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:textColor="@color/accent"
-                android:layout_marginBottom="6dp"/>
+                android:layout_marginBottom="4dp"/>
 
             <!-- Notes -->
             <TextView
@@ -71,7 +71,27 @@
                 android:textSize="13sp"
                 android:textColor="@color/textSecondary"
                 android:maxLines="2"
-                android:ellipsize="end"/>
+                android:ellipsize="end"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Fix 4: View on Map button -->
+            <Button
+                android:id="@+id/btnViewOnMap"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="38dp"
+                android:text="View on map"
+                android:textSize="12sp"
+                android:textColor="@color/textPrimary"
+                app:strokeColor="@color/border"
+                app:cornerRadius="10dp"/>
 
         </LinearLayout>
     </LinearLayout>
