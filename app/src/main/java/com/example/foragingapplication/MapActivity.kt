@@ -68,7 +68,7 @@ class MapActivity : AppCompatActivity() {
                 isScrollGesturesEnabled = true
                 isRotateGesturesEnabled = true
                 isTiltGesturesEnabled = true
-                isZoomControlsEnabled = true      // shows +/- buttons on screen
+                // isZoomControlsEnabled not available in MapLibre — zoom via pinch gesture
                 isDoubleTapGesturesEnabled = true
             }
 
