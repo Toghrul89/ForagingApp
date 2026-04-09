@@ -18,6 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/background"
             app:titleTextColor="@color/textPrimary"
+            app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
             app:title="My Forage Log"/>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -47,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No spots yet"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/textPrimary"/>
 
@@ -57,7 +58,7 @@
             android:text="Head outside and start logging."
             android:textSize="14sp"
             android:textColor="@color/textSecondary"
-            android:layout_marginTop="6dp"/>
+            android:layout_marginTop="8dp"/>
 
     </LinearLayout>
 

@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Full-screen MapLibre MapView — handles all touch/gestures natively -->
     <org.maplibre.android.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
@@ -13,14 +12,14 @@
         android:clickable="true"
         android:focusable="true"/>
 
-    <!-- Floating toolbar card on top -->
+    <!-- Floating title card — matches reference style -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_margin="16dp"
         android:layout_gravity="top"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="6dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
         app:cardBackgroundColor="@color/surface">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -29,19 +28,20 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/transparent"
             app:titleTextColor="@color/textPrimary"
-            app:title="Spots map"
+            app:titleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
+            app:title="Explore Map"
             app:navigationIconTint="@color/textPrimary"/>
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Zoom controls — floating bottom-right -->
+    <!-- Zoom controls -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:orientation="vertical"
         android:layout_margin="16dp"
-        android:layout_marginBottom="32dp">
+        android:layout_marginBottom="40dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="44dp"

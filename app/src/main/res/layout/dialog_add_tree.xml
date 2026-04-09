@@ -7,12 +7,21 @@
     android:padding="24dp"
     android:background="@color/surface">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pin a spot"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/textPrimary"
+        android:layout_marginBottom="16dp"/>
+
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Spot name"
-        android:layout_marginBottom="14dp"
+        android:layout_marginBottom="12dp"
         app:boxCornerRadiusTopStart="14dp"
         app:boxCornerRadiusTopEnd="14dp"
         app:boxCornerRadiusBottomStart="14dp"
