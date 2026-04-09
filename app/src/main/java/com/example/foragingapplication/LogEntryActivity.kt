@@ -120,8 +120,9 @@ class LogEntryActivity : AppCompatActivity() {
             tvCoordinates.visibility = View.VISIBLE
         }
         if (log.imageUri.isNotEmpty()) {
-            currentPhotoUri = Uri.parse(log.imageUri)
-            imageViewPreview.setImageURI(currentPhotoUri)
+            val uri = Uri.parse(log.imageUri)
+            currentPhotoUri = uri
+            imageViewPreview.setImageURI(uri)
             imageViewPreview.visibility = View.VISIBLE
         }
     }
@@ -157,12 +158,13 @@ class LogEntryActivity : AppCompatActivity() {
 
     private fun takePhoto() {
         val photoFile = File(getExternalFilesDir(null), "IMG_${System.currentTimeMillis()}.jpg")
-        currentPhotoUri = FileProvider.getUriForFile(
+        val uri = FileProvider.getUriForFile(
             this,
             "${applicationContext.packageName}.fileprovider",
             photoFile
         )
-        takePictureLauncher.launch(currentPhotoUri)
+        currentPhotoUri = uri
+        takePictureLauncher.launch(uri)
     }
 
     private fun saveLog() {
