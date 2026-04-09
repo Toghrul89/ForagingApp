@@ -312,19 +312,19 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="32dp"/>
 
+            
                 <!-- Big round Save button matching reference -->
                 <Button
                     android:id="@+id/buttonSaveLog"
                     android:layout_width="160dp"
                     android:layout_height="160dp"
                     android:layout_gravity="center_horizontal"
-                    android:text="SAVE\nTREE"
+                    android:text="SAVE&#10;TREE"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="@color/textOnDark"
                     android:backgroundTint="@color/primary"
-                    app:cornerRadius="80dp"
-                    android:layout_gravity="center"/>
+                    app:cornerRadius="80dp"/>
 
             </LinearLayout>
         </FrameLayout>
