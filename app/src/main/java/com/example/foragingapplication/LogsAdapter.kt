@@ -11,7 +11,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foragingapp.model.LogEntry
 
-class LogsAdapter(private val logs: List<LogEntry>) : RecyclerView.Adapter<LogsAdapter.LogViewHolder>() {
+class LogsAdapter(
+    private val logs: List<LogEntry>,
+    private val onDelete: (LogEntry) -> Unit
+) : RecyclerView.Adapter<LogsAdapter.LogViewHolder>() {
 
     class LogViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = view.findViewById(R.id.tvLogName)
@@ -41,21 +44,19 @@ class LogsAdapter(private val logs: List<LogEntry>) : RecyclerView.Adapter<LogsA
         }
 
         holder.itemView.setOnClickListener {
-            val context = holder.itemView.context
-            val intent = Intent(context, LogEntryActivity::class.java)
+            val intent = Intent(it.context, LogEntryActivity::class.java)
             intent.putExtra("LOG_ID", log.id)
-            context.startActivity(intent)
+            it.context.startActivity(intent)
         }
 
         if (log.lat != null && log.lng != null) {
             holder.btnViewOnMap.visibility = View.VISIBLE
             holder.btnViewOnMap.setOnClickListener {
-                val context = holder.itemView.context
-                val intent = Intent(context, MapActivity::class.java)
+                val intent = Intent(it.context, MapActivity::class.java)
                 intent.putExtra("FOCUS_LAT", log.lat)
                 intent.putExtra("FOCUS_LNG", log.lng)
                 intent.putExtra("FOCUS_NAME", log.name)
-                context.startActivity(intent)
+                it.context.startActivity(intent)
             }
         } else {
             holder.btnViewOnMap.visibility = View.GONE
@@ -63,4 +64,6 @@ class LogsAdapter(private val logs: List<LogEntry>) : RecyclerView.Adapter<LogsA
     }
 
     override fun getItemCount(): Int = logs.size
+
+    fun getItemAt(position: Int): LogEntry = logs[position]
 }

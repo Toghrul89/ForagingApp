@@ -7,13 +7,15 @@ import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.foragingapp.data.LogDatabaseHelper
+import androidx.lifecycle.lifecycleScope
 import com.example.foragingapp.model.LogEntry
 import com.google.android.material.appbar.MaterialToolbar
+import kotlinx.coroutines.launch
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.camera.CameraUpdateFactory
@@ -33,15 +35,15 @@ import java.util.*
 class MapActivity : AppCompatActivity() {
 
     private lateinit var mapView: MapView
-    private lateinit var dbHelper: LogDatabaseHelper
     private var map: MapLibreMap? = null
     private val markerFeatures = mutableListOf<Feature>()
+
+    private val viewModel: LogViewModel by viewModels()
 
     companion object {
         private const val SOURCE_ID = "foraging-spots"
         private const val LAYER_ID = "foraging-spots-layer"
         private const val LOCATION_PERMISSION_CODE = 1001
-        // Fix 2: Default is always Seattle
         private const val SEATTLE_LAT = 47.6062
         private const val SEATTLE_LNG = -122.3321
         private const val DEFAULT_ZOOM = 11.0
@@ -58,11 +60,9 @@ class MapActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener { finish() }
 
-        dbHelper = LogDatabaseHelper(this)
         mapView = findViewById(R.id.mapView)
         mapView.onCreate(savedInstanceState)
 
-        // Fix 1: Zoom buttons
         findViewById<TextView>(R.id.btnZoomIn).setOnClickListener {
             map?.let { m ->
                 m.animateCamera(
@@ -92,7 +92,6 @@ class MapActivity : AppCompatActivity() {
         mapView.getMapAsync { mapLibreMap ->
             map = mapLibreMap
 
-            // Fix 1: All touch gestures enabled
             mapLibreMap.uiSettings.apply {
                 isZoomGesturesEnabled = true
                 isScrollGesturesEnabled = true
@@ -103,18 +102,14 @@ class MapActivity : AppCompatActivity() {
             }
 
             mapLibreMap.setStyle("https://tiles.openfreemap.org/styles/liberty") { style ->
-
-                // Fix 3: Show all saved spots as markers
                 setupMarkerLayer(style)
                 loadMarkersFromDatabase()
 
-                // Fix 2 & 4: Start at Seattle always; if opened from a log card, fly to that spot
-                val focusLat = intent.getDoubleExtra("FOCUS_LAT", Double.MIN_VALUE)
-                val focusLng = intent.getDoubleExtra("FOCUS_LNG", Double.MIN_VALUE)
+                val focusLat  = intent.getDoubleExtra("FOCUS_LAT", Double.MIN_VALUE)
+                val focusLng  = intent.getDoubleExtra("FOCUS_LNG", Double.MIN_VALUE)
                 val focusName = intent.getStringExtra("FOCUS_NAME")
 
                 if (focusLat != Double.MIN_VALUE && focusLng != Double.MIN_VALUE) {
-                    // Opened from "View on Map" — fly straight to that spot
                     mapLibreMap.cameraPosition = CameraPosition.Builder()
                         .target(LatLng(focusLat, focusLng))
                         .zoom(SPOT_ZOOM)
@@ -124,7 +119,6 @@ class MapActivity : AppCompatActivity() {
                         Toast.makeText(this, "Showing: $focusName", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    // Normal open — show Seattle
                     mapLibreMap.cameraPosition = CameraPosition.Builder()
                         .target(LatLng(SEATTLE_LAT, SEATTLE_LNG))
                         .zoom(DEFAULT_ZOOM)
@@ -165,28 +159,30 @@ class MapActivity : AppCompatActivity() {
     }
 
     private fun loadMarkersFromDatabase() {
-        markerFeatures.clear()
-        val logs = dbHelper.getAllLogs()
-        for (log in logs) {
-            if (log.lat != null && log.lng != null) {
-                val feature = Feature.fromGeometry(Point.fromLngLat(log.lng, log.lat))
-                feature.addStringProperty("name", log.name)
-                markerFeatures.add(feature)
+        lifecycleScope.launch {
+            markerFeatures.clear()
+            val logs = viewModel.getAllLogsOnce()
+            for (log in logs) {
+                if (log.lat != null && log.lng != null) {
+                    val feature = Feature.fromGeometry(Point.fromLngLat(log.lng, log.lat))
+                    feature.addStringProperty("name", log.name)
+                    markerFeatures.add(feature)
+                }
             }
+            refreshMarkers()
         }
-        refreshMarkers()
     }
 
     private fun showAddSpotDialog(point: LatLng) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_tree, null)
-        val nameInput = dialogView.findViewById<EditText>(R.id.treeNameInput)
-        val noteInput = dialogView.findViewById<EditText>(R.id.treeNoteInput)
+        val nameInput  = dialogView.findViewById<EditText>(R.id.treeNameInput)
+        val noteInput  = dialogView.findViewById<EditText>(R.id.treeNoteInput)
 
         AlertDialog.Builder(this)
             .setTitle("Add Spot Here")
             .setView(dialogView)
             .setPositiveButton("Add") { _, _ ->
-                val name = nameInput.text.toString().ifEmpty { "Unnamed Spot" }
+                val name  = nameInput.text.toString().ifEmpty { "Unnamed Spot" }
                 val notes = noteInput.text.toString()
                 saveSpot(name, notes, point)
             }
@@ -197,47 +193,57 @@ class MapActivity : AppCompatActivity() {
     private fun saveSpot(name: String, notes: String, point: LatLng) {
         val date = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
         val entry = LogEntry(
-            name = name,
+            name     = name,
             location = "Lat: ${String.format(Locale.US, "%.5f", point.latitude)}, Lng: ${String.format(Locale.US, "%.5f", point.longitude)}",
-            date = date,
-            notes = notes,
-            lat = point.latitude,
-            lng = point.longitude
+            date     = date,
+            notes    = notes,
+            lat      = point.latitude,
+            lng      = point.longitude
         )
-        val id = dbHelper.insertLog(entry)
-        if (id > 0) {
+        lifecycleScope.launch {
+            viewModel.insert(entry)
             val feature = Feature.fromGeometry(Point.fromLngLat(point.longitude, point.latitude))
             feature.addStringProperty("name", name)
             markerFeatures.add(feature)
             refreshMarkers()
-            Toast.makeText(this, "$name saved!", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, "Failed to save", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MapActivity, "$name saved!", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun requestLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             ActivityCompat.requestPermissions(
-                this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_CODE
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_CODE
             )
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_CODE && grantResults.isNotEmpty() &&
-            grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == LOCATION_PERMISSION_CODE &&
+            grantResults.isNotEmpty() &&
+            grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
             Toast.makeText(this, "Location permission granted", Toast.LENGTH_SHORT).show()
         }
     }
 
-    override fun onStart() { super.onStart(); mapView.onStart() }
-    override fun onResume() { super.onResume(); mapView.onResume() }
-    override fun onPause() { super.onPause(); mapView.onPause() }
-    override fun onStop() { super.onStop(); mapView.onStop() }
-    override fun onSaveInstanceState(outState: Bundle) { super.onSaveInstanceState(outState); mapView.onSaveInstanceState(outState) }
+    override fun onStart()    { super.onStart();    mapView.onStart() }
+    override fun onResume()   { super.onResume();   mapView.onResume() }
+    override fun onPause()    { super.onPause();    mapView.onPause() }
+    override fun onStop()     { super.onStop();     mapView.onStop() }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapView.onSaveInstanceState(outState)
+    }
     override fun onLowMemory() { super.onLowMemory(); mapView.onLowMemory() }
-    override fun onDestroy() { super.onDestroy(); mapView.onDestroy(); dbHelper.close() }
+    override fun onDestroy()   { super.onDestroy();   mapView.onDestroy() }
 }
