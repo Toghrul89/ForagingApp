@@ -32,16 +32,14 @@ class LogsAdapter(private val logs: List<LogEntry>) : RecyclerView.Adapter<LogsA
         holder.tvName.text = log.name
         holder.tvLocation.text = log.location
         holder.tvDate.text = log.date
-        holder.tvNotes.text = if (log.notes.isNotEmpty()) log.notes else "No notes"
+        holder.tvNotes.text = log.notes
 
         if (log.imageUri.isNotEmpty()) {
             holder.ivThumbnail.setImageURI(Uri.parse(log.imageUri))
-            holder.ivThumbnail.visibility = ImageView.VISIBLE
         } else {
-            holder.ivThumbnail.visibility = ImageView.GONE
+            holder.ivThumbnail.setImageDrawable(null)
         }
 
-        // Tap the card → open for editing
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
             val intent = Intent(context, LogEntryActivity::class.java)
@@ -49,7 +47,6 @@ class LogsAdapter(private val logs: List<LogEntry>) : RecyclerView.Adapter<LogsA
             context.startActivity(intent)
         }
 
-        // Fix 4: "View on Map" button — opens map and flies to this spot's coordinates
         if (log.lat != null && log.lng != null) {
             holder.btnViewOnMap.visibility = View.VISIBLE
             holder.btnViewOnMap.setOnClickListener {
@@ -61,7 +58,6 @@ class LogsAdapter(private val logs: List<LogEntry>) : RecyclerView.Adapter<LogsA
                 context.startActivity(intent)
             }
         } else {
-            // Hide the button if this log has no coordinates
             holder.btnViewOnMap.visibility = View.GONE
         }
     }

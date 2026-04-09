@@ -33,133 +33,135 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Organic blobs in background -->
+            <!-- Background blobs -->
             <View
-                android:layout_width="160dp"
-                android:layout_height="160dp"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
                 android:layout_gravity="top|end"
-                android:layout_marginTop="20dp"
+                android:layout_marginEnd="-40dp"
                 android:background="@drawable/blob_sage"
-                android:alpha="0.5"/>
+                android:alpha="0.45"/>
 
             <View
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_gravity="bottom|start"
-                android:layout_marginStart="20dp"
-                android:layout_marginBottom="80dp"
+                android:layout_marginStart="-20dp"
+                android:layout_marginBottom="100dp"
                 android:background="@drawable/blob_blush"
-                android:alpha="0.4"/>
+                android:alpha="0.35"/>
 
-            <!-- Main content -->
+            <!-- Content -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingStart="28dp"
-                android:paddingEnd="28dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="40dp">
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="48dp">
 
                 <!-- Big heading like reference -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ADD A TREE"
-                    android:textSize="32sp"
+                    android:textSize="30sp"
                     android:textStyle="bold"
                     android:textColor="@color/textPrimary"
-                    android:layout_marginBottom="32dp"/>
+                    android:layout_marginBottom="28dp"/>
 
-                <!-- Row: Tree Name -->
+                <!-- Row 1: Tree Name -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/row_bg"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
+                    android:padding="16dp"
+                    android:layout_marginBottom="10dp">
 
                     <TextView
                         android:layout_width="28dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="28dp"
                         android:text="🌳"
-                        android:textSize="20sp"/>
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:layout_marginEnd="12dp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Tree / Spot Name"
-                            android:textSize="14sp"
+                            android:text="Tree Type"
+                            android:textSize="13sp"
                             android:textStyle="bold"
                             android:textColor="@color/textPrimary"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <EditText
                             android:id="@+id/editTextTreeName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textCapWords"
                             android:textColor="@color/textPrimary"
-                            android:textSize="14sp"
-                            android:hint="e.g. Wild Apple Tree"
+                            android:textSize="13sp"
+                            android:hint="e.g. Wild Apple, Cornelian Cherry"
+                            android:textColorHint="@color/textHint"
                             android:background="@android:color/transparent"
                             android:paddingTop="4dp"
-                            android:paddingBottom="4dp"/>
+                            android:paddingBottom="0dp"/>
 
                     </LinearLayout>
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/divider"
-                    android:layout_marginBottom="16dp"/>
-
-                <!-- Row: Location -->
+                <!-- Row 2: Location -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/row_bg"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
+                    android:padding="16dp"
+                    android:layout_marginBottom="10dp">
 
                     <TextView
                         android:layout_width="28dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="28dp"
                         android:text="📍"
-                        android:textSize="20sp"/>
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:layout_marginEnd="12dp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Location"
-                            android:textSize="14sp"
+                            android:textSize="13sp"
                             android:textStyle="bold"
                             android:textColor="@color/textPrimary"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <EditText
                             android:id="@+id/editTextLocation"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/textPrimary"
-                            android:textSize="14sp"
+                            android:textSize="13sp"
                             android:hint="e.g. Seattle, WA"
+                            android:textColorHint="@color/textHint"
                             android:background="@android:color/transparent"
                             android:paddingTop="4dp"
-                            android:paddingBottom="4dp"/>
+                            android:paddingBottom="0dp"/>
 
                         <TextView
                             android:id="@+id/tvCoordinates"
@@ -167,7 +169,8 @@
                             android:layout_height="wrap_content"
                             android:textSize="11sp"
                             android:textColor="@color/accent"
-                            android:visibility="gone"/>
+                            android:visibility="gone"
+                            android:layout_marginTop="2dp"/>
 
                     </LinearLayout>
 
@@ -175,54 +178,53 @@
                         android:id="@+id/buttonGetLocation"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="36dp"
+                        android:layout_height="34dp"
                         android:text="GPS"
                         android:textSize="11sp"
-                        android:textColor="@color/textPrimary"
-                        app:strokeColor="@color/border"
+                        android:textColor="@color/accent"
+                        app:strokeColor="@color/accent"
                         app:cornerRadius="10dp"
-                        android:layout_marginStart="8dp"/>
+                        android:layout_marginStart="10dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"/>
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/divider"
-                    android:layout_marginBottom="16dp"/>
-
-                <!-- Row: Description / Notes -->
+                <!-- Row 3: Description -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/row_bg"
                     android:orientation="horizontal"
                     android:gravity="top"
-                    android:layout_marginBottom="8dp">
+                    android:padding="16dp"
+                    android:layout_marginBottom="10dp">
 
                     <TextView
                         android:layout_width="28dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="28dp"
                         android:text="☰"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:textColor="@color/textSecondary"
-                        android:layout_marginTop="4dp"/>
+                        android:gravity="center"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginTop="2dp"/>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="12dp">
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Description"
-                            android:textSize="14sp"
+                            android:textSize="13sp"
                             android:textStyle="bold"
                             android:textColor="@color/textPrimary"/>
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <EditText
                             android:id="@+id/editTextNotes"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -230,66 +232,67 @@
                             android:minLines="2"
                             android:gravity="top"
                             android:textColor="@color/textPrimary"
-                            android:textSize="14sp"
-                            android:hint="Wild apples near path..."
+                            android:textSize="13sp"
+                            android:hint="Wild apples near path, abundant in fall..."
+                            android:textColorHint="@color/textHint"
                             android:background="@android:color/transparent"
                             android:paddingTop="4dp"/>
 
                     </LinearLayout>
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/divider"
-                    android:layout_marginBottom="16dp"/>
-
-                <!-- Row: Add Photo -->
+                <!-- Row 4: Add Photo -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/row_bg"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="8dp">
+                    android:padding="16dp"
+                    android:layout_marginBottom="10dp">
 
                     <TextView
                         android:layout_width="28dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="28dp"
                         android:text="📷"
-                        android:textSize="20sp"/>
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:layout_marginEnd="12dp"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Add Photo"
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         android:textStyle="bold"
-                        android:textColor="@color/textPrimary"
-                        android:layout_marginStart="12dp"/>
+                        android:textColor="@color/textPrimary"/>
 
                     <Button
                         android:id="@+id/buttonSelectImage"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="36dp"
+                        android:layout_height="34dp"
                         android:text="Gallery"
                         android:textSize="11sp"
                         android:textColor="@color/textPrimary"
                         app:strokeColor="@color/border"
                         app:cornerRadius="10dp"
-                        android:layout_marginEnd="6dp"/>
+                        android:layout_marginEnd="6dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"/>
 
                     <Button
                         android:id="@+id/buttonTakePhoto"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:text="Camera"
+                        android:layout_height="34dp"
+                        android:text="UPLOAD"
                         android:textSize="11sp"
-                        android:textColor="@color/textPrimary"
-                        app:strokeColor="@color/border"
-                        app:cornerRadius="10dp"/>
+                        android:textColor="@color/textOnDark"
+                        android:backgroundTint="@color/primary"
+                        app:cornerRadius="10dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"/>
 
                 </LinearLayout>
 
@@ -300,31 +303,29 @@
                     android:layout_height="180dp"
                     android:scaleType="centerCrop"
                     android:visibility="gone"
-                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="16dp"
                     android:background="@color/surfaceVariant"
                     android:contentDescription="Photo preview"/>
 
-                <View
+                <!-- Big round Save button -->
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/divider"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="32dp"/>
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="24dp">
 
-            
-                <!-- Big round Save button matching reference -->
-                <Button
-                    android:id="@+id/buttonSaveLog"
-                    android:layout_width="160dp"
-                    android:layout_height="160dp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="SAVE&#10;TREE"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/textOnDark"
-                    android:backgroundTint="@color/primary"
-                    app:cornerRadius="80dp"/>
+                    <Button
+                        android:id="@+id/buttonSaveLog"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:text="SAVE&#10;TREE"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/textOnDark"
+                        android:backgroundTint="@color/primary"
+                        app:cornerRadius="75dp"/>
+
+                </LinearLayout>
 
             </LinearLayout>
         </FrameLayout>

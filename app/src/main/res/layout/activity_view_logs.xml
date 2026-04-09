@@ -18,7 +18,6 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/background"
             app:titleTextColor="@color/textPrimary"
-            app:titleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
             app:title="My Forage Log"/>
 
     </com.google.android.material.appbar.AppBarLayout>
