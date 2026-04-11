@@ -1,3 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ForagingApp</string>
+    <string name="app_name">Fruit Tree</string>
+    <string name="app_tagline">find your trees</string>
+    <string name="about_title">Just for taste.</string>
+    <string name="about_body">Just for taste or experience to find interesting trees. Share with birds and other living creatures.</string>
+    <string name="empty_logs">No trees yet.\nHead outside and start spotting.</string>
+    <string name="map_hint">Long-press on the map to pin a tree</string>
 </resources>

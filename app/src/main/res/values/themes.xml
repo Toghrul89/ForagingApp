@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.ForagingApp" parent="Theme.Material3.Light.NoActionBar">
         <item name="android:statusBarColor">@color/background</item>
@@ -7,7 +8,18 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/textOnDark</item>
         <item name="colorSurface">@color/surface</item>
-        <item name="colorSecondaryContainer">@color/blobSage</item>
+        <item name="colorSecondaryContainer">@color/mossGreen</item>
         <item name="android:fontFamily">sans-serif</item>
+        <item name="materialButtonStyle">@style/Widget.ForagingApp.Button</item>
+    </style>
+
+    <style name="Widget.ForagingApp.Button" parent="Widget.Material3.Button">
+        <item name="android:letterSpacing">0.04</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="Theme.ForagingApp.Map" parent="Theme.ForagingApp">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>

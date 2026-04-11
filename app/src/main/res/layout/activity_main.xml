@@ -17,105 +17,198 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Hero with blobs -->
+            <!-- ══════════════════════════════════════ -->
+            <!-- HERO — dark forest card with blobs     -->
+            <!-- ══════════════════════════════════════ -->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="260dp"
+                android:layout_height="280dp"
                 android:clipChildren="false">
 
+                <!-- Dark hero background -->
                 <View
-                    android:layout_width="220dp"
-                    android:layout_height="220dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="260dp"
+                    android:background="@color/primary"
+                    android:layout_gravity="top"/>
+
+                <!-- Decorative organic blob — top right -->
+                <View
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
                     android:layout_gravity="top|end"
-                    android:layout_marginTop="-50dp"
-                    android:layout_marginEnd="-60dp"
+                    android:layout_marginTop="-30dp"
+                    android:layout_marginEnd="-50dp"
                     android:background="@drawable/blob_sage"
-                    android:alpha="0.55"/>
+                    android:alpha="0.18"/>
 
+                <!-- Small blob — left mid -->
                 <View
-                    android:layout_width="140dp"
-                    android:layout_height="140dp"
-                    android:layout_gravity="bottom|start"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginBottom="-30dp"
-                    android:background="@drawable/blob_blush"
-                    android:alpha="0.5"/>
-
-                <View
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:layout_gravity="top|start"
                     android:layout_marginStart="-20dp"
-                    android:layout_marginTop="60dp"
+                    android:layout_marginTop="80dp"
                     android:background="@drawable/blob_blush"
-                    android:alpha="0.3"/>
+                    android:alpha="0.14"/>
 
+                <!-- Hero text content -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:paddingStart="28dp"
                     android:paddingEnd="28dp"
-                    android:paddingTop="56dp"
+                    android:paddingTop="60dp"
                     android:gravity="top">
 
+                    <!-- Eyebrow label -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="FORAGE"
+                        android:text="FRUIT TREE"
                         android:textSize="10sp"
                         android:letterSpacing="0.3"
-                        android:textColor="@color/accent"
+                        android:textColor="#88FFFFFF"
                         android:layout_marginBottom="10dp"/>
 
+                    <!-- Main headline -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Your wild\nharvest log."
-                        android:textSize="36sp"
+                        android:text="Find your\ntrees."
+                        android:textSize="40sp"
                         android:lineSpacingMultiplier="1.05"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="#FFFFFF"
                         android:textStyle="bold"/>
 
+                    <!-- Sub text -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Track, map &amp; revisit every spot."
+                        android:text="Log, map &amp; revisit every fruit tree."
                         android:textSize="14sp"
-                        android:textColor="@color/textSecondary"
+                        android:textColor="#99FFFFFF"
                         android:layout_marginTop="10dp"/>
+
+                </LinearLayout>
+
+                <!-- Pill stats row overlapping the hero bottom -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="-22dp"
+                    android:orientation="horizontal">
+
+                    <!-- Spots count pill -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        app:cardCornerRadius="22dp"
+                        app:cardElevation="8dp"
+                        app:cardBackgroundColor="@color/surface">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="🌳 "
+                                android:textSize="14sp"/>
+
+                            <TextView
+                                android:id="@+id/tvSpotCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0 trees spotted"
+                                android:textSize="12sp"
+                                android:textColor="@color/textPrimary"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Favourites pill -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        app:cardCornerRadius="22dp"
+                        app:cardElevation="8dp"
+                        app:cardBackgroundColor="@color/surface">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:paddingStart="14dp"
+                            android:paddingEnd="14dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="★ "
+                                android:textSize="14sp"
+                                android:textColor="@color/favoriteGold"/>
+
+                            <TextView
+                                android:id="@+id/tvFavCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0 favourites"
+                                android:textSize="12sp"
+                                android:textColor="@color/textPrimary"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
             </FrameLayout>
 
-            <!-- Action Cards -->
+            <!-- ══════════════════════════════════════ -->
+            <!-- ACTION CARDS                           -->
+            <!-- ══════════════════════════════════════ -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:paddingTop="12dp"
+                android:paddingTop="40dp"
                 android:paddingBottom="8dp">
 
-                <!-- Add Spot dark card -->
+                <!-- ADD SPOT — full-width tall card -->
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/btnLogEntry"
+                    android:id="@+id/cardLogEntry"
                     android:layout_width="match_parent"
-                    android:layout_height="88dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="14dp"
                     android:clickable="true"
                     android:focusable="true"
-                    app:cardCornerRadius="22dp"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardCornerRadius="24dp"
                     app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/primary">
+                    app:cardBackgroundColor="@color/accent">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingStart="24dp"
-                        android:paddingEnd="20dp">
+                        android:paddingStart="26dp"
+                        android:paddingEnd="22dp">
 
+                        <!-- Left: labels -->
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -125,142 +218,157 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="NEW LOG"
-                                android:textSize="10sp"
-                                android:letterSpacing="0.15"
-                                android:textColor="#77FFFFFF"/>
+                                android:text="NEW SPOT"
+                                android:textSize="9sp"
+                                android:letterSpacing="0.2"
+                                android:textColor="#99FFFFFF"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Add a new spot"
-                                android:textSize="19sp"
+                                android:text="Log a fruit tree"
+                                android:textSize="22sp"
                                 android:textStyle="bold"
                                 android:textColor="#FFFFFF"/>
                         </LinearLayout>
 
+                        <!-- Right: arrow pill -->
                         <androidx.cardview.widget.CardView
-                            android:layout_width="80dp"
-                            android:layout_height="38dp"
+                            android:layout_width="44dp"
+                            android:layout_height="44dp"
                             android:layout_alignParentEnd="true"
                             android:layout_centerVertical="true"
-                            app:cardCornerRadius="19dp"
+                            app:cardCornerRadius="22dp"
                             app:cardElevation="0dp"
-                            app:cardBackgroundColor="#44FFFFFF">
+                            app:cardBackgroundColor="#33FFFFFF">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:text="Start →"
-                                android:textSize="12sp"
+                                android:text="+"
+                                android:textSize="24sp"
                                 android:textColor="#FFFFFF"
-                                android:gravity="center"/>
+                                android:gravity="center"
+                                android:textStyle="bold"/>
 
                         </androidx.cardview.widget.CardView>
 
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
-                <!-- My Logs + Map row -->
+                <!-- MY LOGS + MAP — side by side -->
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
+                    android:layout_height="150dp"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="4dp">
+                    android:layout_marginBottom="6dp">
 
+                    <!-- MY LOGS card -->
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cardViewLogs"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_marginEnd="8dp"
                         android:clickable="true"
                         android:focusable="true"
-                        app:cardCornerRadius="22dp"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:cardCornerRadius="24dp"
                         app:cardElevation="0dp"
-                        app:cardBackgroundColor="@color/blobSage">
+                        app:cardBackgroundColor="@color/mossGreen">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:padding="20dp"
+                            android:padding="22dp"
                             android:gravity="bottom">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="My Forage Log"
-                                android:textSize="14sp"
+                                android:text="🗂"
+                                android:textSize="26sp"
+                                android:layout_marginBottom="8dp"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="My Trees"
+                                android:textSize="15sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/primary"/>
 
-                            <Button
-                                android:id="@+id/btnViewLogs"
-                                style="@style/Widget.Material3.Button.TextButton"
+                            <TextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="30dp"
-                                android:text="View →"
-                                android:textColor="@color/accentDark"
+                                android:layout_height="wrap_content"
+                                android:text="View all →"
                                 android:textSize="12sp"
-                                android:paddingStart="0dp"
-                                android:minWidth="0dp"/>
-
+                                android:textColor="@color/leafGreen"
+                                android:layout_marginTop="2dp"/>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
+                    <!-- MAP card -->
                     <androidx.cardview.widget.CardView
+                        android:id="@+id/cardOpenMap"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
                         android:clickable="true"
                         android:focusable="true"
-                        app:cardCornerRadius="22dp"
+                        android:foreground="?attr/selectableItemBackground"
+                        app:cardCornerRadius="24dp"
                         app:cardElevation="0dp"
-                        app:cardBackgroundColor="@color/blobBlush">
+                        app:cardBackgroundColor="@color/primaryLight">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:padding="20dp"
+                            android:padding="22dp"
                             android:gravity="bottom">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Explore Map"
-                                android:textSize="14sp"
-                                android:textStyle="bold"
-                                android:textColor="@color/primary"/>
+                                android:text="🗺"
+                                android:textSize="26sp"
+                                android:layout_marginBottom="8dp"/>
 
-                            <Button
-                                android:id="@+id/btnOpenMap"
-                                style="@style/Widget.Material3.Button.TextButton"
+                            <TextView
                                 android:layout_width="wrap_content"
-                                android:layout_height="30dp"
-                                android:text="Open →"
-                                android:textColor="@color/accentDark"
-                                android:textSize="12sp"
-                                android:paddingStart="0dp"
-                                android:minWidth="0dp"/>
+                                android:layout_height="wrap_content"
+                                android:text="Explore Map"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:textColor="#FFFFFF"/>
 
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Open →"
+                                android:textSize="12sp"
+                                android:textColor="#AAFFFFFF"
+                                android:layout_marginTop="2dp"/>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Divider -->
+            <!-- ══════════════════════════════════════ -->
+            <!-- ABOUT                                  -->
+            <!-- ══════════════════════════════════════ -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/divider"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
-                android:layout_marginTop="16dp"/>
+                android:layout_marginTop="20dp"/>
 
-            <!-- About -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -268,22 +376,22 @@
                 android:paddingStart="28dp"
                 android:paddingEnd="28dp"
                 android:paddingTop="28dp"
-                android:paddingBottom="16dp">
+                android:paddingBottom="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ABOUT"
                     android:textSize="10sp"
-                    android:letterSpacing="0.2"
+                    android:letterSpacing="0.25"
                     android:textColor="@color/textHint"
                     android:layout_marginBottom="12dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Built for foragers."
-                    android:textSize="22sp"
+                    android:text="@string/about_title"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     android:textColor="@color/textPrimary"
                     android:layout_marginBottom="12dp"/>
@@ -291,20 +399,23 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="This app was built to make it easy to track, log, and revisit foraging spots in the wild. Created as a personal portfolio project by a software development student who loves the outdoors."
-                    android:textSize="14sp"
-                    android:lineSpacingMultiplier="1.7"
+                    android:text="@string/about_body"
+                    android:textSize="15sp"
+                    android:lineSpacingMultiplier="1.65"
                     android:textColor="@color/textSecondary"/>
 
             </LinearLayout>
 
-            <!-- Footer -->
+            <!-- ══════════════════════════════════════ -->
+            <!-- FOOTER                                 -->
+            <!-- ══════════════════════════════════════ -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/divider"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"/>
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -317,25 +428,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="FORAGE APP"
+                    android:text="🌿 FRUIT TREE"
                     android:textSize="11sp"
-                    android:letterSpacing="0.2"
+                    android:letterSpacing="0.15"
                     android:textColor="@color/textPrimary"
                     android:textStyle="bold"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Made with care for the wild."
+                    android:text="Share with birds and every living thing."
                     android:textSize="12sp"
-                    android:textColor="@color/textHint"
-                    android:layout_marginTop="4dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="v1.0  ·  Seattle, WA"
-                    android:textSize="11sp"
                     android:textColor="@color/textHint"
                     android:layout_marginTop="4dp"/>
 

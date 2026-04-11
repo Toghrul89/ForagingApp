@@ -7,14 +7,20 @@ import com.example.foragingapp.model.LogEntry
 @Dao
 interface LogDao {
 
-    @Query("SELECT * FROM logs ORDER BY id DESC")
+    @Query("SELECT * FROM logs ORDER BY isFavorite DESC, id DESC")
     fun getAllLogs(): LiveData<List<LogEntry>>
 
-    @Query("SELECT * FROM logs ORDER BY id DESC")
+    @Query("SELECT * FROM logs ORDER BY isFavorite DESC, id DESC")
     suspend fun getAllLogsOnce(): List<LogEntry>
 
     @Query("SELECT * FROM logs WHERE id = :id LIMIT 1")
     suspend fun getLogById(id: Long): LogEntry?
+
+    @Query("SELECT * FROM logs WHERE name LIKE '%' || :query || '%' OR treeType LIKE '%' || :query || '%' OR location LIKE '%' || :query || '%' ORDER BY id DESC")
+    fun search(query: String): LiveData<List<LogEntry>>
+
+    @Query("SELECT * FROM logs WHERE treeType = :type ORDER BY id DESC")
+    fun getByType(type: String): LiveData<List<LogEntry>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(entry: LogEntry): Long

@@ -1,23 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#2C4A2E</color>
-    <color name="primaryDark">#1A2E1C</color>
-    <color name="accent">#4A7C52</color>
-    <color name="accentDark">#2C4A2E</color>
-    <color name="background">#F5F0E8</color>
-    <color name="surface">#FDFAF5</color>
-    <color name="surfaceVariant">#EDE8DC</color>
-    <color name="cardBackground">#FDFAF5</color>
-    <color name="blobSage">#C8D5B9</color>
-    <color name="blobBlush">#E8C9A8</color>
-    <color name="blobSand">#D4C4A0</color>
-    <color name="textPrimary">#1C2B1E</color>
-    <color name="textSecondary">#5A6B5C</color>
+    <!-- Brand -->
+    <color name="primary">#1E3A22</color>
+    <color name="primaryDark">#122016</color>
+    <color name="primaryLight">#2C5230</color>
+
+    <!-- Accent — warm amber for fruit -->
+    <color name="accent">#C8721A</color>
+    <color name="accentLight">#E8933E</color>
+    <color name="accentMuted">#F2D4B0</color>
+
+    <!-- Greens -->
+    <color name="leafGreen">#4A7C52</color>
+    <color name="sageGreen">#B8CCBA</color>
+    <color name="mossGreen">#D4E0D5</color>
+
+    <!-- Backgrounds -->
+    <color name="background">#F2EDE4</color>
+    <color name="surface">#FAFAF6</color>
+    <color name="surfaceVariant">#EDEAE2</color>
+    <color name="cardBg">#FFFFFF</color>
+
+    <!-- Decorative blobs -->
+    <color name="blobSage">#C2D4C4</color>
+    <color name="blobBlush">#E8C9A0</color>
+    <color name="blobTeal">#A8C4C0</color>
+
+    <!-- Text -->
+    <color name="textPrimary">#141F16</color>
+    <color name="textSecondary">#4A5E4C</color>
     <color name="textHint">#8A9E8C</color>
     <color name="textOnDark">#FFFFFF</color>
     <color name="textOnAccent">#FFFFFF</color>
-    <color name="border">#D8D0C4</color>
-    <color name="divider">#EAE4D8</color>
-    <color name="ripple">#1A2C4A2E</color>
-    <color name="success">#4A7C52</color>
+
+    <!-- UI chrome -->
+    <color name="border">#D8D2C8</color>
+    <color name="divider">#E8E2D8</color>
+    <color name="ripple">#1A1E3A22</color>
+
+    <!-- Semantic -->
+    <color name="success">#3D7A45</color>
     <color name="error">#C0392B</color>
+    <color name="favoriteGold">#E8A020</color>
 </resources>

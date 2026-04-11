@@ -1,0 +1,44 @@
+package com.example.foragingapp.model
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+/**
+ * Core data model for a fruit-tree spot.
+ * version 2: added treeType, season, isFavorite
+ */
+@Entity(tableName = "logs")
+data class LogEntry(
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0,
+
+    /** Display name the user gave this spot, e.g. "Big Apple by the creek" */
+    val name: String,
+
+    /** Human-readable address or area, e.g. "Seattle, WA" */
+    val location: String,
+
+    /** ISO date-time string: "yyyy-MM-dd HH:mm" */
+    val date: String,
+
+    /** Free-form notes */
+    val notes: String = "",
+
+    /** Content URI string pointing to a saved photo */
+    val imageUri: String = "",
+
+    /** GPS latitude — null if not captured */
+    val lat: Double? = null,
+
+    /** GPS longitude — null if not captured */
+    val lng: Double? = null,
+
+    /** Category tag, e.g. "Apple", "Cherry", "Pear", "Plum", "Mulberry", "Other" */
+    val treeType: String = "Other",
+
+    /** Best season to harvest, e.g. "Summer", "Autumn", "Spring", "Year-round" */
+    val season: String = "",
+
+    /** User-starred for quick access */
+    val isFavorite: Boolean = false
+)
