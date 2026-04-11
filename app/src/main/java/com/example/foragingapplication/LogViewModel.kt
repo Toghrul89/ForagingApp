@@ -13,19 +13,18 @@ import kotlinx.coroutines.launch
 
 class LogViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository: LogRepository
+    private val repository: LogRepository =
+        LogRepository(AppDatabase.getInstance(application).logDao())   // ← init here
 
     val allLogs: LiveData<List<LogEntry>>
 
     private val _searchQuery = MutableLiveData<String>("")
     val searchResults: LiveData<List<LogEntry>> = _searchQuery.switchMap { query ->
-        if (query.isBlank()) repository.allLogs
+        if (query.isBlank()) repository.allLogs   // ✅ now safe
         else repository.search(query)
     }
 
     init {
-        val dao = AppDatabase.getInstance(application).logDao()
-        repository = LogRepository(dao)
         allLogs = repository.allLogs
     }
 
