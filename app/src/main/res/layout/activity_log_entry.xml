@@ -33,16 +33,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Subtle background blob TL -->
+            <!-- Subtle blob -->
             <View
                 android:layout_width="160dp"
                 android:layout_height="160dp"
                 android:layout_gravity="top|end"
                 android:layout_marginEnd="-30dp"
                 android:background="@drawable/blob_sage"
-                android:alpha="0.35"/>
+                android:alpha="0.3"/>
 
-            <!-- Content -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,7 +51,6 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="56dp">
 
-                <!-- Section heading -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -62,7 +60,7 @@
                     android:textColor="@color/textPrimary"
                     android:layout_marginBottom="22dp"/>
 
-                <!-- ── Row: Tree Name ── -->
+                <!-- ── Spot Name ── -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -72,44 +70,26 @@
                     android:padding="16dp"
                     android:layout_marginBottom="10dp">
 
-                    <TextView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:text="🌳"
-                        android:textSize="18sp"
-                        android:gravity="center"
+                    <TextView android:layout_width="28dp" android:layout_height="28dp"
+                        android:text="🌳" android:textSize="18sp" android:gravity="center"
                         android:layout_marginEnd="12dp"/>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Spot name"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Spot name" android:textSize="12sp" android:textStyle="bold"
                             android:textColor="@color/textPrimary"/>
-
-                        <EditText
-                            android:id="@+id/editTextTreeName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textCapWords"
-                            android:textColor="@color/textPrimary"
-                            android:textSize="14sp"
-                            android:hint="e.g. Wild apple by the creek"
+                        <EditText android:id="@+id/editTextTreeName"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:inputType="textCapWords" android:textColor="@color/textPrimary"
+                            android:textSize="14sp" android:hint="e.g. Zogal tree by Volunteer Park"
                             android:textColorHint="@color/textHint"
                             android:background="@android:color/transparent"
-                            android:paddingTop="4dp"
-                            android:paddingBottom="0dp"/>
+                            android:paddingTop="4dp" android:paddingBottom="0dp"/>
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- ── Row: Tree Type (spinner) ── -->
+                <!-- ── Tree Type ── -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -119,39 +99,121 @@
                     android:padding="16dp"
                     android:layout_marginBottom="10dp">
 
-                    <TextView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:text="🍎"
-                        android:textSize="18sp"
-                        android:gravity="center"
+                    <TextView android:layout_width="28dp" android:layout_height="28dp"
+                        android:text="🍎" android:textSize="18sp" android:gravity="center"
                         android:layout_marginEnd="12dp"/>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Tree type"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Tree type" android:textSize="12sp" android:textStyle="bold"
                             android:textColor="@color/textPrimary"/>
+                        <Spinner android:id="@+id/spinnerTreeType"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:background="@android:color/transparent" android:paddingTop="4dp"/>
+                    </LinearLayout>
+                </LinearLayout>
 
-                        <Spinner
-                            android:id="@+id/spinnerTreeType"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                <!-- ── Season ── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/row_bg"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView android:layout_width="28dp" android:layout_height="28dp"
+                        android:text="🍂" android:textSize="18sp" android:gravity="center"
+                        android:layout_marginEnd="12dp"/>
+
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Best harvest season" android:textSize="12sp" android:textStyle="bold"
+                            android:textColor="@color/textPrimary"/>
+                        <Spinner android:id="@+id/spinnerSeason"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:background="@android:color/transparent" android:paddingTop="4dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- ── Ripeness ── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/row_bg"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView android:layout_width="28dp" android:layout_height="28dp"
+                        android:text="🔴" android:textSize="18sp" android:gravity="center"
+                        android:layout_marginEnd="12dp"/>
+
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Ripeness today" android:textSize="12sp" android:textStyle="bold"
+                            android:textColor="@color/textPrimary"/>
+                        <Spinner android:id="@+id/spinnerRipeness"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:background="@android:color/transparent" android:paddingTop="4dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- ── Star Rating ── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/row_bg"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView android:layout_width="28dp" android:layout_height="28dp"
+                        android:text="★" android:textSize="18sp" android:gravity="center"
+                        android:textColor="@color/favoriteGold"
+                        android:layout_marginEnd="12dp"/>
+
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Your rating" android:textSize="12sp" android:textStyle="bold"
                             android:textColor="@color/textPrimary"
-                            android:background="@android:color/transparent"
-                            android:paddingTop="4dp"/>
+                            android:layout_marginBottom="6dp"/>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <TextView android:id="@+id/star1" android:layout_width="36dp"
+                                android:layout_height="36dp" android:text="☆" android:textSize="26sp"
+                                android:textColor="@color/favoriteGold" android:gravity="center"
+                                android:clickable="true" android:focusable="true"/>
+                            <TextView android:id="@+id/star2" android:layout_width="36dp"
+                                android:layout_height="36dp" android:text="☆" android:textSize="26sp"
+                                android:textColor="@color/favoriteGold" android:gravity="center"
+                                android:clickable="true" android:focusable="true"/>
+                            <TextView android:id="@+id/star3" android:layout_width="36dp"
+                                android:layout_height="36dp" android:text="☆" android:textSize="26sp"
+                                android:textColor="@color/favoriteGold" android:gravity="center"
+                                android:clickable="true" android:focusable="true"/>
+                            <TextView android:id="@+id/star4" android:layout_width="36dp"
+                                android:layout_height="36dp" android:text="☆" android:textSize="26sp"
+                                android:textColor="@color/favoriteGold" android:gravity="center"
+                                android:clickable="true" android:focusable="true"/>
+                            <TextView android:id="@+id/star5" android:layout_width="36dp"
+                                android:layout_height="36dp" android:text="☆" android:textSize="26sp"
+                                android:textColor="@color/favoriteGold" android:gravity="center"
+                                android:clickable="true" android:focusable="true"/>
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- ── Row: Season ── -->
+                <!-- ── Location ── -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -161,109 +223,39 @@
                     android:padding="16dp"
                     android:layout_marginBottom="10dp">
 
-                    <TextView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:text="🍂"
-                        android:textSize="18sp"
-                        android:gravity="center"
+                    <TextView android:layout_width="28dp" android:layout_height="28dp"
+                        android:text="📍" android:textSize="18sp" android:gravity="center"
                         android:layout_marginEnd="12dp"/>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Best harvest season"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Location" android:textSize="12sp" android:textStyle="bold"
                             android:textColor="@color/textPrimary"/>
-
-                        <Spinner
-                            android:id="@+id/spinnerSeason"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@android:color/transparent"
-                            android:paddingTop="4dp"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- ── Row: Location ── -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/row_bg"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:padding="16dp"
-                    android:layout_marginBottom="10dp">
-
-                    <TextView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:text="📍"
-                        android:textSize="18sp"
-                        android:gravity="center"
-                        android:layout_marginEnd="12dp"/>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Location"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/textPrimary"/>
-
-                        <EditText
-                            android:id="@+id/editTextLocation"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/textPrimary"
-                            android:textSize="14sp"
+                        <EditText android:id="@+id/editTextLocation"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:textColor="@color/textPrimary" android:textSize="14sp"
                             android:hint="e.g. Volunteer Park, Seattle"
                             android:textColorHint="@color/textHint"
                             android:background="@android:color/transparent"
-                            android:paddingTop="4dp"
-                            android:paddingBottom="0dp"/>
-
-                        <TextView
-                            android:id="@+id/tvCoordinates"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="11sp"
-                            android:textColor="@color/accent"
-                            android:visibility="gone"
-                            android:layout_marginTop="3dp"/>
-
+                            android:paddingTop="4dp" android:paddingBottom="0dp"/>
+                        <TextView android:id="@+id/tvCoordinates"
+                            android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:textSize="11sp" android:textColor="@color/accent"
+                            android:visibility="gone" android:layout_marginTop="3dp"/>
                     </LinearLayout>
 
-                    <Button
-                        android:id="@+id/buttonGetLocation"
+                    <Button android:id="@+id/buttonGetLocation"
                         style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:text="GPS"
-                        android:textSize="11sp"
+                        android:layout_width="wrap_content" android:layout_height="36dp"
+                        android:text="GPS" android:textSize="11sp"
                         android:textColor="@color/leafGreen"
-                        app:strokeColor="@color/leafGreen"
-                        app:cornerRadius="10dp"
+                        app:strokeColor="@color/leafGreen" app:cornerRadius="10dp"
                         android:layout_marginStart="10dp"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp"/>
-
+                        android:paddingStart="14dp" android:paddingEnd="14dp"/>
                 </LinearLayout>
 
-                <!-- ── Row: Notes ── -->
+                <!-- ── Notes ── -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -273,46 +265,27 @@
                     android:padding="16dp"
                     android:layout_marginBottom="10dp">
 
-                    <TextView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:text="✏️"
-                        android:textSize="16sp"
-                        android:gravity="center"
-                        android:layout_marginEnd="12dp"
-                        android:layout_marginTop="2dp"/>
+                    <TextView android:layout_width="28dp" android:layout_height="28dp"
+                        android:text="✏️" android:textSize="16sp" android:gravity="center"
+                        android:layout_marginEnd="12dp" android:layout_marginTop="2dp"/>
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Notes"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
+                    <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:orientation="vertical">
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                            android:text="Notes" android:textSize="12sp" android:textStyle="bold"
                             android:textColor="@color/textPrimary"/>
-
-                        <EditText
-                            android:id="@+id/editTextNotes"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="textMultiLine"
-                            android:minLines="3"
-                            android:gravity="top"
-                            android:textColor="@color/textPrimary"
+                        <EditText android:id="@+id/editTextNotes"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:inputType="textMultiLine" android:minLines="3"
+                            android:gravity="top" android:textColor="@color/textPrimary"
                             android:textSize="14sp"
-                            android:hint="Wild apples near the path, full of fruit in September…"
+                            android:hint="Small red fruits, full of clusters in August. Near the fountain…"
                             android:textColorHint="@color/textHint"
-                            android:background="@android:color/transparent"
-                            android:paddingTop="4dp"/>
+                            android:background="@android:color/transparent" android:paddingTop="4dp"/>
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- ── Row: Add Photo ── -->
+                <!-- ── Add Photo ── -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -322,49 +295,31 @@
                     android:padding="16dp"
                     android:layout_marginBottom="10dp">
 
-                    <TextView
-                        android:layout_width="28dp"
-                        android:layout_height="28dp"
-                        android:text="📷"
-                        android:textSize="18sp"
-                        android:gravity="center"
+                    <TextView android:layout_width="28dp" android:layout_height="28dp"
+                        android:text="📷" android:textSize="18sp" android:gravity="center"
                         android:layout_marginEnd="12dp"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Add photo"
-                        android:textSize="13sp"
-                        android:textStyle="bold"
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                        android:layout_weight="1" android:text="Add photo"
+                        android:textSize="13sp" android:textStyle="bold"
                         android:textColor="@color/textPrimary"/>
 
-                    <Button
-                        android:id="@+id/buttonSelectImage"
+                    <Button android:id="@+id/buttonSelectImage"
                         style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:text="Gallery"
-                        android:textSize="11sp"
+                        android:layout_width="wrap_content" android:layout_height="36dp"
+                        android:text="Gallery" android:textSize="11sp"
                         android:textColor="@color/textSecondary"
-                        app:strokeColor="@color/border"
-                        app:cornerRadius="10dp"
+                        app:strokeColor="@color/border" app:cornerRadius="10dp"
                         android:layout_marginEnd="6dp"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp"/>
+                        android:paddingStart="12dp" android:paddingEnd="12dp"/>
 
-                    <Button
-                        android:id="@+id/buttonTakePhoto"
-                        android:layout_width="wrap_content"
-                        android:layout_height="36dp"
-                        android:text="Camera"
-                        android:textSize="11sp"
+                    <Button android:id="@+id/buttonTakePhoto"
+                        android:layout_width="wrap_content" android:layout_height="36dp"
+                        android:text="Camera" android:textSize="11sp"
                         android:textColor="@color/textOnDark"
                         android:backgroundTint="@color/primary"
                         app:cornerRadius="10dp"
-                        android:paddingStart="12dp"
-                        android:paddingEnd="12dp"/>
-
+                        android:paddingStart="12dp" android:paddingEnd="12dp"/>
                 </LinearLayout>
 
                 <!-- Photo preview -->
@@ -379,7 +334,7 @@
                     android:contentDescription="Tree photo"
                     android:clipToOutline="true"/>
 
-                <!-- ── Save button — circular, centred ── -->
+                <!-- Save button -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -390,7 +345,7 @@
                         android:id="@+id/buttonSaveLog"
                         android:layout_width="160dp"
                         android:layout_height="160dp"
-                        android:text="SAVE&#10;TREE"
+                        android:text="SAVE&#10;SPOT"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/textOnDark"

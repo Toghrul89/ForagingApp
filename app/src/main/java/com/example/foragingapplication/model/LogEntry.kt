@@ -3,19 +3,15 @@ package com.example.foragingapp.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-/**
- * Core data model for a fruit-tree spot.
- * version 2: added treeType, season, isFavorite
- */
 @Entity(tableName = "logs")
 data class LogEntry(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
 
-    /** Display name the user gave this spot, e.g. "Big Apple by the creek" */
+    /** Display name the user gave this spot */
     val name: String,
 
-    /** Human-readable address or area, e.g. "Seattle, WA" */
+    /** Human-readable address / area */
     val location: String,
 
     /** ISO date-time string: "yyyy-MM-dd HH:mm" */
@@ -33,12 +29,18 @@ data class LogEntry(
     /** GPS longitude — null if not captured */
     val lng: Double? = null,
 
-    /** Category tag, e.g. "Apple", "Cherry", "Pear", "Plum", "Mulberry", "Other" */
+    /** Category tag, e.g. "Cornelian Cherry", "Apple", etc. */
     val treeType: String = "Other",
 
-    /** Best season to harvest, e.g. "Summer", "Autumn", "Spring", "Year-round" */
+    /** Best season to harvest */
     val season: String = "",
 
     /** User-starred for quick access */
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+
+    /** Ripeness when visited: "Unripe" | "Almost Ready" | "Peak" | "Overripe" */
+    val ripeness: String = "",
+
+    /** User rating 1-5, 0 = not rated */
+    val rating: Int = 0
 )

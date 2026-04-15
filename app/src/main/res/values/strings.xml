@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Fruit Tree</string>
-    <string name="app_tagline">find your trees</string>
-    <string name="about_title">Just for taste.</string>
-    <string name="about_body">Just for taste or experience to find interesting trees. Share with birds and other living creatures.</string>
-    <string name="empty_logs">No trees yet.\nHead outside and start spotting.</string>
+    <string name="app_name">Zogal</string>
+    <string name="app_tagline">your wild harvest journal</string>
+
+    <string name="about_title">From Baku to Seattle — one little red fruit changed everything.</string>
+
+    <string name="about_body">In Azerbaijani, "Zogal" (zoğal) is the word for cornelian cherry — a small, intensely tart red fruit that grows wild across the Caucasus. For me, it was never just a fruit. It was the taste of summer mornings in Baku, fingers stained red, grandmother\'s garden, the feeling of being somewhere completely alive.
+
+When I moved to the United States in 2018, I missed zogal the way you miss a person. I searched farmers markets, specialty stores, Azerbaijani communities — nothing. It simply didn\'t exist in any shelf I could find.
+
+Then in 2022 I moved to Seattle. One afternoon, walking through a neighborhood I barely knew, I spotted a small gnarled tree with clusters of deep red fruits. I stopped. I stared. I tasted one — and for a moment I was back in Baku. There was a zogal tree growing wild in Seattle, and nobody around me even knew what it was.
+
+That moment planted two ideas at once. The first: there must be others like me — immigrants, foragers, plant lovers — who carry a fruit in their memory that they haven\'t tasted in years, and who walk right past it without recognizing it. The second: I had just started studying software engineering, and I finally had the tools to do something about it.
+
+Zogal is the app I wished existed. A journal for wild trees, hidden harvests, and the small joys that geography tried to take from you. Log your spots, map your finds, share the season. And remember — we always leave enough for the birds.</string>
+
+    <string name="empty_logs">No spots yet.\nHead outside and start exploring.</string>
     <string name="map_hint">Long-press on the map to pin a tree</string>
 </resources>

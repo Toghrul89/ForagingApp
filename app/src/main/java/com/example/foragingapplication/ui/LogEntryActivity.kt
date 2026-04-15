@@ -41,27 +41,44 @@ class LogEntryActivity : AppCompatActivity() {
     companion object {
         private const val LOC_PERMISSION_CODE = 1002
 
+        // Zogal (Cornelian Cherry) is listed first as the hero fruit
         val TREE_TYPES = listOf(
-            "Apple 🍎", "Cherry 🍒", "Pear 🍐", "Plum 🫐",
-            "Mulberry 🫐", "Fig 🫐", "Walnut 🌰", "Hazelnut 🌰",
-            "Blackberry 🫐", "Elderberry", "Quince", "Persimmon",
-            "Crabapple", "Hawthorn", "Serviceberry", "Other 🌿"
+            "Cornelian Cherry 🌿", // Zogal
+            "Apple 🍎",
+            "Cherry 🍒",
+            "Pear 🍐",
+            "Plum 🫐",
+            "Mulberry 🫐",
+            "Fig 🍈",
+            "Walnut 🌰",
+            "Hazelnut 🌰",
+            "Blackberry 🫐",
+            "Elderberry",
+            "Quince",
+            "Persimmon",
+            "Crabapple",
+            "Hawthorn",
+            "Serviceberry",
+            "Other 🌿"
         )
 
         val SEASONS = listOf("Spring", "Summer", "Autumn", "Winter", "Year-round")
+
+        val RIPENESS_OPTIONS = listOf(
+            "🌱 Unripe",
+            "🟡 Almost Ready",
+            "🔴 Peak — harvest now!",
+            "🍂 Overripe"
+        )
     }
 
     private val pickImageLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let { loadPhoto(it) }
-    }
+    ) { uri: Uri? -> uri?.let { loadPhoto(it) } }
 
     private val takePictureLauncher = registerForActivityResult(
         ActivityResultContracts.TakePicture()
-    ) { success ->
-        if (success) currentPhotoUri?.let { loadPhoto(it) }
-    }
+    ) { success -> if (success) currentPhotoUri?.let { loadPhoto(it) } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,15 +93,14 @@ class LogEntryActivity : AppCompatActivity() {
 
         setupSpinners()
 
-        // Edit mode
         val editingId = intent.getLongExtra("LOG_ID", -1).takeIf { it != -1L }
         if (editingId != null) {
             lifecycleScope.launch {
                 viewModel.getLogById(editingId)?.let { log ->
                     editingEntry = log
                     populateFields(log)
-                    supportActionBar?.title = "Edit Tree"
-                    binding.buttonSaveLog.text = "Update Tree"
+                    supportActionBar?.title = "Edit Spot"
+                    binding.buttonSaveLog.text = "UPDATE\nSPOT"
                 }
             }
         } else {
@@ -95,6 +111,12 @@ class LogEntryActivity : AppCompatActivity() {
         binding.buttonSelectImage.setOnClickListener { pickImageLauncher.launch("image/*") }
         binding.buttonTakePhoto.setOnClickListener { takePhoto() }
         binding.buttonSaveLog.setOnClickListener { saveLog() }
+
+        // Star rating buttons
+        listOf(binding.star1, binding.star2, binding.star3, binding.star4, binding.star5)
+            .forEachIndexed { idx, tv ->
+                tv.setOnClickListener { setRating(idx + 1) }
+            }
     }
 
     private fun setupSpinners() {
@@ -105,6 +127,10 @@ class LogEntryActivity : AppCompatActivity() {
         val seasonAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, SEASONS)
         seasonAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerSeason.adapter = seasonAdapter
+
+        val ripenessAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, RIPENESS_OPTIONS)
+        ripenessAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerRipeness.adapter = ripenessAdapter
     }
 
     private fun populateFields(log: LogEntry) {
@@ -120,6 +146,11 @@ class LogEntryActivity : AppCompatActivity() {
         val seasonIdx = SEASONS.indexOf(log.season)
         if (seasonIdx >= 0) binding.spinnerSeason.setSelection(seasonIdx)
 
+        val ripenessIdx = RIPENESS_OPTIONS.indexOfFirst { it.contains(log.ripeness) }
+        if (ripenessIdx >= 0) binding.spinnerRipeness.setSelection(ripenessIdx)
+
+        setRating(log.rating)
+
         if (log.lat != null && log.lng != null) {
             binding.tvCoordinates.text = "📍 ${String.format("%.5f", log.lat)}, ${String.format("%.5f", log.lng)}"
             binding.tvCoordinates.visibility = View.VISIBLE
@@ -127,6 +158,16 @@ class LogEntryActivity : AppCompatActivity() {
         if (log.imageUri.isNotEmpty()) {
             currentPhotoUri = Uri.parse(log.imageUri)
             loadPhoto(currentPhotoUri!!)
+        }
+    }
+
+    private var currentRating = 0
+
+    private fun setRating(r: Int) {
+        currentRating = r
+        val stars = listOf(binding.star1, binding.star2, binding.star3, binding.star4, binding.star5)
+        stars.forEachIndexed { idx, tv ->
+            tv.text = if (idx < r) "★" else "☆"
         }
     }
 
@@ -190,25 +231,36 @@ class LogEntryActivity : AppCompatActivity() {
         }
 
         val treeTypeRaw = binding.spinnerTreeType.selectedItem?.toString() ?: "Other"
-        // Strip the emoji from spinner label for cleaner DB storage
+        // Strip emoji for clean DB storage
         val treeType = treeTypeRaw.split(" ").first()
         val season = binding.spinnerSeason.selectedItem?.toString() ?: ""
+        val ripenessRaw = binding.spinnerRipeness.selectedItem?.toString() ?: ""
+        // Extract clean word from emoji-prefixed option e.g. "🔴 Peak — harvest now!" → "Peak"
+        val ripeness = when {
+            ripenessRaw.contains("Unripe") -> "Unripe"
+            ripenessRaw.contains("Almost") -> "Almost Ready"
+            ripenessRaw.contains("Peak") -> "Peak"
+            ripenessRaw.contains("Overripe") -> "Overripe"
+            else -> ""
+        }
 
         if (currentLat == null || currentLng == null) {
             AlertDialog.Builder(this)
                 .setTitle("No GPS coordinates")
                 .setMessage("This tree won't appear on the map without GPS.\n\nSave anyway?")
-                .setPositiveButton("Save anyway") { _, _ -> doSave(treeName, location, notes, treeType, season) }
+                .setPositiveButton("Save anyway") { _, _ ->
+                    doSave(treeName, location, notes, treeType, season, ripeness)
+                }
                 .setNegativeButton("Add GPS", null)
                 .show()
             return
         }
-        doSave(treeName, location, notes, treeType, season)
+        doSave(treeName, location, notes, treeType, season, ripeness)
     }
 
     private fun doSave(
         treeName: String, location: String, notes: String,
-        treeType: String, season: String
+        treeType: String, season: String, ripeness: String
     ) {
         val date = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
         val entry = LogEntry(
@@ -222,18 +274,22 @@ class LogEntryActivity : AppCompatActivity() {
             lng = currentLng,
             treeType = treeType,
             season = season,
-            isFavorite = editingEntry?.isFavorite ?: false
+            isFavorite = editingEntry?.isFavorite ?: false,
+            ripeness = ripeness,
+            rating = currentRating
         )
         if (editingEntry != null) viewModel.update(entry) else viewModel.insert(entry)
         Toast.makeText(this, "🌿 Spot saved!", Toast.LENGTH_SHORT).show()
         finish()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOC_PERMISSION_CODE && grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED) {
-            getCurrentLocation()
-        } else {
+        if (requestCode == LOC_PERMISSION_CODE &&
+            grantResults.firstOrNull() == PackageManager.PERMISSION_GRANTED
+        ) { getCurrentLocation() } else {
             Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
         }
     }

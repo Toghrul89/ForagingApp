@@ -1,5 +1,6 @@
 package com.example.foragingapp.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -29,16 +30,16 @@ class ViewLogsActivity : AppCompatActivity() {
 
         adapter = LogsAdapter(
             onEdit = { log ->
-                val intent = android.content.Intent(this, LogEntryActivity::class.java)
-                intent.putExtra("LOG_ID", log.id)
-                startActivity(intent)
+                startActivity(Intent(this, LogEntryActivity::class.java).apply {
+                    putExtra("LOG_ID", log.id)
+                })
             },
             onMapClick = { log ->
-                val intent = android.content.Intent(this, MapActivity::class.java)
-                intent.putExtra("FOCUS_LAT", log.lat)
-                intent.putExtra("FOCUS_LNG", log.lng)
-                intent.putExtra("FOCUS_NAME", log.name)
-                startActivity(intent)
+                startActivity(Intent(this, MapActivity::class.java).apply {
+                    putExtra("FOCUS_LAT", log.lat)
+                    putExtra("FOCUS_LNG", log.lng)
+                    putExtra("FOCUS_NAME", log.name)
+                })
             },
             onFavorite = { log -> viewModel.toggleFavorite(log) }
         )
@@ -48,10 +49,12 @@ class ViewLogsActivity : AppCompatActivity() {
 
         // Swipe-to-delete
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            override fun onMove(rv: RecyclerView, vh: RecyclerView.ViewHolder, t: RecyclerView.ViewHolder) = false
+            override fun onMove(
+                rv: RecyclerView, vh: RecyclerView.ViewHolder, t: RecyclerView.ViewHolder
+            ) = false
+
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val pos = viewHolder.adapterPosition
-                val deleted = adapter.getItemAt(pos)
+                val deleted = adapter.getItemAt(viewHolder.adapterPosition)
                 viewModel.delete(deleted)
                 Snackbar.make(binding.root, "${deleted.name} removed", Snackbar.LENGTH_LONG)
                     .setAction("Undo") { viewModel.insert(deleted) }
@@ -64,10 +67,47 @@ class ViewLogsActivity : AppCompatActivity() {
             viewModel.setSearch(text?.toString() ?: "")
         }
 
+        // Default: observe search results
         viewModel.searchResults.observe(this) { logs ->
-            adapter.submitList(logs)
-            binding.tvEmpty.visibility = if (logs.isEmpty()) View.VISIBLE else View.GONE
-            binding.rvLogs.visibility = if (logs.isEmpty()) View.GONE else View.VISIBLE
+            if (!binding.chipFavorites.isChecked && !binding.chipPeak.isChecked) {
+                updateList(logs)
+            }
         }
+
+        // Favorites filter chip
+        binding.chipFavorites.setOnCheckedChangeListener { _, checked ->
+            if (checked) {
+                binding.chipPeak.isChecked = false
+                viewModel.allLogs.value?.let { logs ->
+                    updateList(logs.filter { it.isFavorite })
+                }
+            } else {
+                viewModel.setSearch(binding.searchBar.text?.toString() ?: "")
+            }
+        }
+
+        // Peak ripeness filter chip
+        binding.chipPeak.setOnCheckedChangeListener { _, checked ->
+            if (checked) {
+                binding.chipFavorites.isChecked = false
+                viewModel.allLogs.value?.let { logs ->
+                    updateList(logs.filter { it.ripeness == "Peak" })
+                }
+            } else {
+                viewModel.setSearch(binding.searchBar.text?.toString() ?: "")
+            }
+        }
+
+        // Observe allLogs to refresh chips
+        viewModel.allLogs.observe(this) { logs ->
+            if (binding.chipFavorites.isChecked) updateList(logs.filter { it.isFavorite })
+            else if (binding.chipPeak.isChecked) updateList(logs.filter { it.ripeness == "Peak" })
+        }
+    }
+
+    private fun updateList(logs: List<com.example.foragingapp.model.LogEntry>) {
+        adapter.submitList(logs)
+        binding.tvEmpty.visibility = if (logs.isEmpty()) View.VISIBLE else View.GONE
+        binding.rvLogs.visibility = if (logs.isEmpty()) View.GONE else View.VISIBLE
     }
 }

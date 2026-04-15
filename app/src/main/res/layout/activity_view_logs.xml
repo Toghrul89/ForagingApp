@@ -27,7 +27,7 @@
             android:orientation="horizontal"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:paddingBottom="12dp"
+            android:paddingBottom="8dp"
             android:background="@color/background">
 
             <androidx.cardview.widget.CardView
@@ -36,7 +36,6 @@
                 app:cardCornerRadius="22dp"
                 app:cardElevation="0dp"
                 app:cardBackgroundColor="@color/surface">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -44,13 +43,8 @@
                     android:gravity="center_vertical"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔍 "
-                        android:textSize="14sp"/>
-
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="🔍 " android:textSize="14sp"/>
                     <EditText
                         android:id="@+id/searchBar"
                         android:layout_width="0dp"
@@ -69,9 +63,48 @@
 
         </LinearLayout>
 
+        <!-- Filter chips row -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="12dp"
+            android:background="@color/background">
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleLine="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipFavorites"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="★ Favourites"
+                    android:textColor="@color/favoriteGold"
+                    app:chipStrokeColor="@color/favoriteGold"
+                    app:chipStrokeWidth="1dp"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipPeak"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔴 Peak Ripeness"
+                    android:textColor="@color/success"
+                    app:chipStrokeColor="@color/success"
+                    app:chipStrokeWidth="1dp"/>
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Logs list -->
+    <!-- Log list -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvLogs"
         android:layout_width="match_parent"
@@ -94,27 +127,16 @@
         android:gravity="center"
         android:visibility="gone">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="🌿"
-            android:textSize="48sp"
-            android:layout_marginBottom="16dp"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="🌿" android:textSize="52sp" android:layout_marginBottom="16dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No trees yet"
-            android:textSize="22sp"
-            android:textStyle="bold"
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="No trees yet" android:textSize="22sp" android:textStyle="bold"
             android:textColor="@color/textPrimary"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="Head outside and start spotting."
-            android:textSize="14sp"
-            android:textColor="@color/textSecondary"
+            android:textSize="14sp" android:textColor="@color/textSecondary"
             android:layout_marginTop="8dp"/>
 
     </LinearLayout>
