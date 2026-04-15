@@ -15,49 +15,32 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Top row: thumbnail/emoji + main info -->
+        <!-- Top row: thumbnail + main info -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
-            <!-- Thumbnail container (image OR emoji placeholder) -->
-            <FrameLayout
+            <!-- Thumbnail -->
+            <ImageView
+                android:id="@+id/ivLogThumbnail"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:layout_marginEnd="14dp">
+                android:scaleType="centerCrop"
+                android:background="@drawable/rounded_image"
+                android:contentDescription="Tree photo"
+                android:layout_marginEnd="14dp"
+                android:clipToOutline="true"/>
 
-                <ImageView
-                    android:id="@+id/ivLogThumbnail"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:scaleType="centerCrop"
-                    android:background="@drawable/rounded_image"
-                    android:contentDescription="Tree photo"
-                    android:clipToOutline="true"
-                    android:visibility="invisible"/>
-
-                <!-- Emoji shown when no photo — centered in a soft circle -->
-                <TextView
-                    android:id="@+id/tvEmojiPlaceholder"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:text="🌿"
-                    android:textSize="30sp"
-                    android:gravity="center"
-                    android:background="@drawable/rounded_image"
-                    android:visibility="gone"/>
-
-            </FrameLayout>
-
-            <!-- Middle: name, tags, date, location -->
+            <!-- Middle: name, date, location -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
+                <!-- Name row -->
                 <TextView
                     android:id="@+id/tvLogName"
                     android:layout_width="match_parent"
@@ -67,11 +50,11 @@
                     android:textColor="@color/textPrimary"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:layout_marginBottom="3dp"/>
+                    android:layout_marginBottom="2dp"/>
 
-                <!-- Type + season + ripeness tags row -->
+                <!-- Type + season tags -->
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginBottom="4dp">
@@ -95,29 +78,9 @@
                         android:layout_height="wrap_content"
                         android:textSize="10sp"
                         android:textColor="@color/accent"
-                        android:paddingStart="2dp"
-                        android:layout_marginEnd="4dp"/>
-
-                    <TextView
-                        android:id="@+id/tvRipeness"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="10sp"
-                        android:textStyle="bold"
-                        android:paddingStart="2dp"
-                        android:visibility="gone"/>
+                        android:paddingStart="2dp"/>
 
                 </LinearLayout>
-
-                <!-- Star rating -->
-                <TextView
-                    android:id="@+id/tvRating"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="@color/favoriteGold"
-                    android:layout_marginBottom="2dp"
-                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/tvLogDate"
@@ -152,7 +115,7 @@
 
         </LinearLayout>
 
-        <!-- Notes -->
+        <!-- Notes (shown if present) -->
         <TextView
             android:id="@+id/tvLogNotes"
             android:layout_width="match_parent"
@@ -165,7 +128,7 @@
             android:layout_marginStart="78dp"
             android:visibility="gone"/>
 
-        <!-- Bottom row: map chip -->
+        <!-- Bottom row: map chip (right-aligned) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

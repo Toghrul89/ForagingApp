@@ -13,29 +13,42 @@ import kotlinx.coroutines.launch
 
 class LogViewModel(application: Application) : AndroidViewModel(application) {
 
-    // FIX: initialize repository immediately so it is ready before searchResults lambda runs
     private val repository: LogRepository =
-        LogRepository(AppDatabase.getInstance(application).logDao())
+        LogRepository(AppDatabase.getInstance(application).logDao())   // ← init here
 
-    val allLogs: LiveData<List<LogEntry>> = repository.allLogs
+    val allLogs: LiveData<List<LogEntry>>
 
     private val _searchQuery = MutableLiveData<String>("")
     val searchResults: LiveData<List<LogEntry>> = _searchQuery.switchMap { query ->
-        if (query.isBlank()) repository.allLogs
+        if (query.isBlank()) repository.allLogs   // ✅ now safe
         else repository.search(query)
     }
 
-    fun setSearch(query: String) { _searchQuery.value = query }
+    init {
+        allLogs = repository.allLogs
+    }
 
-    fun insert(entry: LogEntry) = viewModelScope.launch { repository.insert(entry) }
-    fun update(entry: LogEntry) = viewModelScope.launch { repository.update(entry) }
-    fun delete(entry: LogEntry) = viewModelScope.launch { repository.delete(entry) }
+    fun setSearch(query: String) {
+        _searchQuery.value = query
+    }
+
+    fun insert(entry: LogEntry) = viewModelScope.launch {
+        repository.insert(entry)
+    }
+
+    fun update(entry: LogEntry) = viewModelScope.launch {
+        repository.update(entry)
+    }
+
+    fun delete(entry: LogEntry) = viewModelScope.launch {
+        repository.delete(entry)
+    }
 
     fun toggleFavorite(entry: LogEntry) = viewModelScope.launch {
         repository.update(entry.copy(isFavorite = !entry.isFavorite))
     }
 
     suspend fun getLogById(id: Long): LogEntry? = repository.getLogById(id)
+
     suspend fun getAllLogsOnce(): List<LogEntry> = repository.getAllLogsOnce()
-    fun getByType(type: String): LiveData<List<LogEntry>> = repository.getByType(type)
 }

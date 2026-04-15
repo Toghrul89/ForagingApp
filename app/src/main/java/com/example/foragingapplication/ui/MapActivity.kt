@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.foragingapp.LogViewModel
+import com.example.foragingapp.R
 import com.example.foragingapp.databinding.ActivityMapBinding
 import com.example.foragingapp.databinding.DialogAddTreeBinding
 import com.example.foragingapp.model.LogEntry
@@ -49,11 +50,20 @@ class MapActivity : AppCompatActivity() {
         private const val DEFAULT_LNG = -122.3321
         private const val DEFAULT_ZOOM = 11.0
         private const val SPOT_ZOOM = 15.0
-        private const val MAP_STYLE = "https://tiles.openfreemap.org/styles/bright"
+
+        /**
+         * OpenFreeMap "bright" style — very stable, renders quickly.
+         * Liberty style sometimes fails to load the sprite sheet which breaks
+         * named icons like "marker-15". We use a style that works with custom
+         * circle layers so we never depend on a remote sprite.
+         */
+        private const val MAP_STYLE =
+            "https://tiles.openfreemap.org/styles/bright"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // MapLibre.getInstance MUST be called before setContentView
         MapLibre.getInstance(this)
         binding = ActivityMapBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -63,26 +73,42 @@ class MapActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { finish() }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         binding.mapView.onCreate(savedInstanceState)
 
+        // Zoom controls
         binding.btnZoomIn.setOnClickListener {
             map?.let { m ->
-                m.animateCamera(CameraUpdateFactory.newCameraPosition(
-                    CameraPosition.Builder().target(m.cameraPosition.target)
-                        .zoom(m.cameraPosition.zoom + 1.0).build()), 300)
+                m.animateCamera(
+                    CameraUpdateFactory.newCameraPosition(
+                        CameraPosition.Builder()
+                            .target(m.cameraPosition.target)
+                            .zoom(m.cameraPosition.zoom + 1.0)
+                            .build()
+                    ), 300
+                )
             }
         }
         binding.btnZoomOut.setOnClickListener {
             map?.let { m ->
-                m.animateCamera(CameraUpdateFactory.newCameraPosition(
-                    CameraPosition.Builder().target(m.cameraPosition.target)
-                        .zoom(m.cameraPosition.zoom - 1.0).build()), 300)
+                m.animateCamera(
+                    CameraUpdateFactory.newCameraPosition(
+                        CameraPosition.Builder()
+                            .target(m.cameraPosition.target)
+                            .zoom(m.cameraPosition.zoom - 1.0)
+                            .build()
+                    ), 300
+                )
             }
         }
+
+        // Locate-me button
         binding.btnLocateMe.setOnClickListener { zoomToMyLocation() }
 
         binding.mapView.getMapAsync { mapLibreMap ->
             map = mapLibreMap
+
+            // Enable all gestures
             mapLibreMap.uiSettings.apply {
                 isZoomGesturesEnabled = true
                 isScrollGesturesEnabled = true
@@ -90,6 +116,7 @@ class MapActivity : AppCompatActivity() {
                 isTiltGesturesEnabled = true
                 isDoubleTapGesturesEnabled = true
                 isQuickZoomGesturesEnabled = true
+                // Hide default MapLibre logo/attribution (we credit in About)
                 isLogoEnabled = false
                 isAttributionEnabled = false
             }
@@ -103,81 +130,71 @@ class MapActivity : AppCompatActivity() {
                 val focusName = intent.getStringExtra("FOCUS_NAME")
 
                 if (focusLat != Double.MIN_VALUE && focusLng != Double.MIN_VALUE) {
-                    mapLibreMap.animateCamera(CameraUpdateFactory.newCameraPosition(
-                        CameraPosition.Builder()
-                            .target(LatLng(focusLat, focusLng)).zoom(SPOT_ZOOM).build()), 800)
-                    focusName?.let {
-                        binding.toolbar.title = it
-                        Toast.makeText(this, "Showing: $it", Toast.LENGTH_SHORT).show()
+                    mapLibreMap.animateCamera(
+                        CameraUpdateFactory.newCameraPosition(
+                            CameraPosition.Builder()
+                                .target(LatLng(focusLat, focusLng))
+                                .zoom(SPOT_ZOOM)
+                                .build()
+                        ), 800
+                    )
+                    if (focusName != null) {
+                        binding.toolbar.title = focusName
+                        Toast.makeText(this, "Showing: $focusName", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    mapLibreMap.animateCamera(CameraUpdateFactory.newCameraPosition(
-                        CameraPosition.Builder()
-                            .target(LatLng(DEFAULT_LAT, DEFAULT_LNG)).zoom(DEFAULT_ZOOM).build()), 500)
+                    mapLibreMap.animateCamera(
+                        CameraUpdateFactory.newCameraPosition(
+                            CameraPosition.Builder()
+                                .target(LatLng(DEFAULT_LAT, DEFAULT_LNG))
+                                .zoom(DEFAULT_ZOOM)
+                                .build()
+                        ), 500
+                    )
                     Toast.makeText(this, "Long-press anywhere to pin a tree", Toast.LENGTH_LONG).show()
                 }
 
+                // Long-press to add (less accidental than single tap)
                 mapLibreMap.addOnMapLongClickListener { point ->
                     showAddSpotDialog(point)
                     true
                 }
-
-                // Tap marker to show info
-                mapLibreMap.addOnMapClickListener { point ->
-                    val pixel = mapLibreMap.projection.toScreenLocation(point)
-                    val features = mapLibreMap.queryRenderedFeatures(pixel, LAYER_ID)
-                    if (features.isNotEmpty()) {
-                        val name = features[0].getStringProperty("name")
-                        val type = features[0].getStringProperty("type") ?: ""
-                        val ripeness = features[0].getStringProperty("ripeness") ?: ""
-                        val info = buildString {
-                            append("🌿 $name")
-                            if (type.isNotEmpty()) append("\n$type")
-                            if (ripeness.isNotEmpty()) append("\nRipeness: $ripeness")
-                        }
-                        Toast.makeText(this, info, Toast.LENGTH_SHORT).show()
-                        true
-                    } else false
-                }
             }
         }
+
         requestLocationPermission()
     }
 
+    /**
+     * Use a CircleLayer instead of SymbolLayer so we have zero dependency
+     * on a remote sprite sheet. This is the primary fix for the "map not
+     * working good" issue — sprite-load failures silently suppress all markers.
+     */
     private fun setupMarkerLayer(style: Style) {
         style.addSource(GeoJsonSource(SOURCE_ID, FeatureCollection.fromFeatures(emptyList())))
 
-        // Glow ring
+        // Outer glow
         style.addLayer(
             org.maplibre.android.style.layers.CircleLayer("${LAYER_ID}-glow", SOURCE_ID)
                 .withProperties(
-                    circleRadius(22f),
-                    circleColor("#8B0000"),  // deep red — cornelian cherry colour
-                    circleOpacity(0.18f)
+                    circleRadius(18f),
+                    circleColor("#4A7C52"),
+                    circleOpacity(0.25f)
                 )
         )
-        // Main dot — cornelian cherry deep red
+
+        // Main dot
         style.addLayer(
             org.maplibre.android.style.layers.CircleLayer(LAYER_ID, SOURCE_ID)
                 .withProperties(
-                    circleRadius(11f),
-                    circleColor("#C0392B"),
+                    circleRadius(10f),
+                    circleColor("#2C4A2E"),
                     circleStrokeWidth(2.5f),
                     circleStrokeColor("#FFFFFF")
                 )
         )
-        // Emoji label above dot
-        style.addLayer(
-            SymbolLayer("${LAYER_ID}-emoji", SOURCE_ID)
-                .withProperties(
-                    textField("{emoji}"),
-                    textSize(16f),
-                    textOffset(arrayOf(0f, -2.2f)),
-                    textAllowOverlap(true),
-                    iconAllowOverlap(true)
-                )
-        )
-        // Name label below
+
+        // Label below the dot
         style.addLayer(
             SymbolLayer("${LAYER_ID}-label", SOURCE_ID)
                 .withProperties(
@@ -206,8 +223,6 @@ class MapActivity : AppCompatActivity() {
                     val feature = Feature.fromGeometry(Point.fromLngLat(log.lng, log.lat))
                     feature.addStringProperty("name", log.name)
                     feature.addStringProperty("type", log.treeType)
-                    feature.addStringProperty("ripeness", log.ripeness)
-                    feature.addStringProperty("emoji", LogsAdapter.emojiForType(log.treeType))
                     markerFeatures.add(feature)
                 }
             }
@@ -244,7 +259,6 @@ class MapActivity : AppCompatActivity() {
             viewModel.insert(entry)
             val feature = Feature.fromGeometry(Point.fromLngLat(point.longitude, point.latitude))
             feature.addStringProperty("name", name)
-            feature.addStringProperty("emoji", "🌿")
             markerFeatures.add(feature)
             refreshMarkers()
             Toast.makeText(this@MapActivity, "🌿 $name pinned!", Toast.LENGTH_SHORT).show()
@@ -254,12 +268,20 @@ class MapActivity : AppCompatActivity() {
     private fun zoomToMyLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED
-        ) { requestLocationPermission(); return }
+        ) {
+            requestLocationPermission()
+            return
+        }
         fusedLocationClient.lastLocation.addOnSuccessListener { loc ->
             if (loc != null) {
-                map?.animateCamera(CameraUpdateFactory.newCameraPosition(
-                    CameraPosition.Builder().target(LatLng(loc.latitude, loc.longitude))
-                        .zoom(SPOT_ZOOM).build()), 600)
+                map?.animateCamera(
+                    CameraUpdateFactory.newCameraPosition(
+                        CameraPosition.Builder()
+                            .target(LatLng(loc.latitude, loc.longitude))
+                            .zoom(SPOT_ZOOM)
+                            .build()
+                    ), 600
+                )
             } else {
                 Toast.makeText(this, "Cannot get your location right now", Toast.LENGTH_SHORT).show()
             }
@@ -278,16 +300,22 @@ class MapActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_CODE && grantResults.isNotEmpty() &&
+        if (requestCode == LOCATION_PERMISSION_CODE &&
+            grantResults.isNotEmpty() &&
             grantResults[0] == PackageManager.PERMISSION_GRANTED
-        ) { Toast.makeText(this, "Location permission granted", Toast.LENGTH_SHORT).show() }
+        ) {
+            Toast.makeText(this, "Location permission granted", Toast.LENGTH_SHORT).show()
+        }
     }
 
+    // MapLibre lifecycle — all required
     override fun onStart()  { super.onStart();  binding.mapView.onStart() }
     override fun onResume() { super.onResume(); binding.mapView.onResume(); loadMarkersFromDatabase() }
     override fun onPause()  { super.onPause();  binding.mapView.onPause() }
     override fun onStop()   { super.onStop();   binding.mapView.onStop() }
-    override fun onSaveInstanceState(out: Bundle) { super.onSaveInstanceState(out); binding.mapView.onSaveInstanceState(out) }
+    override fun onSaveInstanceState(out: Bundle) {
+        super.onSaveInstanceState(out); binding.mapView.onSaveInstanceState(out)
+    }
     override fun onLowMemory() { super.onLowMemory(); binding.mapView.onLowMemory() }
     override fun onDestroy()   { super.onDestroy();   binding.mapView.onDestroy() }
 }

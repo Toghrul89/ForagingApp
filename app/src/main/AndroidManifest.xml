@@ -18,6 +18,16 @@
         android:theme="@style/Theme.ForagingApp"
         android:networkSecurityConfig="@xml/network_security_config">
 
+        <activity android:name=".ui.DetailActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.LogEntryActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.MapActivity"
+            android:exported="false"/>
+        <activity android:name=".ui.ViewLogsActivity"
+            android:exported="false"/>
         <activity
             android:name=".ui.MainActivity"
             android:exported="true">
@@ -26,23 +36,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".ui.LogEntryActivity"
-            android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
-
-        <activity
-            android:name=".ui.ViewLogsActivity"
-            android:exported="false"/>
-
-        <activity
-            android:name=".ui.MapActivity"
-            android:exported="false"/>
-
-        <activity
-            android:name=".ui.AboutActivity"
-            android:exported="false"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
