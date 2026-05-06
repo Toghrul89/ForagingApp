@@ -1,9 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Fruit Tree</string>
-    <string name="app_tagline">find your trees</string>
-    <string name="about_title">Just for taste.</string>
-    <string name="about_body">Just for taste or experience to find interesting trees. Share with birds and other living creatures.</string>
+    <string name="app_tagline">Find wild fruit near you</string>
+    <string name="notifications">Notifications</string>
+
+    <string name="home_title">Find wild fruit.\nTaste nature.</string>
+    <string name="home_subtitle">Discover, identify, and find wild fruit near you.</string>
+    <string name="home_search_hint">Search fruits, locations...</string>
+    <string name="all_fruits">All Fruits</string>
+    <string name="near_me">Near Me</string>
+    <string name="in_season">In Season</string>
+    <string name="saved">Saved</string>
+    <string name="in_season_now">In season now</string>
+    <string name="zero_trees_spotted">0 trees spotted</string>
+    <string name="zero_favourites">0 saved</string>
+
+    <string name="blackberry">Blackberry</string>
+    <string name="blackberry_scientific">Rubus fruticosus</string>
+    <string name="elderberry">Elderberry</string>
+    <string name="elderberry_scientific">Sambucus nigra</string>
+    <string name="raspberry">Wild Raspberry</string>
+    <string name="raspberry_scientific">Rubus idaeus</string>
+    <string name="serviceberry">Serviceberry</string>
+    <string name="serviceberry_scientific">Amelanchier</string>
+    <string name="common_location">⌖ Common</string>
+
+    <string name="nav_home">⌂\nHome</string>
+    <string name="nav_explore">◇\nExplore</string>
+    <string name="nav_identify">▣\nIdentify</string>
+    <string name="nav_map">□\nMap</string>
+    <string name="nav_profile">♙\nProfile</string>
+
+    <string name="about_title">Forage gently.</string>
+    <string name="about_body">Log useful fruit tree spots, revisit them in season, and forage only where it is legal and safe. Confirm every plant before eating.</string>
     <string name="empty_logs">No trees yet.\nHead outside and start spotting.</string>
     <string name="map_hint">Long-press on the map to pin a tree</string>
+
+    <string name="icon_leaf">♧</string>
+    <string name="icon_leaf_outline">♤</string>
+    <string name="icon_bell">♧</string>
+    <string name="icon_search">⌕</string>
+    <string name="icon_target">◎</string>
+    <string name="icon_berries">♧</string>
+    <string name="icon_pin">⌖</string>
+    <string name="icon_bookmark">▱</string>
+    <string name="icon_arrow_right">›</string>
+    <string name="icon_check">✓</string>
+    <string name="hero_fruit_art">☘︎\n● ● ●</string>
+    <string name="fruit_art_blackberry">●●●</string>
+    <string name="fruit_art_elderberry">●●●</string>
+    <string name="fruit_art_raspberry">●●●</string>
+    <string name="fruit_art_serviceberry">●●●</string>
 </resources>

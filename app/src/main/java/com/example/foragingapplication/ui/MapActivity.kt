@@ -116,9 +116,9 @@ class MapActivity : AppCompatActivity() {
                 isTiltGesturesEnabled = true
                 isDoubleTapGesturesEnabled = true
                 isQuickZoomGesturesEnabled = true
-                // Hide default MapLibre logo/attribution (we credit in About)
+                // Keep attribution visible for publish readiness and tile provider compliance.
                 isLogoEnabled = false
-                isAttributionEnabled = false
+                isAttributionEnabled = true
             }
 
             mapLibreMap.setStyle(MAP_STYLE) { style ->
@@ -313,8 +313,8 @@ class MapActivity : AppCompatActivity() {
     override fun onResume() { super.onResume(); binding.mapView.onResume(); loadMarkersFromDatabase() }
     override fun onPause()  { super.onPause();  binding.mapView.onPause() }
     override fun onStop()   { super.onStop();   binding.mapView.onStop() }
-    override fun onSaveInstanceState(out: Bundle) {
-        super.onSaveInstanceState(out); binding.mapView.onSaveInstanceState(out)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState); binding.mapView.onSaveInstanceState(outState)
     }
     override fun onLowMemory() { super.onLowMemory(); binding.mapView.onLowMemory() }
     override fun onDestroy()   { super.onDestroy();   binding.mapView.onDestroy() }

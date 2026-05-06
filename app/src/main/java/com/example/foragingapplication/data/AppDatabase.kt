@@ -17,7 +17,7 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AppDatabase? = null
 
-        /** Migrate from v2 (original) → v3 (adds treeType, season, isFavorite) */
+        /** Migrate from v2 to v3. Keeps existing logs and adds publishing-era fields. */
         private val MIGRATION_2_3 = object : Migration(2, 3) {
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE logs ADD COLUMN treeType TEXT NOT NULL DEFAULT 'Other'")
@@ -34,7 +34,6 @@ abstract class AppDatabase : RoomDatabase() {
                     "foraging.db"
                 )
                     .addMigrations(MIGRATION_2_3)
-                    .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance

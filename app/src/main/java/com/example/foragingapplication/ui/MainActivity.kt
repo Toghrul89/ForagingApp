@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foragingapp.LogViewModel
-import com.example.foragingapp.R
 import com.example.foragingapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -18,11 +17,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Update spot counter badge on the home card
         viewModel.allLogs.observe(this) { logs ->
             val count = logs.size
             binding.tvSpotCount.text = if (count == 1) "1 tree spotted" else "$count trees spotted"
-            binding.tvFavCount.text = "${logs.count { it.isFavorite }} favourites"
+            val savedCount = logs.count { it.isFavorite }
+            binding.tvFavCount.text = if (savedCount == 1) "1 saved" else "$savedCount saved"
+        }
+
+        binding.cardSearchHome.setOnClickListener {
+            startActivity(Intent(this, ViewLogsActivity::class.java))
+        }
+
+        binding.buttonLocateHome.setOnClickListener {
+            startActivity(Intent(this, MapActivity::class.java))
         }
 
         binding.cardLogEntry.setOnClickListener {
@@ -35,6 +42,26 @@ class MainActivity : AppCompatActivity() {
 
         binding.cardOpenMap.setOnClickListener {
             startActivity(Intent(this, MapActivity::class.java))
+        }
+
+        binding.cardSavedHome.setOnClickListener {
+            startActivity(Intent(this, ViewLogsActivity::class.java))
+        }
+
+        binding.navExplore.setOnClickListener {
+            startActivity(Intent(this, ViewLogsActivity::class.java))
+        }
+
+        binding.navIdentify.setOnClickListener {
+            startActivity(Intent(this, LogEntryActivity::class.java))
+        }
+
+        binding.navMap.setOnClickListener {
+            startActivity(Intent(this, MapActivity::class.java))
+        }
+
+        binding.navProfile.setOnClickListener {
+            startActivity(Intent(this, ViewLogsActivity::class.java))
         }
     }
 }

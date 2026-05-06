@@ -50,7 +50,8 @@ class ViewLogsActivity : AppCompatActivity() {
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             override fun onMove(rv: RecyclerView, vh: RecyclerView.ViewHolder, t: RecyclerView.ViewHolder) = false
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val pos = viewHolder.adapterPosition
+                val pos = viewHolder.bindingAdapterPosition
+                if (pos == RecyclerView.NO_POSITION) return
                 val deleted = adapter.getItemAt(pos)
                 viewModel.delete(deleted)
                 Snackbar.make(binding.root, "${deleted.name} removed", Snackbar.LENGTH_LONG)
