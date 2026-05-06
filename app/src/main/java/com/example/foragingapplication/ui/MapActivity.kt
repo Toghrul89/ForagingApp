@@ -2,10 +2,13 @@ package com.example.foragingapp.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -25,6 +28,7 @@ import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.Style
+import org.maplibre.android.style.layers.Property
 import org.maplibre.android.style.layers.PropertyFactory.*
 import org.maplibre.android.style.layers.SymbolLayer
 import org.maplibre.android.style.sources.GeoJsonSource
@@ -45,6 +49,7 @@ class MapActivity : AppCompatActivity() {
     companion object {
         private const val SOURCE_ID = "fruit-trees"
         private const val LAYER_ID = "fruit-trees-layer"
+        private const val MARKER_IMAGE_ID = "tree-map-marker"
         private const val LOCATION_PERMISSION_CODE = 1001
         private const val DEFAULT_LAT = 47.6062
         private const val DEFAULT_LNG = -122.3321
@@ -123,11 +128,11 @@ class MapActivity : AppCompatActivity() {
 
             mapLibreMap.setStyle(MAP_STYLE) { style ->
                 setupMarkerLayer(style)
-                loadMarkersFromDatabase()
 
                 val focusLat = intent.getDoubleExtra("FOCUS_LAT", Double.MIN_VALUE)
                 val focusLng = intent.getDoubleExtra("FOCUS_LNG", Double.MIN_VALUE)
                 val focusName = intent.getStringExtra("FOCUS_NAME")
+                loadMarkersFromDatabase(focusLat, focusLng, focusName)
 
                 if (focusLat != Double.MIN_VALUE && focusLng != Double.MIN_VALUE) {
                     mapLibreMap.animateCamera(
@@ -165,49 +170,56 @@ class MapActivity : AppCompatActivity() {
         requestLocationPermission()
     }
 
-    /**
-     * Use a CircleLayer instead of SymbolLayer so we have zero dependency
-     * on a remote sprite sheet. This is the primary fix for the "map not
-     * working good" issue — sprite-load failures silently suppress all markers.
-     */
     private fun setupMarkerLayer(style: Style) {
         style.addSource(GeoJsonSource(SOURCE_ID, FeatureCollection.fromFeatures(emptyList())))
+        style.addImage(MARKER_IMAGE_ID, bitmapFromDrawable(R.drawable.ic_tree_map_marker))
 
-        // Outer glow
         style.addLayer(
             org.maplibre.android.style.layers.CircleLayer("${LAYER_ID}-glow", SOURCE_ID)
                 .withProperties(
-                    circleRadius(18f),
-                    circleColor("#4A7C52"),
-                    circleOpacity(0.25f)
+                    circleRadius(24f),
+                    circleColor("#D87916"),
+                    circleOpacity(0.22f)
                 )
         )
 
-        // Main dot
         style.addLayer(
-            org.maplibre.android.style.layers.CircleLayer(LAYER_ID, SOURCE_ID)
+            SymbolLayer(LAYER_ID, SOURCE_ID)
                 .withProperties(
-                    circleRadius(10f),
-                    circleColor("#2C4A2E"),
-                    circleStrokeWidth(2.5f),
-                    circleStrokeColor("#FFFFFF")
+                    iconImage(MARKER_IMAGE_ID),
+                    iconSize(0.95f),
+                    iconAnchor(Property.ICON_ANCHOR_BOTTOM),
+                    iconAllowOverlap(true),
+                    iconIgnorePlacement(true)
                 )
         )
 
-        // Label below the dot
         style.addLayer(
             SymbolLayer("${LAYER_ID}-label", SOURCE_ID)
                 .withProperties(
                     textField("{name}"),
-                    textSize(11f),
-                    textOffset(arrayOf(0f, 2.2f)),
+                    textSize(12f),
+                    textOffset(arrayOf(0f, 1.2f)),
+                    textAnchor(Property.TEXT_ANCHOR_TOP),
                     textColor("#1C2B1E"),
                     textHaloColor("#FFFFFF"),
-                    textHaloWidth(2f),
-                    textAllowOverlap(false),
-                    iconAllowOverlap(true)
+                    textHaloWidth(2.5f),
+                    textAllowOverlap(true)
                 )
         )
+    }
+
+    private fun bitmapFromDrawable(drawableResId: Int): Bitmap {
+        val drawable = requireNotNull(AppCompatResources.getDrawable(this, drawableResId)) {
+            "Missing drawable resource $drawableResId"
+        }
+        val width = if (drawable.intrinsicWidth > 0) drawable.intrinsicWidth else 56
+        val height = if (drawable.intrinsicHeight > 0) drawable.intrinsicHeight else 68
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        return bitmap
     }
 
     private fun refreshMarkers() {
@@ -215,19 +227,38 @@ class MapActivity : AppCompatActivity() {
             ?.setGeoJson(FeatureCollection.fromFeatures(markerFeatures))
     }
 
-    private fun loadMarkersFromDatabase() {
+    private fun loadMarkersFromDatabase(
+        focusLat: Double = Double.MIN_VALUE,
+        focusLng: Double = Double.MIN_VALUE,
+        focusName: String? = null
+    ) {
         lifecycleScope.launch {
             markerFeatures.clear()
             viewModel.getAllLogsOnce().forEach { log ->
                 if (log.lat != null && log.lng != null) {
-                    val feature = Feature.fromGeometry(Point.fromLngLat(log.lng, log.lat))
-                    feature.addStringProperty("name", log.name)
-                    feature.addStringProperty("type", log.treeType)
-                    markerFeatures.add(feature)
+                    markerFeatures.add(markerFeature(log.lng, log.lat, log.name, log.treeType))
+                }
+            }
+            if (focusLat != Double.MIN_VALUE && focusLng != Double.MIN_VALUE) {
+                val alreadyLoaded = markerFeatures.any { feature ->
+                    val point = feature.geometry() as? Point
+                    point != null &&
+                        Math.abs(point.latitude() - focusLat) < 0.00001 &&
+                        Math.abs(point.longitude() - focusLng) < 0.00001
+                }
+                if (!alreadyLoaded) {
+                    markerFeatures.add(markerFeature(focusLng, focusLat, focusName ?: "Fruit tree", "Tree"))
                 }
             }
             refreshMarkers()
         }
+    }
+
+    private fun markerFeature(lng: Double, lat: Double, name: String, treeType: String): Feature {
+        val feature = Feature.fromGeometry(Point.fromLngLat(lng, lat))
+        feature.addStringProperty("name", name)
+        feature.addStringProperty("type", treeType)
+        return feature
     }
 
     private fun showAddSpotDialog(point: LatLng) {
@@ -257,9 +288,7 @@ class MapActivity : AppCompatActivity() {
         )
         lifecycleScope.launch {
             viewModel.insert(entry)
-            val feature = Feature.fromGeometry(Point.fromLngLat(point.longitude, point.latitude))
-            feature.addStringProperty("name", name)
-            markerFeatures.add(feature)
+            markerFeatures.add(markerFeature(point.longitude, point.latitude, name, entry.treeType))
             refreshMarkers()
             Toast.makeText(this@MapActivity, "🌿 $name pinned!", Toast.LENGTH_SHORT).show()
         }
