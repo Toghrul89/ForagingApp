@@ -23,6 +23,8 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.launch
 import org.maplibre.android.MapLibre
+import org.maplibre.android.annotations.IconFactory
+import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
@@ -225,6 +227,26 @@ class MapActivity : AppCompatActivity() {
     private fun refreshMarkers() {
         map?.style?.getSourceAs<GeoJsonSource>(SOURCE_ID)
             ?.setGeoJson(FeatureCollection.fromFeatures(markerFeatures))
+        syncAnnotationMarkers()
+    }
+
+    private fun syncAnnotationMarkers() {
+        val currentMap = map ?: return
+        currentMap.clear()
+
+        val markerIcon = IconFactory.getInstance(this)
+            .fromBitmap(bitmapFromDrawable(R.drawable.ic_tree_map_marker))
+
+        markerFeatures.forEach { feature ->
+            val point = feature.geometry() as? Point ?: return@forEach
+            val name = feature.getStringProperty("name") ?: "Fruit tree"
+            currentMap.addMarker(
+                MarkerOptions()
+                    .position(LatLng(point.latitude(), point.longitude()))
+                    .title(name)
+                    .icon(markerIcon)
+            )
+        }
     }
 
     private fun loadMarkersFromDatabase(
@@ -251,6 +273,11 @@ class MapActivity : AppCompatActivity() {
                 }
             }
             refreshMarkers()
+            if (markerFeatures.isEmpty()) {
+                Toast.makeText(this@MapActivity, "No saved GPS markers yet", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this@MapActivity, "${markerFeatures.size} tree marker(s) loaded", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
