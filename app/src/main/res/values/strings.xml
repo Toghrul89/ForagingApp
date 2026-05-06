@@ -3,6 +3,8 @@
     <string name="app_name">Fruit Tree</string>
     <string name="app_tagline">Find wild fruit near you</string>
     <string name="notifications">Notifications</string>
+    <string name="search">Search</string>
+    <string name="hero_fruit_illustration">Leaf illustration</string>
 
     <string name="home_title">Find wild fruit.\nTaste nature.</string>
     <string name="home_subtitle">Discover, identify, and find wild fruit near you.</string>
@@ -25,30 +27,30 @@
     <string name="serviceberry_scientific">Amelanchier</string>
     <string name="common_location">⌖ Common</string>
 
-    <string name="nav_home">⌂\nHome</string>
-    <string name="nav_explore">◇\nExplore</string>
-    <string name="nav_identify">▣\nIdentify</string>
-    <string name="nav_map">□\nMap</string>
-    <string name="nav_profile">♙\nProfile</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_explore">Explore</string>
+    <string name="nav_identify">Identify</string>
+    <string name="nav_map">Map</string>
+    <string name="nav_profile">Profile</string>
 
     <string name="about_title">Forage gently.</string>
     <string name="about_body">Log useful fruit tree spots, revisit them in season, and forage only where it is legal and safe. Confirm every plant before eating.</string>
     <string name="empty_logs">No trees yet.\nHead outside and start spotting.</string>
     <string name="map_hint">Long-press on the map to pin a tree</string>
 
-    <string name="icon_leaf">♧</string>
-    <string name="icon_leaf_outline">♤</string>
-    <string name="icon_bell">♧</string>
-    <string name="icon_search">⌕</string>
-    <string name="icon_target">◎</string>
-    <string name="icon_berries">♧</string>
-    <string name="icon_pin">⌖</string>
-    <string name="icon_bookmark">▱</string>
-    <string name="icon_arrow_right">›</string>
-    <string name="icon_check">✓</string>
-    <string name="hero_fruit_art">☘︎\n● ● ●</string>
-    <string name="fruit_art_blackberry">●●●</string>
-    <string name="fruit_art_elderberry">●●●</string>
-    <string name="fruit_art_raspberry">●●●</string>
-    <string name="fruit_art_serviceberry">●●●</string>
+    <string name="icon_leaf">Leaf</string>
+    <string name="icon_leaf_outline">Leaf</string>
+    <string name="icon_bell">Bell</string>
+    <string name="icon_search">Search</string>
+    <string name="icon_target">Locate</string>
+    <string name="icon_berries">Fruit</string>
+    <string name="icon_pin">Pin</string>
+    <string name="icon_bookmark">Saved</string>
+    <string name="icon_arrow_right">View all</string>
+    <string name="icon_check">OK</string>
+    <string name="hero_fruit_art">Wild fruit</string>
+    <string name="fruit_art_blackberry">Blackberry</string>
+    <string name="fruit_art_elderberry">Elderberry</string>
+    <string name="fruit_art_raspberry">Raspberry</string>
+    <string name="fruit_art_serviceberry">Serviceberry</string>
 </resources>
