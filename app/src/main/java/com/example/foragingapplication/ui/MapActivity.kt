@@ -1,6 +1,7 @@
 package com.example.foragingapp.ui
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -24,6 +25,7 @@ import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.launch
 import org.maplibre.android.MapLibre
 import org.maplibre.android.annotations.IconFactory
+import org.maplibre.android.annotations.Marker
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraPosition
 import org.maplibre.android.camera.CameraUpdateFactory
@@ -45,6 +47,7 @@ class MapActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMapBinding
     private var map: MapLibreMap? = null
     private val markerFeatures = mutableListOf<Feature>()
+    private val annotationLogIds = mutableMapOf<Long, Long>()
     private val viewModel: LogViewModel by viewModels()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -166,6 +169,11 @@ class MapActivity : AppCompatActivity() {
                     showAddSpotDialog(point)
                     true
                 }
+
+                mapLibreMap.setOnInfoWindowClickListener { marker ->
+                    openTreeDetails(marker)
+                    true
+                }
             }
         }
 
@@ -233,6 +241,7 @@ class MapActivity : AppCompatActivity() {
     private fun syncAnnotationMarkers() {
         val currentMap = map ?: return
         currentMap.clear()
+        annotationLogIds.clear()
 
         val markerIcon = IconFactory.getInstance(this)
             .fromBitmap(bitmapFromDrawable(R.drawable.ic_tree_map_marker))
@@ -240,13 +249,28 @@ class MapActivity : AppCompatActivity() {
         markerFeatures.forEach { feature ->
             val point = feature.geometry() as? Point ?: return@forEach
             val name = feature.getStringProperty("name") ?: "Fruit tree"
-            currentMap.addMarker(
+            val marker = currentMap.addMarker(
                 MarkerOptions()
                     .position(LatLng(point.latitude(), point.longitude()))
                     .title(name)
                     .icon(markerIcon)
             )
+            val logId = feature.getNumberProperty("id")?.toLong() ?: -1L
+            if (logId > 0) annotationLogIds[marker.id] = logId
         }
+    }
+
+    private fun openTreeDetails(marker: Marker) {
+        val intent = Intent(this, TreeDetailsActivity::class.java)
+        val logId = annotationLogIds[marker.id] ?: -1L
+        if (logId > 0) {
+            intent.putExtra("LOG_ID", logId)
+        } else {
+            intent.putExtra("TREE_NAME", marker.title)
+            intent.putExtra("TREE_LAT", marker.position.latitude)
+            intent.putExtra("TREE_LNG", marker.position.longitude)
+        }
+        startActivity(intent)
     }
 
     private fun loadMarkersFromDatabase(
@@ -258,7 +282,7 @@ class MapActivity : AppCompatActivity() {
             markerFeatures.clear()
             viewModel.getAllLogsOnce().forEach { log ->
                 if (log.lat != null && log.lng != null) {
-                    markerFeatures.add(markerFeature(log.lng, log.lat, log.name, log.treeType))
+                    markerFeatures.add(markerFeature(log.lng, log.lat, log.name, log.treeType, log.id))
                 }
             }
             if (focusLat != Double.MIN_VALUE && focusLng != Double.MIN_VALUE) {
@@ -269,7 +293,7 @@ class MapActivity : AppCompatActivity() {
                         Math.abs(point.longitude() - focusLng) < 0.00001
                 }
                 if (!alreadyLoaded) {
-                    markerFeatures.add(markerFeature(focusLng, focusLat, focusName ?: "Fruit tree", "Tree"))
+                    markerFeatures.add(markerFeature(focusLng, focusLat, focusName ?: "Fruit tree", "Tree", null))
                 }
             }
             refreshMarkers()
@@ -281,10 +305,11 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
-    private fun markerFeature(lng: Double, lat: Double, name: String, treeType: String): Feature {
+    private fun markerFeature(lng: Double, lat: Double, name: String, treeType: String, id: Long?): Feature {
         val feature = Feature.fromGeometry(Point.fromLngLat(lng, lat))
         feature.addStringProperty("name", name)
         feature.addStringProperty("type", treeType)
+        if (id != null) feature.addNumberProperty("id", id)
         return feature
     }
 
@@ -314,8 +339,8 @@ class MapActivity : AppCompatActivity() {
             lng = point.longitude
         )
         lifecycleScope.launch {
-            viewModel.insert(entry)
-            markerFeatures.add(markerFeature(point.longitude, point.latitude, name, entry.treeType))
+            val id = viewModel.insertAndReturnId(entry)
+            markerFeatures.add(markerFeature(point.longitude, point.latitude, name, entry.treeType, id))
             refreshMarkers()
             Toast.makeText(this@MapActivity, "🌿 $name pinned!", Toast.LENGTH_SHORT).show()
         }

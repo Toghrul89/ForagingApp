@@ -65,6 +65,12 @@ class ViewLogsActivity : AppCompatActivity() {
             viewModel.setSearch(text?.toString() ?: "")
         }
 
+        intent.getStringExtra("SEARCH_QUERY")?.let { query ->
+            binding.searchBar.setText(query)
+            binding.searchBar.setSelection(query.length)
+            viewModel.setSearch(query)
+        }
+
         viewModel.searchResults.observe(this) { logs ->
             adapter.submitList(logs)
             binding.tvEmpty.visibility = if (logs.isEmpty()) View.VISIBLE else View.GONE

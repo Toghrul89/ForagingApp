@@ -89,6 +89,7 @@ class LogEntryActivity : AppCompatActivity() {
             }
         } else {
             supportActionBar?.title = "New Spot"
+            applyPrefill()
         }
 
         binding.buttonGetLocation.setOnClickListener { getCurrentLocation() }
@@ -107,10 +108,19 @@ class LogEntryActivity : AppCompatActivity() {
         binding.spinnerSeason.adapter = seasonAdapter
     }
 
+    private fun applyPrefill() {
+        intent.getStringExtra("PREFILL_NAME")?.let { binding.editTextTreeName.setText(it) }
+        intent.getStringExtra("PREFILL_NOTES")?.let { binding.editTextNotes.setText(it) }
+        intent.getStringExtra("PREFILL_IMAGE_URI")?.takeIf { it.isNotBlank() }?.let { uriString ->
+            loadPhoto(Uri.parse(uriString))
+        }
+    }
+
     private fun populateFields(log: LogEntry) {
         binding.editTextTreeName.setText(log.name)
         binding.editTextLocation.setText(log.location)
         binding.editTextNotes.setText(log.notes)
+        binding.editTextWikipedia.setText(log.wikipediaUrl)
         currentLat = log.lat
         currentLng = log.lng
 
@@ -177,6 +187,7 @@ class LogEntryActivity : AppCompatActivity() {
         val treeName = binding.editTextTreeName.text?.toString()?.trim()
         val location = binding.editTextLocation.text?.toString()?.trim()
         val notes = binding.editTextNotes.text?.toString()?.trim() ?: ""
+        val wikipediaUrl = binding.editTextWikipedia.text?.toString()?.trim() ?: ""
 
         if (treeName.isNullOrEmpty()) {
             binding.editTextTreeName.error = "Spot name is required"
@@ -198,17 +209,17 @@ class LogEntryActivity : AppCompatActivity() {
             AlertDialog.Builder(this)
                 .setTitle("No GPS coordinates")
                 .setMessage("This tree won't appear on the map without GPS.\n\nSave anyway?")
-                .setPositiveButton("Save anyway") { _, _ -> doSave(treeName, location, notes, treeType, season) }
+                .setPositiveButton("Save anyway") { _, _ -> doSave(treeName, location, notes, treeType, season, wikipediaUrl) }
                 .setNegativeButton("Add GPS", null)
                 .show()
             return
         }
-        doSave(treeName, location, notes, treeType, season)
+        doSave(treeName, location, notes, treeType, season, wikipediaUrl)
     }
 
     private fun doSave(
         treeName: String, location: String, notes: String,
-        treeType: String, season: String
+        treeType: String, season: String, wikipediaUrl: String
     ) {
         val date = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
         val entry = LogEntry(
@@ -222,7 +233,8 @@ class LogEntryActivity : AppCompatActivity() {
             lng = currentLng,
             treeType = treeType,
             season = season,
-            isFavorite = editingEntry?.isFavorite ?: false
+            isFavorite = editingEntry?.isFavorite ?: false,
+            wikipediaUrl = wikipediaUrl
         )
         if (editingEntry != null) viewModel.update(entry) else viewModel.insert(entry)
         Toast.makeText(this, "🌿 Spot saved!", Toast.LENGTH_SHORT).show()

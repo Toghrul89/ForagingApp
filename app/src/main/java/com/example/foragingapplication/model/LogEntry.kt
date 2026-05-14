@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 /**
  * Core data model for a fruit-tree spot.
- * version 2: added treeType, season, isFavorite
+ * version 4: added optional wikipediaUrl
  */
 @Entity(tableName = "logs")
 data class LogEntry(
@@ -40,5 +40,8 @@ data class LogEntry(
     val season: String = "",
 
     /** User-starred for quick access */
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+
+    /** Optional direct Wikipedia/source URL supplied by the user */
+    val wikipediaUrl: String = ""
 )

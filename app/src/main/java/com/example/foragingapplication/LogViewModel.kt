@@ -36,6 +36,8 @@ class LogViewModel(application: Application) : AndroidViewModel(application) {
         repository.insert(entry)
     }
 
+    suspend fun insertAndReturnId(entry: LogEntry): Long = repository.insert(entry)
+
     fun update(entry: LogEntry) = viewModelScope.launch {
         repository.update(entry)
     }

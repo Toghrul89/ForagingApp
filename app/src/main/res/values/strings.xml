@@ -35,6 +35,7 @@
 
     <string name="about_title">Forage gently.</string>
     <string name="about_body">Log useful fruit tree spots, revisit them in season, and forage only where it is legal and safe. Confirm every plant before eating.</string>
+    <string name="about_full_text">ForagingApp started with a simple discovery.\n\nAfter moving to Seattle, I missed a fruit from home — cornelian cherry (known as dogwood cherry or “zoğal” in Azerbaijan). I never expected to find it growing in a neighborhood tree, but one day I did — and it felt like reconnecting with a small piece of home.\n\nThat moment inspired this app.\n\nForagingApp helps people discover fruit trees around them, learn about unfamiliar plants, and share local finds with others. Add trees you know, explore nearby spots on the map, and uncover hidden seasonal treasures in your city.\n\nPlease forage responsibly: plants and fruits can be difficult to identify, and some may be unsafe to eat. When in doubt, avoid tasting and always verify identification first. Nature belongs to wildlife too — enjoy respectfully and sustainably.</string>
     <string name="empty_logs">No trees yet.\nHead outside and start spotting.</string>
     <string name="map_hint">Long-press on the map to pin a tree</string>
 

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/background"
+            app:title="Identify Tree"
+            app:titleTextColor="@color/textPrimary"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="22dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/row_bg"
+                android:lineSpacingMultiplier="1.35"
+                android:padding="16dp"
+                android:text="Upload or take a clear photo of leaves, fruit, bark, or flowers. This beginner-friendly identifier gives a likely suggestion only. Always verify before tasting."
+                android:textColor="@color/textSecondary"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:id="@+id/imagePreview"
+                android:layout_width="match_parent"
+                android:layout_height="230dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/row_bg"
+                android:contentDescription="Selected tree image"
+                android:scaleType="centerCrop"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/buttonGallery"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:text="Upload Photo"
+                    android:textColor="@color/leafGreen"
+                    app:cornerRadius="16dp"
+                    app:strokeColor="@color/leafGreen"/>
+
+                <Button
+                    android:id="@+id/buttonCamera"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/primary"
+                    android:text="Take Photo"
+                    android:textColor="@color/textOnDark"
+                    app:cornerRadius="16dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/row_bg"
+                android:lineSpacingMultiplier="1.35"
+                android:padding="16dp"
+                android:text="No photo selected yet."
+                android:textColor="@color/textPrimary"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/buttonWikipedia"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:text="Learn More on Wikipedia"
+                android:textColor="@color/leafGreen"
+                android:visibility="gone"
+                app:cornerRadius="16dp"
+                app:strokeColor="@color/leafGreen"/>
+
+            <Button
+                android:id="@+id/buttonAddToMap"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="@color/primary"
+                android:text="Add to Map"
+                android:textColor="@color/textOnDark"
+                android:visibility="gone"
+                app:cornerRadius="18dp"/>
+        </LinearLayout>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

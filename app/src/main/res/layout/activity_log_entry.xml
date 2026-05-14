@@ -369,6 +369,55 @@
 
                 </LinearLayout>
 
+                <!-- ── Row: Optional Wikipedia Link ── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/row_bg"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:text="W"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:gravity="center"
+                        android:textColor="@color/leafGreen"
+                        android:layout_marginEnd="12dp"/>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Wikipedia link (optional)"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/textPrimary"/>
+
+                        <EditText
+                            android:id="@+id/editTextWikipedia"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textUri"
+                            android:textColor="@color/textPrimary"
+                            android:textSize="14sp"
+                            android:hint="https://en.wikipedia.org/wiki/..."
+                            android:textColorHint="@color/textHint"
+                            android:background="@android:color/transparent"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="0dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+
                 <!-- Photo preview -->
                 <ImageView
                     android:id="@+id/imageViewPreview"
