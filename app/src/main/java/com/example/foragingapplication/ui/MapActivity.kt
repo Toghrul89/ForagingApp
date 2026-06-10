@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.content.res.AppCompatResources
@@ -17,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.foragingapp.LogViewModel
 import com.example.foragingapp.R
+import com.example.foragingapp.auth.AuthManager
 import com.example.foragingapp.databinding.ActivityMapBinding
 import com.example.foragingapp.databinding.DialogAddTreeBinding
 import com.example.foragingapp.model.LogEntry
@@ -50,6 +52,7 @@ class MapActivity : AppCompatActivity() {
     private val annotationLogIds = mutableMapOf<Long, Long>()
     private val viewModel: LogViewModel by viewModels()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var previewLog: LogEntry? = null
 
     companion object {
         private const val SOURCE_ID = "fruit-trees"
@@ -161,17 +164,22 @@ class MapActivity : AppCompatActivity() {
                                 .build()
                         ), 500
                     )
-                    Toast.makeText(this, "Long-press anywhere to pin a tree", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Long-press to add a fruit discovery", Toast.LENGTH_LONG).show()
                 }
 
                 // Long-press to add (less accidental than single tap)
                 mapLibreMap.addOnMapLongClickListener { point ->
-                    showAddSpotDialog(point)
+                    if (AuthManager.isSignedIn(this)) {
+                        showAddSpotDialog(point)
+                    } else {
+                        Toast.makeText(this, "Please sign in to contribute discoveries.", Toast.LENGTH_LONG).show()
+                        startActivity(Intent(this, AuthActivity::class.java))
+                    }
                     true
                 }
 
-                mapLibreMap.setOnInfoWindowClickListener { marker ->
-                    openTreeDetails(marker)
+                mapLibreMap.setOnMarkerClickListener { marker ->
+                    showTreePreview(marker)
                     true
                 }
             }
@@ -273,6 +281,69 @@ class MapActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    private fun showTreePreview(marker: Marker) {
+        val logId = annotationLogIds[marker.id] ?: -1L
+        if (logId <= 0) {
+            binding.previewName.text = marker.title ?: "Fruit tree"
+            binding.previewMeta.text = "Seattle discovery"
+            binding.previewBadges.text = "Community Added • Access Unknown"
+            binding.bottomPreview.visibility = View.VISIBLE
+            binding.buttonPreviewDetails.setOnClickListener { openTreeDetails(marker) }
+            return
+        }
+        lifecycleScope.launch {
+            val log = viewModel.getLogById(logId) ?: return@launch
+            previewLog = log
+            binding.previewName.text = log.name
+            binding.previewMeta.text = buildString {
+                if (log.scientificName.isNotBlank()) append(log.scientificName)
+                if (log.season.isNotBlank()) {
+                    if (isNotBlank()) append(" • ")
+                    append(log.season)
+                }
+                if (log.sourceLabel.isNotBlank()) {
+                    if (isNotBlank()) append("\n")
+                    append(log.sourceLabel)
+                }
+            }.ifBlank { log.location.ifBlank { "Seattle discovery" } }
+            binding.previewBadges.text = "${sourceBadge(log)} • ${log.verificationStatus} • ${log.accessType}"
+            binding.bottomPreview.visibility = View.VISIBLE
+            binding.buttonPreviewDetails.setOnClickListener {
+                startActivity(Intent(this@MapActivity, TreeDetailsActivity::class.java).putExtra("LOG_ID", log.id))
+            }
+            binding.buttonPreviewSave.setOnClickListener {
+                if (AuthManager.isSignedIn(this@MapActivity)) {
+                    viewModel.toggleFavorite(log)
+                    Toast.makeText(this@MapActivity, "Saved", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@MapActivity, "Please sign in to save trees.", Toast.LENGTH_LONG).show()
+                    startActivity(Intent(this@MapActivity, AuthActivity::class.java))
+                }
+            }
+            binding.buttonPreviewShare.setOnClickListener { shareTree(log) }
+        }
+    }
+
+    private fun sourceBadge(log: LogEntry): String {
+        return if (log.dataSource == "OFFICIAL") "Official Dataset" else "Community Added"
+    }
+
+    private fun shareTree(log: LogEntry) {
+        val coordinates = if (log.lat != null && log.lng != null) {
+            "\nhttps://maps.google.com/?q=${log.lat},${log.lng}"
+        } else {
+            ""
+        }
+        startActivity(
+            Intent.createChooser(
+                Intent(Intent.ACTION_SEND)
+                    .setType("text/plain")
+                    .putExtra(Intent.EXTRA_TEXT, "ZOGAL discovery: ${log.name}$coordinates"),
+                "Share discovery"
+            )
+        )
+    }
+
     private fun loadMarkersFromDatabase(
         focusLat: Double = Double.MIN_VALUE,
         focusLng: Double = Double.MIN_VALUE,
@@ -298,7 +369,7 @@ class MapActivity : AppCompatActivity() {
             }
             refreshMarkers()
             if (markerFeatures.isEmpty()) {
-                Toast.makeText(this@MapActivity, "No saved GPS markers yet", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MapActivity, "No map discoveries yet", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(this@MapActivity, "${markerFeatures.size} tree marker(s) loaded", Toast.LENGTH_SHORT).show()
             }
@@ -330,19 +401,27 @@ class MapActivity : AppCompatActivity() {
 
     private fun saveSpot(name: String, notes: String, point: LatLng) {
         val date = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(Date())
+        val user = AuthManager.currentUser(this)
         val entry = LogEntry(
             name = name,
             location = "Lat: ${String.format(Locale.US, "%.5f", point.latitude)}, Lng: ${String.format(Locale.US, "%.5f", point.longitude)}",
             date = date,
             notes = notes,
             lat = point.latitude,
-            lng = point.longitude
+            lng = point.longitude,
+            creatorUserId = user?.id.orEmpty(),
+            creatorName = user?.fullName.orEmpty(),
+            createdAt = date,
+            dataSource = "COMMUNITY",
+            accessType = "Public",
+            fruitCategory = "Fruit Tree",
+            sourceLabel = user?.fullName?.takeIf { it.isNotBlank() }?.let { "Added by $it" }.orEmpty()
         )
         lifecycleScope.launch {
             val id = viewModel.insertAndReturnId(entry)
             markerFeatures.add(markerFeature(point.longitude, point.latitude, name, entry.treeType, id))
             refreshMarkers()
-            Toast.makeText(this@MapActivity, "🌿 $name pinned!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MapActivity, "$name pinned", Toast.LENGTH_SHORT).show()
         }
     }
 

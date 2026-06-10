@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ForagingApp"
+rootProject.name = "Zogal"
 include(":app")

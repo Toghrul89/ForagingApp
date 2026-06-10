@@ -1,7 +1,20 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+}
+
+val localProperties = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+
+fun localProperty(name: String): String {
+    return localProperties.getProperty(name)
+        ?: providers.environmentVariable(name).orNull
+        ?: ""
 }
 
 android {
@@ -15,6 +28,8 @@ android {
         versionCode = 2
         versionName = "2.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "PLANTNET_API_KEY", "\"${localProperty("PLANTNET_API_KEY")}\"")
+        buildConfigField("String", "PLANTNET_PROJECT", "\"all\"")
     }
 
     buildTypes {
@@ -38,6 +53,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 

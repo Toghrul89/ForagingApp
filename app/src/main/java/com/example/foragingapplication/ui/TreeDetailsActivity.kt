@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.foragingapp.LogViewModel
+import com.example.foragingapp.auth.AuthManager
 import com.example.foragingapp.databinding.ActivityTreeDetailsBinding
 import com.example.foragingapp.model.LogEntry
 import kotlinx.coroutines.launch
@@ -61,14 +62,26 @@ class TreeDetailsActivity : AppCompatActivity() {
         binding.textName.text = log.name
 
         val meta = buildList {
+            if (log.scientificName.isNotBlank()) add(log.scientificName)
             if (log.treeType.isNotBlank()) add(log.treeType)
             if (log.season.isNotBlank()) add(log.season)
-            if (log.date.isNotBlank()) add("Added ${log.date}")
-            if (log.location.isNotBlank()) add(log.location)
+            if (log.location.isNotBlank()) add("Neighborhood: ${log.location}")
+            if (log.sourceLabel.isNotBlank()) add(log.sourceLabel)
+            else if (log.creatorName.isNotBlank()) add("Added by ${log.creatorName}")
+            val created = log.createdAt.ifBlank { log.date }
+            if (created.isNotBlank()) add("Created: $created")
         }.joinToString("\n")
         binding.textMeta.text = meta
 
         binding.textNotes.text = log.notes.ifBlank { "No description added yet." }
+        binding.textTrust.text = buildString {
+            append(if (log.dataSource == "OFFICIAL") "Official Dataset" else "Community Contribution")
+            append(" • ")
+            append(log.verificationStatus)
+            append(" • ")
+            append(log.accessType.ifBlank { if (log.isPublic) "Public" else "Private" })
+            if (log.isReported) append(" • Reported")
+        }
 
         if (log.imageUri.isNotBlank()) {
             binding.imageTree.visibility = View.VISIBLE
@@ -77,17 +90,36 @@ class TreeDetailsActivity : AppCompatActivity() {
             binding.imageTree.visibility = View.GONE
         }
 
-        binding.buttonWikipedia.visibility = if (log.name.isBlank()) View.GONE else View.VISIBLE
+        binding.buttonWikipedia.visibility = if (hasWikipediaDirection(log)) View.VISIBLE else View.GONE
         binding.buttonWikipedia.setOnClickListener { openWikipedia(log) }
+        val canManage = log.dataSource != "OFFICIAL" &&
+            AuthManager.currentUser(this)?.id == log.creatorUserId &&
+            log.creatorUserId.isNotBlank()
+        binding.buttonEdit.visibility = if (canManage) View.VISIBLE else View.GONE
+        binding.buttonDelete.visibility = if (canManage) View.VISIBLE else View.GONE
+        binding.buttonEdit.setOnClickListener {
+            startActivity(Intent(this, LogEntryActivity::class.java).putExtra("LOG_ID", log.id))
+        }
+        binding.buttonReport.setOnClickListener { reportIssue(log) }
         binding.buttonDelete.setOnClickListener { confirmDelete(log) }
     }
 
     private fun openWikipedia(log: LogEntry) {
-        val url = log.wikipediaUrl.ifBlank {
-            val query = URLEncoder.encode(log.name, StandardCharsets.UTF_8.toString())
-            "https://en.wikipedia.org/wiki/Special:Search?search=$query"
+        val url = when {
+            log.wikipediaUrl.startsWith("http://") || log.wikipediaUrl.startsWith("https://") -> log.wikipediaUrl
+            log.name.isNotBlank() -> {
+                val encodedName = URLEncoder.encode(log.name, StandardCharsets.UTF_8.toString())
+                "https://en.wikipedia.org/wiki/Special:Search?search=$encodedName"
+            }
+            else -> return
         }
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+    }
+
+    private fun hasWikipediaDirection(log: LogEntry): Boolean {
+        return log.wikipediaUrl.startsWith("http://") ||
+            log.wikipediaUrl.startsWith("https://") ||
+            log.name.isNotBlank()
     }
 
     private fun confirmDelete(log: LogEntry) {
@@ -98,6 +130,20 @@ class TreeDetailsActivity : AppCompatActivity() {
                 viewModel.delete(log)
                 Toast.makeText(this, "Tree deleted", Toast.LENGTH_SHORT).show()
                 finish()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun reportIssue(log: LogEntry) {
+        val reasons = arrayOf("Incorrect information", "Unsafe identification", "Spam", "Offensive content")
+        AlertDialog.Builder(this)
+            .setTitle("Report issue")
+            .setItems(reasons) { _, which ->
+                val reason = reasons[which]
+                viewModel.update(log.copy(isReported = true, verificationStatus = "Needs verification"))
+                Toast.makeText(this, "Reported: $reason", Toast.LENGTH_SHORT).show()
+                showLog(log.copy(isReported = true, verificationStatus = "Needs verification"))
             }
             .setNegativeButton("Cancel", null)
             .show()

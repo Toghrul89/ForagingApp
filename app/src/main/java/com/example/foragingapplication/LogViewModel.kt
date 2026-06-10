@@ -8,6 +8,7 @@ import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.example.foragingapp.data.AppDatabase
 import com.example.foragingapp.data.LogRepository
+import com.example.foragingapp.data.SeattleOfficialTreeImporter
 import com.example.foragingapp.model.LogEntry
 import kotlinx.coroutines.launch
 
@@ -48,6 +49,14 @@ class LogViewModel(application: Application) : AndroidViewModel(application) {
 
     fun toggleFavorite(entry: LogEntry) = viewModelScope.launch {
         repository.update(entry.copy(isFavorite = !entry.isFavorite))
+    }
+
+    fun deleteOldIncorrectCornelianCherry() = viewModelScope.launch {
+        repository.deleteOldIncorrectCornelianCherry()
+    }
+
+    fun importOfficialSeattleTrees() = viewModelScope.launch {
+        SeattleOfficialTreeImporter.importIfNeeded(repository)
     }
 
     suspend fun getLogById(id: Long): LogEntry? = repository.getLogById(id)

@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 /**
  * Core data model for a fruit-tree spot.
- * version 4: added optional wikipediaUrl
+ * Core data model for a fruit-tree spot.
  */
 @Entity(tableName = "logs")
 data class LogEntry(
@@ -43,5 +43,38 @@ data class LogEntry(
     val isFavorite: Boolean = false,
 
     /** Optional direct Wikipedia/source URL supplied by the user */
-    val wikipediaUrl: String = ""
+    val wikipediaUrl: String = "",
+
+    /** User id of the person who added this tree. Blank means legacy/public. */
+    val creatorUserId: String = "",
+
+    /** Display name of the person who added this tree. */
+    val creatorName: String = "",
+
+    /** Date the tree was first added. */
+    val createdAt: String = "",
+
+    /** Whether this tree is visible to other users when cloud sync is added. */
+    val isPublic: Boolean = true,
+
+    /** Verification state: Needs verification, User verified, Community confirmed */
+    val verificationStatus: String = "Needs verification",
+
+    /** Simple local moderation flag until a backend moderation queue exists. */
+    val isReported: Boolean = false,
+
+    /** OFFICIAL for Seattle public-data imports, COMMUNITY for user contributions. */
+    val dataSource: String = "COMMUNITY",
+
+    /** Botanical/scientific name when known. */
+    val scientificName: String = "",
+
+    /** Public, Private, or Unknown access label. */
+    val accessType: String = "Unknown",
+
+    /** Fruit category used for markers and filtering, e.g. Apple, Berry, Stone Fruit. */
+    val fruitCategory: String = "Fruit",
+
+    /** Professional contributor/source label shown in cards and details. */
+    val sourceLabel: String = ""
 )

@@ -18,7 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/background"
             app:titleTextColor="@color/textPrimary"
-            app:title="My Trees"/>
+            app:title="Explore"/>
 
         <!-- Search bar -->
         <LinearLayout
@@ -56,7 +56,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:hint="Search trees, locations…"
+                        android:hint="Search fruit trees, neighborhoods…"
                         android:textColorHint="@color/textHint"
                         android:textColor="@color/textPrimary"
                         android:textSize="14sp"
@@ -104,7 +104,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No trees yet"
+            android:text="Go discover your first fruit tree"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@color/textPrimary"/>
@@ -112,7 +112,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Head outside and start spotting."
+            android:text="Seattle discoveries will appear here as the community adds fruit trees."
             android:textSize="14sp"
             android:textColor="@color/textSecondary"
             android:layout_marginTop="8dp"/>
@@ -126,7 +126,7 @@
         android:layout_gravity="bottom"
         android:paddingTop="10dp"
         android:paddingBottom="14dp"
-        android:text="← swipe left to delete"
+        android:text="Swipe left to delete your own discoveries"
         android:textSize="11sp"
         android:textColor="@color/textHint"
         android:gravity="center"

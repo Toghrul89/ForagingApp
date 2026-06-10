@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foragingapp.LogViewModel
+import com.example.foragingapp.auth.AuthManager
 import com.example.foragingapp.databinding.ActivityViewLogsBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -29,9 +30,16 @@ class ViewLogsActivity : AppCompatActivity() {
 
         adapter = LogsAdapter(
             onEdit = { log ->
-                val intent = android.content.Intent(this, LogEntryActivity::class.java)
-                intent.putExtra("LOG_ID", log.id)
-                startActivity(intent)
+                val user = AuthManager.currentUser(this)
+                if (user != null && log.creatorUserId == user.id) {
+                    val intent = android.content.Intent(this, LogEntryActivity::class.java)
+                    intent.putExtra("LOG_ID", log.id)
+                    startActivity(intent)
+                } else {
+                    val intent = android.content.Intent(this, TreeDetailsActivity::class.java)
+                    intent.putExtra("LOG_ID", log.id)
+                    startActivity(intent)
+                }
             },
             onMapClick = { log ->
                 val intent = android.content.Intent(this, MapActivity::class.java)
@@ -40,7 +48,13 @@ class ViewLogsActivity : AppCompatActivity() {
                 intent.putExtra("FOCUS_NAME", log.name)
                 startActivity(intent)
             },
-            onFavorite = { log -> viewModel.toggleFavorite(log) }
+            onFavorite = { log ->
+                if (AuthManager.isSignedIn(this)) viewModel.toggleFavorite(log)
+                else {
+                    android.widget.Toast.makeText(this, "Please sign in to save trees.", android.widget.Toast.LENGTH_LONG).show()
+                    startActivity(android.content.Intent(this, AuthActivity::class.java))
+                }
+            }
         )
 
         binding.rvLogs.layoutManager = LinearLayoutManager(this)
@@ -53,10 +67,16 @@ class ViewLogsActivity : AppCompatActivity() {
                 val pos = viewHolder.bindingAdapterPosition
                 if (pos == RecyclerView.NO_POSITION) return
                 val deleted = adapter.getItemAt(pos)
-                viewModel.delete(deleted)
-                Snackbar.make(binding.root, "${deleted.name} removed", Snackbar.LENGTH_LONG)
-                    .setAction("Undo") { viewModel.insert(deleted) }
-                    .show()
+                val user = AuthManager.currentUser(this@ViewLogsActivity)
+                if (user == null || deleted.creatorUserId != user.id) {
+                    adapter.notifyItemChanged(pos)
+                    Snackbar.make(binding.root, "You can delete only trees you added.", Snackbar.LENGTH_LONG).show()
+                } else {
+                    viewModel.delete(deleted)
+                    Snackbar.make(binding.root, "${deleted.name} removed", Snackbar.LENGTH_LONG)
+                        .setAction("Undo") { viewModel.insert(deleted) }
+                        .show()
+                }
             }
         }).attachToRecyclerView(binding.rvLogs)
 

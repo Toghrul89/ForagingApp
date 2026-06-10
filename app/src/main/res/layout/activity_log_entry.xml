@@ -398,7 +398,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Wikipedia link (optional)"
+                            android:text="Wikipedia link (auto)"
                             android:textSize="12sp"
                             android:textStyle="bold"
                             android:textColor="@color/textPrimary"/>
@@ -410,12 +410,47 @@
                             android:inputType="textUri"
                             android:textColor="@color/textPrimary"
                             android:textSize="14sp"
-                            android:hint="https://en.wikipedia.org/wiki/..."
+                            android:hint="Generated from fruit name if left blank"
                             android:textColorHint="@color/textHint"
                             android:background="@android:color/transparent"
                             android:paddingTop="4dp"
                             android:paddingBottom="0dp"/>
                     </LinearLayout>
+                </LinearLayout>
+
+                <!-- ── Row: Visibility + Verification ── -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/row_bg"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:layout_marginBottom="10dp">
+
+                    <CheckBox
+                        android:id="@+id/checkPublic"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="Make this fruit tree public"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="14sp"/>
+
+                    <CheckBox
+                        android:id="@+id/checkVerified"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="I am confident this fruit tree is identified correctly"
+                        android:textColor="@color/textPrimary"
+                        android:textSize="14sp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="Only share fruit trees you are allowed to access. Never eat fruit unless you have verified identification and safety."
+                        android:textColor="@color/textSecondary"
+                        android:textSize="12sp"/>
                 </LinearLayout>
 
                 <!-- Photo preview -->

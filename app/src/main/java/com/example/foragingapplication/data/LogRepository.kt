@@ -17,7 +17,17 @@ class LogRepository(private val dao: LogDao) {
 
     suspend fun insert(entry: LogEntry): Long = dao.insert(entry)
 
+    suspend fun insertAll(entries: List<LogEntry>): List<Long> = dao.insertAll(entries)
+
+    suspend fun countOfficialTrees(): Int = dao.countOfficialTrees()
+
+    suspend fun deleteCommunityAndDemoRows(): Int = dao.deleteCommunityAndDemoRows()
+
     suspend fun update(entry: LogEntry) = dao.update(entry)
 
     suspend fun delete(entry: LogEntry) = dao.delete(entry)
+
+    suspend fun deleteOldIncorrectCornelianCherry(): Int {
+        return dao.deleteOldIncorrectCornelianCherry(47.60638, -122.31709)
+    }
 }

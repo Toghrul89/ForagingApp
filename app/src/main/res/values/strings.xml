@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Fruit Tree</string>
-    <string name="app_tagline">Find wild fruit near you</string>
+    <string name="app_name">Zogal</string>
+    <string name="app_tagline">Urban Foraging Map</string>
     <string name="notifications">Notifications</string>
     <string name="search">Search</string>
     <string name="hero_fruit_illustration">Leaf illustration</string>
 
-    <string name="home_title">Find wild fruit.\nTaste nature.</string>
-    <string name="home_subtitle">Discover, identify, and find wild fruit near you.</string>
-    <string name="home_search_hint">Search fruits, locations...</string>
+    <string name="home_title">Discover hidden\nfruit nearby.</string>
+    <string name="home_subtitle">Explore seasonal fruit trees around Seattle.</string>
+    <string name="home_search_hint">Search fruit trees, neighborhoods...</string>
     <string name="all_fruits">All Fruits</string>
     <string name="near_me">Near Me</string>
+    <string name="add_tree">Add Tree</string>
     <string name="in_season">In Season</string>
     <string name="saved">Saved</string>
     <string name="in_season_now">In season now</string>
@@ -33,11 +34,14 @@
     <string name="nav_map">Map</string>
     <string name="nav_profile">Profile</string>
 
-    <string name="about_title">Forage gently.</string>
-    <string name="about_body">Log useful fruit tree spots, revisit them in season, and forage only where it is legal and safe. Confirm every plant before eating.</string>
-    <string name="about_full_text">ForagingApp started with a simple discovery.\n\nAfter moving to Seattle, I missed a fruit from home — cornelian cherry (known as dogwood cherry or “zoğal” in Azerbaijan). I never expected to find it growing in a neighborhood tree, but one day I did — and it felt like reconnecting with a small piece of home.\n\nThat moment inspired this app.\n\nForagingApp helps people discover fruit trees around them, learn about unfamiliar plants, and share local finds with others. Add trees you know, explore nearby spots on the map, and uncover hidden seasonal treasures in your city.\n\nPlease forage responsibly: plants and fruits can be difficult to identify, and some may be unsafe to eat. When in doubt, avoid tasting and always verify identification first. Nature belongs to wildlife too — enjoy respectfully and sustainably.</string>
-    <string name="empty_logs">No trees yet.\nHead outside and start spotting.</string>
+    <string name="about_title">A Seattle fruit map with a small story.</string>
+    <string name="about_body">Discover neighborhood fruit trees, revisit them in season, and share local finds responsibly.</string>
+    <string name="about_full_text">Zogal started with a simple discovery.\n\nAfter moving to Seattle, I missed a fruit from home — cornelian cherry, known as dogwood cherry or “zoğal” in Azerbaijan. I never expected to find it growing in a neighborhood tree, but one day I did, and it felt like reconnecting with a small piece of home.\n\nThat moment inspired this app.\n\nZogal helps people discover fruit trees around Seattle, learn about unfamiliar fruit, and share local finds with others. Add trees you know, explore nearby spots on the map, and uncover hidden seasonal fruit in your city.\n\nPlease forage responsibly: plants and fruits can be difficult to identify, and some may be unsafe to eat. When in doubt, avoid tasting and always verify identification first. Nature belongs to wildlife too — enjoy respectfully and sustainably.</string>
+    <string name="empty_logs">Go discover your first fruit tree.</string>
     <string name="map_hint">Long-press on the map to pin a tree</string>
+    <string name="safety_disclaimer">Zogal does not guarantee plant safety or identification accuracy. Never consume plants unless properly identified by an expert.</string>
+    <string name="privacy_policy_summary">Privacy Policy: Zogal stores your profile, saved trees, photos, and reports only to support community discovery features. Do not upload private locations you do not want associated with your account.</string>
+    <string name="terms_summary">Terms of Service: Use Zogal as a discovery map, not as an edible safety authority. You are responsible for respecting property, local rules, wildlife, and safe identification.</string>
 
     <string name="icon_leaf">Leaf</string>
     <string name="icon_leaf_outline">Leaf</string>

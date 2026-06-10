@@ -37,10 +37,24 @@ class LogsAdapter(
             tvLogName.text = log.name
             tvLogDate.text = log.date
             tvLogLocation.text = log.location
-            tvLogNotes.text = log.notes.ifEmpty { "" }
-            tvLogNotes.visibility = if (log.notes.isNotEmpty()) View.VISIBLE else View.GONE
+            tvLogNotes.text = buildString {
+                append(if (log.dataSource == "OFFICIAL") "Official Dataset" else "Community Contribution")
+                append(" • ")
+                append(log.accessType.ifBlank { if (log.isPublic) "Public" else "Private" })
+                if (log.sourceLabel.isNotBlank()) {
+                    append("\n")
+                    append(log.sourceLabel)
+                } else if (log.notes.isNotBlank()) {
+                    append("\n")
+                    append(log.notes)
+                }
+            }
+            tvLogNotes.visibility = View.VISIBLE
             tvTreeType.text = log.treeType
-            tvSeason.text = if (log.season.isNotEmpty()) "· ${log.season}" else ""
+            tvSeason.text = buildString {
+                if (log.season.isNotEmpty()) append("· ${log.season}")
+                if (log.scientificName.isNotEmpty()) append(" · ${log.scientificName}")
+            }
 
             // Favorite star
             btnFavorite.text = if (log.isFavorite) "★" else "☆"

@@ -258,7 +258,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="@string/in_season"
+                            android:text="@string/add_tree"
                             android:textColor="@color/textPrimary"
                             android:textSize="14sp"/>
                     </LinearLayout>
@@ -358,8 +358,50 @@
                     <include layout="@layout/item_season_fruit_elderberry"/>
                     <include layout="@layout/item_season_fruit_raspberry"/>
                     <include layout="@layout/item_season_fruit_serviceberry"/>
+                    <include
+                        android:id="@+id/cardSeasonMore"
+                        layout="@layout/item_season_more"/>
                 </LinearLayout>
             </HorizontalScrollView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="38dp"
+                android:fontFamily="serif"
+                android:text="@string/about_title"
+                android:textColor="@color/textPrimary"
+                android:textSize="24sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/app_tagline"
+                android:textColor="@color/leafGreen"
+                android:textSize="13sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/row_bg"
+                android:lineSpacingMultiplier="1.35"
+                android:padding="20dp"
+                android:text="@string/about_full_text"
+                android:textColor="@color/textSecondary"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="8dp"
+                android:lineSpacingMultiplier="1.25"
+                android:text="@string/terms_summary"
+                android:textColor="@color/textHint"
+                android:textSize="12sp"/>
         </LinearLayout>
     </ScrollView>
 

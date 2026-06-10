@@ -38,7 +38,7 @@
                 android:background="@drawable/row_bg"
                 android:lineSpacingMultiplier="1.35"
                 android:padding="16dp"
-                android:text="Upload or take a clear photo of leaves, fruit, bark, or flowers. This beginner-friendly identifier gives a likely suggestion only. Always verify before tasting."
+                android:text="Upload or take a clear photo of fruit, leaves, bark, or flowers. This fruit-tree helper gives a likely suggestion only. Always verify before tasting."
                 android:textColor="@color/textSecondary"
                 android:textSize="14sp"/>
 
@@ -90,7 +90,7 @@
                 android:background="@drawable/row_bg"
                 android:lineSpacingMultiplier="1.35"
                 android:padding="16dp"
-                android:text="No photo selected yet."
+                android:text="No fruit tree photo selected yet."
                 android:textColor="@color/textPrimary"
                 android:textSize="16sp"/>
 

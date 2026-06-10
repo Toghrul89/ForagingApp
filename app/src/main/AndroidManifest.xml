@@ -24,13 +24,21 @@
 
         <activity android:name=".ui.AboutActivity"
             android:exported="false"/>
+        <activity android:name=".ui.AuthActivity"
+            android:exported="false"/>
+        <activity android:name=".ui.ProfileActivity"
+            android:exported="false"/>
         <activity android:name=".ui.TreeDetailsActivity"
+            android:exported="false"/>
+        <activity android:name=".ui.SeasonalTreesActivity"
             android:exported="false"/>
         <activity android:name=".ui.IdentifyTreeActivity"
             android:exported="false"/>
         <activity android:name=".ui.LogEntryActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.LocationPickerActivity"
+            android:exported="false"/>
         <activity android:name=".ui.MapActivity"
             android:exported="false"/>
         <activity android:name=".ui.ViewLogsActivity"
