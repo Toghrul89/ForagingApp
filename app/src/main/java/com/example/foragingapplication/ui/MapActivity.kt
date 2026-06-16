@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -289,6 +290,22 @@ class MapActivity : AppCompatActivity() {
             binding.previewBadges.text = "Community Added • Access Unknown"
             binding.bottomPreview.visibility = View.VISIBLE
             binding.buttonPreviewDetails.setOnClickListener { openTreeDetails(marker) }
+            binding.buttonPreviewSave.setOnClickListener {
+                Toast.makeText(this, "Open details before saving this marker.", Toast.LENGTH_SHORT).show()
+            }
+            binding.buttonPreviewNavigate.setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=${marker.position.latitude},${marker.position.longitude}")))
+            }
+            binding.buttonPreviewShare.setOnClickListener {
+                startActivity(
+                    Intent.createChooser(
+                        Intent(Intent.ACTION_SEND)
+                            .setType("text/plain")
+                            .putExtra(Intent.EXTRA_TEXT, "ZOGAL discovery: ${marker.title}\nhttps://maps.google.com/?q=${marker.position.latitude},${marker.position.longitude}"),
+                        "Share discovery"
+                    )
+                )
+            }
             return
         }
         lifecycleScope.launch {
@@ -321,6 +338,7 @@ class MapActivity : AppCompatActivity() {
                 }
             }
             binding.buttonPreviewShare.setOnClickListener { shareTree(log) }
+            binding.buttonPreviewNavigate.setOnClickListener { navigateToTree(log) }
         }
     }
 
@@ -340,6 +358,19 @@ class MapActivity : AppCompatActivity() {
                     .setType("text/plain")
                     .putExtra(Intent.EXTRA_TEXT, "ZOGAL discovery: ${log.name}$coordinates"),
                 "Share discovery"
+            )
+        )
+    }
+
+    private fun navigateToTree(log: LogEntry) {
+        if (log.lat == null || log.lng == null) {
+            Toast.makeText(this, "No coordinates for this discovery", Toast.LENGTH_SHORT).show()
+            return
+        }
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("google.navigation:q=${log.lat},${log.lng}")
             )
         )
     }

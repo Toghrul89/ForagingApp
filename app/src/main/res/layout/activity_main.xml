@@ -365,6 +365,40 @@
             </HorizontalScrollView>
 
             <TextView
+                android:id="@+id/recentlyAddedTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="34dp"
+                android:fontFamily="serif"
+                android:text="Recently added"
+                android:textColor="@color/textPrimary"
+                android:textSize="24sp"/>
+
+            <LinearLayout
+                android:id="@+id/recentlyAddedContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"/>
+
+            <TextView
+                android:id="@+id/communityHighlightsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:fontFamily="serif"
+                android:text="Community highlights"
+                android:textColor="@color/textPrimary"
+                android:textSize="24sp"/>
+
+            <LinearLayout
+                android:id="@+id/communityHighlightsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical"/>
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="38dp"
