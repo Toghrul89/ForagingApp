@@ -88,20 +88,24 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, SeasonalTreesActivity::class.java))
         }
 
-        binding.navExplore.setOnClickListener {
-            startActivity(Intent(this, ViewLogsActivity::class.java))
-        }
-
-        binding.navIdentify.setOnClickListener {
-            startActivity(Intent(this, IdentifyTreeActivity::class.java))
+        binding.navProfile.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
 
         binding.navMap.setOnClickListener {
             startActivity(Intent(this, MapActivity::class.java))
         }
 
-        binding.navProfile.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
+        binding.navAdd.setOnClickListener {
+            requireSignInForContribution()
+        }
+
+        binding.navIdentify.setOnClickListener {
+            startActivity(Intent(this, IdentifyTreeActivity::class.java))
+        }
+
+        binding.navExplore.setOnClickListener {
+            startActivity(Intent(this, ViewLogsActivity::class.java))
         }
     }
 

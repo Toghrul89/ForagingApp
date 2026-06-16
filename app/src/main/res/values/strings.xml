@@ -33,6 +33,7 @@
     <string name="nav_identify">Identify</string>
     <string name="nav_map">Map</string>
     <string name="nav_profile">Profile</string>
+    <string name="nav_add">Add</string>
 
     <string name="about_title">A Seattle fruit map with a small story.</string>
     <string name="about_body">Discover neighborhood fruit trees, revisit them in season, and share local finds responsibly.</string>
