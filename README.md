@@ -18,6 +18,51 @@ The project was inspired by a personal experience. After moving to Seattle, I un
 * User accounts and profiles
 * Seattle open-data tree integration
 
+## Screenshots
+
+### Home Screen
+
+![Home Screen](screenshots/zogal-home.png)
+
+The main dashboard where users can discover seasonal fruit trees, search locations, and access core app features.
+
+### Home Screen (Alternative View)
+
+![Home Screen Alternative](screenshots/zogal-home-2.png)
+
+Displays seasonal fruit recommendations and community highlights.
+
+### Explore Screen
+
+![Explore Screen](screenshots/zogal-explore.png)
+
+Browse community-discovered fruit trees and search by fruit type or neighborhood.
+
+### Map Screen
+
+![Map Screen](screenshots/zogal-map.png)
+
+Interactive MapLibre-powered map for exploring and adding fruit tree locations around Seattle.
+
+### Add Spot
+
+![Add Spot](screenshots/zogal-addspot.png)
+
+Users can submit new fruit tree locations, add notes, photos, and harvest information.
+
+### Identify Tree
+
+![Identify Tree](screenshots/zogal-identify.png)
+
+Plant identification feature that helps users identify fruit trees from uploaded photos.
+
+### Profile Screen
+
+![Profile Screen](screenshots/zogal-profile.png)
+
+Manage account information, saved trees, discoveries, and application settings.
+
+
 ## Tech Stack
 
 * Kotlin
