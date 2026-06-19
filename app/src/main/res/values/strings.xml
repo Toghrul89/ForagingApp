@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Zogal</string>
-    <string name="app_tagline">Urban Foraging Map</string>
+    <string name="app_name">Zogal: Fruit Forage</string>
+    <string name="app_tagline">Find Hidden Fruit Nearby</string>
     <string name="notifications">Notifications</string>
     <string name="search">Search</string>
     <string name="hero_fruit_illustration">Leaf illustration</string>
